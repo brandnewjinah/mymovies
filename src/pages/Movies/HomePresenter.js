@@ -1,6 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+//import components
+import Section from "../../components/Section";
+import Indicator from "../../components/Indicator";
+
+//import styles and assets
+import styled from "styled-components";
+
 const HomePresenter = ({
   nowPlaying,
   popular,
@@ -9,11 +16,32 @@ const HomePresenter = ({
   loading,
   error,
 }) => {
-  return (
-    <div>
-      <h1>HomePresenter</h1>
-      <h1>{nowPlaying.length}</h1>
-    </div>
+  return loading ? (
+    <Indicator />
+  ) : (
+    <Container>
+      {nowPlaying && nowPlaying.length > 0 && (
+        <Section title="Now Playing">
+          {nowPlaying.map((movie) => (
+            <span>{movie.title}</span>
+          ))}
+        </Section>
+      )}
+      {popular && popular.length > 0 && (
+        <Section title="Popular">
+          {popular.map((movie) => (
+            <span>{movie.title}</span>
+          ))}
+        </Section>
+      )}
+      {upcoming && upcoming.length > 0 && (
+        <Section title="Upcoming">
+          {upcoming.map((movie) => (
+            <span>{movie.title}</span>
+          ))}
+        </Section>
+      )}
+    </Container>
   );
 };
 
@@ -25,5 +53,9 @@ HomePresenter.propTypes = {
   loading: PropTypes.bool.isRequired,
   error: PropTypes.string,
 };
+
+const Container = styled.div`
+  padding: 0px 10px;
+`;
 
 export default HomePresenter;
