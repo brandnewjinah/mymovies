@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 //import components
 import Section from "../../components/Section";
 import Indicator from "../../components/Indicator";
+import Poster from "../../components/Poster";
 
 //import styles and assets
 import styled from "styled-components";
@@ -23,21 +24,42 @@ const HomePresenter = ({
       {nowPlaying && nowPlaying.length > 0 && (
         <Section title="Now Playing">
           {nowPlaying.map((movie) => (
-            <span>{movie.title}</span>
+            <Poster
+              key={movie.id}
+              id={movie.id}
+              imageurl={movie.poster_path}
+              title={movie.title}
+              rating={movie.vote_average}
+              year={movie.release_date}
+            />
           ))}
         </Section>
       )}
       {popular && popular.length > 0 && (
         <Section title="Popular">
           {popular.map((movie) => (
-            <span>{movie.title}</span>
+            <Poster
+              key={movie.id}
+              id={movie.id}
+              imageurl={movie.poster_path}
+              title={movie.title}
+              rating={movie.vote_average}
+              year={movie.release_date}
+            />
           ))}
         </Section>
       )}
       {upcoming && upcoming.length > 0 && (
         <Section title="Upcoming">
           {upcoming.map((movie) => (
-            <span>{movie.title}</span>
+            <Poster
+              key={movie.id}
+              id={movie.id}
+              imageurl={movie.poster_path}
+              title={movie.title}
+              rating={movie.vote_average}
+              year={movie.release_date}
+            />
           ))}
         </Section>
       )}

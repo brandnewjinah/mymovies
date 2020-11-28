@@ -21,10 +21,12 @@ Section.propTypes = {
   ]),
 };
 
-const Container = styled.div``;
+const Container = styled.div`
+  margin: 60px 10px;
+`;
 
 const Title = styled.span`
-  font-size: 18px;
+  font-size: 24px;
   font-weight: 600;
 `;
 

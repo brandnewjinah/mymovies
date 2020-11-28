@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 //import components
 import Section from "../../components/Section";
 import Indicator from "../../components/Indicator";
+import Poster from "../../components/Poster";
 
 //import styles and assets
 import styled from "styled-components";
@@ -23,28 +24,56 @@ const TVPresenter = ({
       {today && today.length > 0 && (
         <Section title="Airing Today">
           {today.map((show) => (
-            <span>{show.name}</span>
+            <Poster
+              key={show.id}
+              id={show.id}
+              imageurl={show.poster_path}
+              title={show.name}
+              rating={show.vote_average}
+              year={show.first_air_date}
+            />
           ))}
         </Section>
       )}
       {popular && popular.length > 0 && (
         <Section title="Popular">
           {popular.map((show) => (
-            <span>{show.name}</span>
+            <Poster
+              key={show.id}
+              id={show.id}
+              imageurl={show.poster_path}
+              title={show.name}
+              rating={show.vote_average}
+              year={show.first_air_date}
+            />
           ))}
         </Section>
       )}
       {topRated && topRated.length > 0 && (
         <Section title="Top Rated">
           {topRated.map((show) => (
-            <span>{show.name}</span>
+            <Poster
+              key={show.id}
+              id={show.id}
+              imageurl={show.poster_path}
+              title={show.name}
+              rating={show.vote_average}
+              year={show.first_air_date}
+            />
           ))}
         </Section>
       )}
       {thisWeek && thisWeek.length > 0 && (
         <Section title="This Week">
           {thisWeek.map((show) => (
-            <span>{show.name}</span>
+            <Poster
+              key={show.id}
+              id={show.id}
+              imageurl={show.poster_path}
+              title={show.name}
+              rating={show.vote_average}
+              year={show.first_air_date}
+            />
           ))}
         </Section>
       )}
