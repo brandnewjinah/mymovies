@@ -3,16 +3,17 @@ import PropTypes from "prop-types";
 
 //import styles and assets
 import styled from "styled-components";
+import noImage from "../assets/noimage.jpg";
 
-const Poster = ({ id, imageurl, title, rating, year }) => {
+const Poster = ({ id, imageUrl, title, rating, year }) => {
   return (
     <Container>
       <ImageContainer>
         <Image
           bgUrl={
-            imageurl
-              ? `https://image.tmdb.org/t/p/w500${imageurl}`
-              : require("../assets/noimage.jpg")
+            imageUrl
+              ? `https://image.tmdb.org/t/p/w500${imageUrl}`
+              : "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty-300x240.jpg"
           }
         ></Image>
         <Rating>
@@ -32,7 +33,7 @@ const Poster = ({ id, imageurl, title, rating, year }) => {
 
 Poster.propTyes = {
   id: PropTypes.number.isRequired,
-  imageurl: PropTypes.string,
+  imageUrl: PropTypes.string,
   title: PropTypes.string.isRequired,
   rating: PropTypes.number,
   year: PropTypes.string,
