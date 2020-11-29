@@ -13,6 +13,7 @@ import Header from "./components/Header";
 import Home from "./pages/Movies";
 import Search from "./pages/Search";
 import TV from "./pages/TV";
+import Rate from "./mypages/Rate";
 
 const Routes = () => {
   return (
@@ -23,6 +24,7 @@ const Routes = () => {
           <Route exact path="/" component={Home} />
           <Route exact path="/search" component={Search} />
           <Route exact path="/tv" component={TV} />
+          <Route exact path="/rate" component={Rate} />
           <Redirect from="*" to="/" />
         </Switch>
       </>
