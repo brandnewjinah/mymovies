@@ -22,7 +22,10 @@ Section.propTypes = {
 };
 
 const Container = styled.div`
-  margin: 60px 10px;
+  /* margin: 60px 10px; */
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1260px;
 `;
 
 const Title = styled.span`
@@ -33,7 +36,8 @@ const Title = styled.span`
 const Grid = styled.div`
   margin-top: 25px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, 125px);
+  /* grid-template-columns: repeat(auto-fill, 125px); */
+  grid-template-columns: repeat(5, 1fr);
   grid-gap: 25px;
 `;
 
