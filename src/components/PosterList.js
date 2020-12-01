@@ -5,26 +5,42 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import noImage from "../assets/noimage.jpg";
 
-const Poster = ({ id, imageUrl, title, rating, year }) => {
+//redux
+import { connect } from "react-redux";
+import { likeItem, dislikeItem } from "../store/movies";
+
+const Poster = (props) => {
+  const handleLike = (movie) => {
+    props.likeItem(movie);
+  };
+
+  const handleDislike = (movie) => {
+    props.dislikeItem(movie);
+  };
+
+  console.log(props.disliked);
+
   return (
     <Container>
       <ImageContainer>
         <Image
           src={
-            imageUrl
-              ? `https://image.tmdb.org/t/p/w500${imageUrl}`
+            props.imageUrl
+              ? `https://image.tmdb.org/t/p/w500${props.imageUrl}`
               : "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty-300x240.jpg"
           }
         />
         <Rating>
-          <div>Liked</div>
-          <div>Disliked</div>
+          <button onClick={() => handleLike(props.id)}>Liked</button>
+          <button onClick={() => handleDislike(props.id)}>Disliked</button>
         </Rating>
       </ImageContainer>
       <Title>
-        {title.length > 18 ? `${title.substring(0, 20)}...` : title}
+        {props.title.length > 18
+          ? `${props.title.substring(0, 20)}...`
+          : props.title}
       </Title>
-      <Year>{year.substring(0, 4)}</Year>
+      <Year>{props.year.substring(0, 4)}</Year>
     </Container>
   );
 };
@@ -87,4 +103,12 @@ Poster.propTyes = {
   rating: PropTypes.number,
   year: PropTypes.string,
 };
-export default Poster;
+
+const mapStateToProps = (state) => {
+  return {
+    liked: state.liked,
+    disliked: state.disliked,
+  };
+};
+
+export default connect(mapStateToProps, { likeItem, dislikeItem })(Poster);
