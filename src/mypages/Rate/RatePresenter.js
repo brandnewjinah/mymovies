@@ -3,18 +3,29 @@ import PropTypes from "prop-types";
 
 //import components
 import Section from "../../components/Section";
-import Indicator from "../../components/Indicator";
 import PosterList from "../../components/PosterList";
+
+//redux
+import { connect } from "react-redux";
+import { likeItem, dislikeItem } from "../../store/movies";
 
 //import styles and assets
 import styled from "styled-components";
 
-const RatePresenter = ({ popular, error, topRated }) => {
+const RatePresenter = (props) => {
+  const handleLike = (movie) => {
+    props.likeItem(movie);
+  };
+
+  const handleDislike = (movie) => {
+    props.dislikeItem(movie);
+  };
+
   return (
     <Container>
-      {topRated && topRated.length > 0 && (
+      {props.topRated && props.topRated.length > 0 && (
         <Section title="Now Playing">
-          {topRated.map((movie) => (
+          {props.topRated.map((movie) => (
             <PosterList
               key={movie.id}
               id={movie.id}
@@ -22,6 +33,12 @@ const RatePresenter = ({ popular, error, topRated }) => {
               title={movie.title}
               rating={movie.vote_average}
               year={movie.release_date}
+              liked={props.liked && props.liked.find((id) => id === movie.id)}
+              disliked={
+                props.disliked && props.disliked.find((id) => id === movie.id)
+              }
+              onClick1={(movie) => handleLike(movie)}
+              onClick2={(movie) => handleDislike(movie)}
             />
           ))}
         </Section>
@@ -43,4 +60,13 @@ const Container = styled.div`
   padding: 0px 10px;
 `;
 
-export default RatePresenter;
+const mapStateToProps = (state) => {
+  return {
+    liked: state.liked,
+    disliked: state.disliked,
+  };
+};
+
+export default connect(mapStateToProps, { likeItem, dislikeItem })(
+  RatePresenter
+);

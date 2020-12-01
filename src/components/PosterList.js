@@ -1,24 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 
 //import styles and assets
 import styled from "styled-components";
-import noImage from "../assets/noimage.jpg";
-
-//redux
-import { connect } from "react-redux";
-import { likeItem, dislikeItem } from "../store/movies";
 
 const Poster = (props) => {
-  const handleLike = (movie) => {
-    props.likeItem(movie);
-  };
-
-  const handleDislike = (movie) => {
-    props.dislikeItem(movie);
-  };
-
-  console.log(props.disliked);
+  // console.log(props.disliked);
+  //if props.disliked includes current id, make it colorful
 
   return (
     <Container>
@@ -31,8 +19,18 @@ const Poster = (props) => {
           }
         />
         <Rating>
-          <button onClick={() => handleLike(props.id)}>Liked</button>
-          <button onClick={() => handleDislike(props.id)}>Disliked</button>
+          <div
+            style={props.liked ? { backgroundColor: "yellow" } : null}
+            onClick={() => props.onClick1(props.id)}
+          >
+            Liked
+          </div>
+          <div
+            style={props.disliked ? { backgroundColor: "blue" } : null}
+            onClick={() => props.onClick2(props.id)}
+          >
+            Disliked
+          </div>
         </Rating>
       </ImageContainer>
       <Title>
@@ -67,7 +65,11 @@ const Rating = styled.div`
   display: flex;
 
   div {
-    margin: 0 1.5em;
+    margin: 0 1em;
+    background-color: white;
+    color: black;
+    padding: 0.5em;
+    cursor: pointer;
   }
 `;
 
@@ -104,11 +106,4 @@ Poster.propTyes = {
   year: PropTypes.string,
 };
 
-const mapStateToProps = (state) => {
-  return {
-    liked: state.liked,
-    disliked: state.disliked,
-  };
-};
-
-export default connect(mapStateToProps, { likeItem, dislikeItem })(Poster);
+export default Poster;

@@ -30,68 +30,36 @@ const reducer = (state, action) => {
   if (action.type === LIKE_ITEM) {
     let added = action.payload.movie;
     let newLikes = [...state.liked];
+    let newDislikes = [...state.disliked];
 
     //look for duplicate first
     let duplicate = newLikes.find((item) => item === added);
 
     if (duplicate) {
-      return { ...state };
+      newLikes = newLikes.filter((f) => f !== added);
     } else {
+      newDislikes = newDislikes.filter((f) => f !== added);
       newLikes = [...newLikes, added];
-      return { ...state, liked: newLikes };
     }
+    return { ...state, liked: newLikes, disliked: newDislikes };
   }
 
   if (action.type === DISLIKE_ITEM) {
     let added = action.payload.movie;
     let newDislikes = [...state.disliked];
+    let newLikes = [...state.liked];
 
     //look for duplicate first
     let duplicate = newDislikes.find((item) => item === added);
 
     if (duplicate) {
-      return { ...state };
+      newDislikes = newDislikes.filter((f) => f !== added);
     } else {
+      newLikes = newLikes.filter((f) => f !== added);
       newDislikes = [...newDislikes, added];
-      return { ...state, disliked: newDislikes };
     }
+    return { ...state, liked: newLikes, disliked: newDislikes };
   }
-
-  // if (action.type === ADD_ITEM) {
-  //   // 1. add one item to an empty cart
-  //   // 2. add one item to an active cart
-  //   // 3. add duplicate item
-
-  //   let added = action.payload.movie;
-  //   let newLikes = [...state.liked];
-  //   let totalqty = state.qty;
-
-  //   //look for duplicate first
-
-  //   let duplicate = newLikes.find(
-  //     (item) => item.product_id === added.product_id
-  //   );
-  //   if (duplicate) {
-  //     let index = newLikes.findIndex(
-  //       (item) => item.product_id === added.product_id
-  //     );
-  //     newLikes[index].qty += 1;
-  //     return { ...state, items: newLikes, qty: totalqty + 1 };
-  //   } else {
-  //     newLikes = [...newLikes, { ...added, qty: 1 }];
-  //     return { ...state, items: newLikes, qty: totalqty + 1 };
-  //   }
-  // }
-  // if (action.type === REMOVE_ITEM) {
-  //   const { qty } = state;
-  //   return {
-  //     ...state,
-  //     items: state.items.filter(
-  //       (item) => item.product_id !== action.payload.data.product_id
-  //     ),
-  //     qty: qty - action.payload.data.qty,
-  //   };
-  // }
 
   return state;
 };
