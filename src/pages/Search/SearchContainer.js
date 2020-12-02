@@ -34,7 +34,6 @@ const SearchContainer = () => {
       showsError,
     });
     setLoading(false);
-    console.log(movies);
   };
 
   return (

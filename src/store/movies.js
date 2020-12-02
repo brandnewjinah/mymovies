@@ -33,12 +33,12 @@ const reducer = (state, action) => {
     let newDislikes = [...state.disliked];
 
     //look for duplicate first
-    let duplicate = newLikes.find((item) => item === added);
+    let duplicate = newLikes.find((item) => item.id === added.id);
 
     if (duplicate) {
-      newLikes = newLikes.filter((f) => f !== added);
+      newLikes = newLikes.filter((f) => f.id !== added.id);
     } else {
-      newDislikes = newDislikes.filter((f) => f !== added);
+      newDislikes = newDislikes.filter((f) => f.id !== added.id);
       newLikes = [...newLikes, added];
     }
     return { ...state, liked: newLikes, disliked: newDislikes };
@@ -50,12 +50,12 @@ const reducer = (state, action) => {
     let newLikes = [...state.liked];
 
     //look for duplicate first
-    let duplicate = newDislikes.find((item) => item === added);
+    let duplicate = newDislikes.find((item) => item.id === added.id);
 
     if (duplicate) {
-      newDislikes = newDislikes.filter((f) => f !== added);
+      newDislikes = newDislikes.filter((f) => f.id !== added.id);
     } else {
-      newLikes = newLikes.filter((f) => f !== added);
+      newLikes = newLikes.filter((f) => f.id !== added.id);
       newDislikes = [...newDislikes, added];
     }
     return { ...state, liked: newLikes, disliked: newDislikes };

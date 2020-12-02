@@ -74,6 +74,7 @@ export const movieApi = {
   nowPlaying: () => getAnything("/movie/now_playing"),
   popular: () => getAnything("/movie/popular"),
   upcoming: () => getAnything("/movie/upcoming"),
+  genre: () => getAnything("/genre/movie/list"),
   topRated: (page) => getAnything("/movie/top_rated", { page }),
   movie: (id) => getAnything(`/movie/${id}`, { append_to_response: "videos" }),
   similar: (id) => getAnything(`/movie/${id}/similar`),

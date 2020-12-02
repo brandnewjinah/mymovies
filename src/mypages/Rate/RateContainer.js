@@ -5,20 +5,22 @@ import RatePresenter from "./RatePresenter";
 
 const RateContainer = () => {
   const [movies, setMovies] = useState({
-    popular: [],
-    popularError: null,
+    genres: [],
+    genresError: null,
     topRated: [],
     topRatedError: null,
+    loading: true,
   });
 
   const [page, setPage] = useState(1);
 
   const getData = async () => {
-    const [popular, popularError] = await movieApi.popular();
+    const [genres, genresError] = await movieApi.genre();
     const [topRated, topRatedError] = await movieApi.topRated(page);
     setMovies({
-      popular,
-      popularError,
+      loading: false,
+      genres: genres.genres,
+      genresError,
       topRated,
       topRatedError,
     });
