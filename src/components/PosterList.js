@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 
 //import styles and assets
 import styled from "styled-components";
+import { Heart, BrokenHeart } from "../assets/Icons";
 
 const Poster = (props) => {
   // console.log(props.disliked);
@@ -20,16 +21,16 @@ const Poster = (props) => {
         />
         <Rating>
           <div
-            style={props.liked ? { backgroundColor: "yellow" } : null}
+            style={props.liked ? { backgroundColor: "#91b04f" } : null}
             onClick={() => props.onClick1(props.id)}
           >
-            Liked
+            <Heart width="26" height="26" fill="#fff" />
           </div>
           <div
-            style={props.disliked ? { backgroundColor: "blue" } : null}
+            style={props.disliked ? { backgroundColor: "#de7747" } : null}
             onClick={() => props.onClick2(props.id)}
           >
-            Disliked
+            <BrokenHeart width="26" height="26" fill="#fff" />
           </div>
         </Rating>
       </ImageContainer>
@@ -46,6 +47,10 @@ const Poster = (props) => {
 const Container = styled.div`
   width: 100%;
   margin-bottom: 1.5em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Image = styled.img`
@@ -58,7 +63,7 @@ const Image = styled.img`
 const Rating = styled.div`
   position: absolute;
   top: 50%;
-  left: 45%;
+  left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
   opacity: 0;
@@ -66,10 +71,11 @@ const Rating = styled.div`
 
   div {
     margin: 0 1em;
-    background-color: white;
-    color: black;
-    padding: 0.5em;
+    padding: 1em;
     cursor: pointer;
+    background-color: #999999;
+    border-radius: 100%;
+    display: flex;
   }
 `;
 

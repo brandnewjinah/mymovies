@@ -11,9 +11,11 @@ const RateContainer = () => {
     topRatedError: null,
   });
 
+  const [page, setPage] = useState(1);
+
   const getData = async () => {
     const [popular, popularError] = await movieApi.popular();
-    const [topRated, topRatedError] = await movieApi.topRated();
+    const [topRated, topRatedError] = await movieApi.topRated(page);
     setMovies({
       popular,
       popularError,
@@ -24,8 +26,19 @@ const RateContainer = () => {
 
   useEffect(() => {
     getData();
-  }, []);
-  return <RatePresenter {...movies} />;
+  }, [page]);
+
+  const nextPage = () => {
+    setPage(page + 1);
+  };
+
+  const prevPage = () => {
+    if (page > 1) {
+      setPage(page - 1);
+    }
+  };
+
+  return <RatePresenter nextPage={nextPage} prevPage={prevPage} {...movies} />;
 };
 
 export default RateContainer;

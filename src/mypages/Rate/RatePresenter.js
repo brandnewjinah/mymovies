@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 //import components
-import Section from "../../components/Section";
+import Section from "../../components/Section2";
 import PosterList from "../../components/PosterList";
 
 //redux
@@ -23,8 +23,15 @@ const RatePresenter = (props) => {
 
   return (
     <Container>
+      <Header>
+        <h2>Please rate at least 30 movies you watched</h2>
+        <div>{props.liked.length + props.disliked.length} / 30</div>
+        <button onClick={props.prevPage}>Prev</button>
+        <button onClick={props.nextPage}>Next</button>
+      </Header>
+
       {props.topRated && props.topRated.length > 0 && (
-        <Section title="Now Playing">
+        <Section title="Rate movies you watched">
           {props.topRated.map((movie) => (
             <PosterList
               key={movie.id}
@@ -43,6 +50,11 @@ const RatePresenter = (props) => {
           ))}
         </Section>
       )}
+
+      <Footer>
+        <div>You rated {props.liked.length + props.disliked.length} / 30</div>
+        <button>Next</button>
+      </Footer>
     </Container>
   );
 };
@@ -57,7 +69,32 @@ RatePresenter.propTypes = {
 };
 
 const Container = styled.div`
-  padding: 0px 10px;
+  margin: 4em auto;
+  width: 100%;
+  max-width: 1260px;
+`;
+
+const Header = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  h2 {
+    font-size: 1.5rem;
+  }
+`;
+
+const Footer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1em;
+`;
+
+const Title = styled.span`
+  font-size: 24px;
+  font-weight: 600;
 `;
 
 const mapStateToProps = (state) => {
