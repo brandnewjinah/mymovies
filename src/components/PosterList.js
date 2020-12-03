@@ -68,8 +68,8 @@ const Container = styled.div`
 
 const Image = styled.img`
   width: 100%;
-  /* height: auto; */
-  min-height: 348px;
+  height: auto;
+  /* min-height: 348px; */
   object-fit: contain;
   border-radius: 8px;
   transition: opacity 0.1s linear;

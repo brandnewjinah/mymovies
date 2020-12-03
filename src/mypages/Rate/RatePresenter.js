@@ -42,6 +42,8 @@ const RatePresenter = (props) => {
     return ref.current;
   };
 
+  console.log(props.genres);
+
   const prevCount = usePrevious(total);
 
   const handleGenre = (genre) => {
@@ -138,7 +140,7 @@ const RatePresenter = (props) => {
 
       <Footer>
         <div>You rated {props.liked.length + props.disliked.length} / 30</div>
-        <button>Next</button>
+        <Button onClick={props.nextPage}>Next</Button>
       </Footer>
     </Container>
   );
