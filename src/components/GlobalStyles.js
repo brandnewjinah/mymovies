@@ -3,6 +3,9 @@ import reset from "styled-reset";
 
 const globalStyles = createGlobalStyle`
     ${reset};
+
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Source+Serif+Pro:wght@300;400;600;700&display=swap');
+
     a {
         text-decoration: none;
         color: inherit;
@@ -11,11 +14,11 @@ const globalStyles = createGlobalStyle`
         box-sizing: border-box;
     }
     body {
-        font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        font-family: 'Poppins', sans-serif;
         font-size: 12px;
         /* background-color: rgba(20, 20, 20, 1); */
         background-color: #fff;
-        color: black;
+        color: #172d6e;
         padding-top: 50px; 
     }
 `;

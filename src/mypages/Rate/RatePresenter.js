@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
 //import components
-import Section from "../../components/Section2";
+import { Section } from "../../components/Section2";
 import PosterList from "../../components/PosterList";
 import Indicator from "../../components/Indicator";
 
@@ -14,10 +14,9 @@ import { likeItem, dislikeItem } from "../../store/movies";
 //import styles and assets
 import styled from "styled-components";
 
-//import data
-import { lanList } from "../../data/language";
-
 const RatePresenter = (props) => {
+  const [total, setTotal] = useState(0);
+
   const handleLike = (movie) => {
     props.likeItem(movie);
   };
@@ -25,6 +24,25 @@ const RatePresenter = (props) => {
   const handleDislike = (movie) => {
     props.dislikeItem(movie);
   };
+
+  const handleRated = () => {
+    const totalRated = props.liked.length + props.disliked.length;
+    setTotal(totalRated);
+  };
+
+  useEffect(() => {
+    handleRated();
+  }, [props.liked, props.disliked]);
+
+  const usePrevious = (value) => {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = value;
+    });
+    return ref.current;
+  };
+
+  const prevCount = usePrevious(total);
 
   const handleGenre = (genre) => {
     if (genre) {
@@ -36,20 +54,60 @@ const RatePresenter = (props) => {
     }
   };
 
+  const burst = {
+    color: "green",
+  };
+
   return props.loading ? (
     <Indicator />
   ) : (
     <Container>
       <Header>
-        <h2>Please rate at least 30 movies you watched</h2>
-        <div>{props.liked.length + props.disliked.length} / 30</div>
-        <button onClick={props.prevPage}>Prev</button>
-        <button onClick={props.nextPage}>Next</button>
-        <Link to="/profile">
-          <button disabled={props.liked.length + props.disliked.length < 30}>
-            Finish
-          </button>
-        </Link>
+        <h2>
+          <span
+            style={
+              total < 30
+                ? { color: "#fd7e14" }
+                : prevCount === 29
+                ? burst
+                : null
+            }
+          >
+            {total}
+          </span>
+          <span> / 30</span>
+        </h2>
+        {total >= 30 ? (
+          <div
+            style={{
+              display: "flex",
+            }}
+          >
+            <h4>You rated 30 movies! Keep rating or </h4>
+            <Link to="/profile">
+              <h4
+                style={{
+                  borderBottom: `3px solid #172d6e`,
+                  marginLeft: "6px",
+                }}
+              >
+                See your profile
+              </h4>
+            </Link>
+          </div>
+        ) : (
+          <h4>Please rate at least 30 movies you watched</h4>
+        )}
+        <div
+          style={{
+            display: "flex",
+          }}
+        >
+          {props.page !== 1 ? (
+            <Button onClick={props.prevPage}>Prev</Button>
+          ) : null}
+          <Button onClick={props.nextPage}>Next</Button>
+        </div>
       </Header>
 
       {props.topRated && props.topRated.length > 0 && (
@@ -57,6 +115,7 @@ const RatePresenter = (props) => {
           {props.topRated.map((movie) => (
             <PosterList
               key={movie.id}
+              rate={true}
               id={movie.id}
               imageUrl={movie.poster_path}
               title={movie.title}
@@ -93,11 +152,34 @@ const Container = styled.div`
 
 const Header = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
 
   h2 {
-    font-size: 1.5rem;
+    font-size: 2.8rem;
+    font-weight: 500;
   }
+
+  h4 {
+    font-size: 1.125rem;
+    margin: 1.5em 0;
+    text-rendering: optimizeLegibility;
+  }
+`;
+
+const Button = styled.button`
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  border: transparent;
+  font-family: "Poppins", sans-serif;
+  color: #172d6e;
+  font-size: 1.125rem;
+  font-weight: 400;
+  border-bottom: 3px solid #172d6e;
+  margin: 0 0.5em;
+  cursor: pointer;
 `;
 
 const Footer = styled.div`

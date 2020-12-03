@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { Heart, BrokenHeart } from "../assets/Icons";
 
 const Poster = ({
+  rate,
   imageUrl,
   liked,
   disliked,
@@ -25,28 +26,30 @@ const Poster = ({
               : "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty-300x240.jpg"
           }
         />
-        <Rating>
-          <div
-            style={liked ? { backgroundColor: "#91b04f" } : null}
-            onClick={() => onClick1()}
-          >
-            <Heart width="26" height="26" fill="#fff" />
-          </div>
-          <div
-            style={disliked ? { backgroundColor: "#de7747" } : null}
-            onClick={() => onClick2()}
-          >
-            <BrokenHeart width="26" height="26" fill="#fff" />
-          </div>
-        </Rating>
+        {rate && (
+          <Rating>
+            <div
+              style={liked ? { backgroundColor: "#91b04f" } : null}
+              onClick={() => onClick1()}
+            >
+              <Heart width="26" height="26" fill="#fff" />
+            </div>
+            <div
+              style={disliked ? { backgroundColor: "#de7747" } : null}
+              onClick={() => onClick2()}
+            >
+              <BrokenHeart width="26" height="26" fill="#fff" />
+            </div>
+          </Rating>
+        )}
       </ImageContainer>
 
       <Title>
-        {title.length > 18 ? `${title.substring(0, 20)}...` : title}
+        {title.length > 20 ? `${title.substring(0, 22)}...` : title}
       </Title>
       <Details>
         <div>{year.substring(0, 4)}</div>
-        <div>{genre.join(" \u00B7 ")}</div>
+        <div>{genre && genre.join(" \u00B7 ")}</div>
       </Details>
     </Container>
   );
@@ -57,15 +60,20 @@ const Container = styled.div`
   margin-bottom: 1.5em;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
+  /* background-color: Gainsboro;
+  border: 1px solid black; */
 `;
 
 const Image = styled.img`
   width: 100%;
-  height: 300px;
+  /* height: auto; */
+  min-height: 348px;
   object-fit: contain;
+  border-radius: 8px;
   transition: opacity 0.1s linear;
+  /* box-shadow: 0 2px 6px 2px rgba(0, 0, 0, 0.1); */
 `;
 
 const Rating = styled.div`
@@ -103,7 +111,8 @@ const ImageContainer = styled.div`
 
 const Title = styled.span`
   display: block;
-  font-size: 1.025rem;
+  font-size: 1rem;
+  font-weight: 500;
   margin: 0.5em 0;
 `;
 

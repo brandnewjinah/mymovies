@@ -3,29 +3,35 @@ import PropTypes from "prop-types";
 
 //import components
 import Indicator from "../../components/Indicator";
-import Section from "../../components/Section";
+import { Section } from "../../components/Section2";
 import PosterList from "../../components/PosterList";
+
+//redux
+import { connect } from "react-redux";
 
 //import styles and assets
 import styled from "styled-components";
 
-const ProfilePresenter = ({
-  movies,
-  shows,
-  keyword,
-  onChange,
-  onSubmit,
-  loading,
-}) => {
+const ProfilePresenter = (props) => {
+  const handleGenre = (genre) => {
+    if (genre) {
+      const genres = genre.map((g) => {
+        const found = props.genres.find((item) => item.id === g);
+        return found.name;
+      });
+      return genres.slice(0, 2);
+    }
+  };
+
   return (
     <Container>
-      {loading ? (
+      {props.loading ? (
         <Indicator />
       ) : (
         <>
-          {movies && movies.length > 0 && (
-            <Section title="Movie Results">
-              {movies.map((movie) => (
+          {props.liked && props.liked.length > 0 && (
+            <Section title="Liked Movies">
+              {props.liked.map((movie) => (
                 <PosterList
                   key={movie.id}
                   id={movie.id}
@@ -33,6 +39,22 @@ const ProfilePresenter = ({
                   title={movie.title}
                   rating={movie.vote_average}
                   year={movie.release_date}
+                  genre={handleGenre(movie.genre_ids)}
+                />
+              ))}
+            </Section>
+          )}
+          {props.disliked && props.disliked.length > 0 && (
+            <Section title="Disliked Movies">
+              {props.disliked.map((movie) => (
+                <PosterList
+                  key={movie.id}
+                  id={movie.id}
+                  imageUrl={movie.poster_path}
+                  title={movie.title}
+                  rating={movie.vote_average}
+                  year={movie.release_date}
+                  genre={handleGenre(movie.genre_ids)}
                 />
               ))}
             </Section>
@@ -44,7 +66,9 @@ const ProfilePresenter = ({
 };
 
 const Container = styled.div`
-  padding: 0px 20px;
+  margin: 4em auto;
+  width: 100%;
+  max-width: 1260px;
 `;
 
 const Form = styled.form`
@@ -58,4 +82,11 @@ const Input = styled.input`
   width: 100%;
 `;
 
-export default ProfilePresenter;
+const mapStateToProps = (state) => {
+  return {
+    liked: state.liked,
+    disliked: state.disliked,
+  };
+};
+
+export default connect(mapStateToProps, null)(ProfilePresenter);

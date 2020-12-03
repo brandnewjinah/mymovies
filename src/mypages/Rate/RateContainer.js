@@ -40,7 +40,14 @@ const RateContainer = () => {
     }
   };
 
-  return <RatePresenter nextPage={nextPage} prevPage={prevPage} {...movies} />;
+  return (
+    <RatePresenter
+      nextPage={nextPage}
+      prevPage={prevPage}
+      page={page}
+      {...movies}
+    />
+  );
 };
 
 export default RateContainer;
