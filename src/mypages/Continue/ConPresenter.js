@@ -14,8 +14,8 @@ import { likeItem, dislikeItem } from "../../store/movies";
 //import styles and assets
 import styled from "styled-components";
 
-const RatePresenter = (props) => {
-  const [total, setTotal] = useState(0);
+const ConPresenter = (props) => {
+  const [movies, setMovies] = useState([]);
 
   const handleLike = (movie) => {
     props.likeItem(movie);
@@ -25,24 +25,9 @@ const RatePresenter = (props) => {
     props.dislikeItem(movie);
   };
 
-  const handleRated = () => {
-    const totalRated = props.liked.length + props.disliked.length;
-    setTotal(totalRated);
-  };
-
   useEffect(() => {
-    handleRated();
-  }, [props.liked, props.disliked]);
-
-  const usePrevious = (value) => {
-    const ref = useRef();
-    useEffect(() => {
-      ref.current = value;
-    });
-    return ref.current;
-  };
-
-  const prevCount = usePrevious(total);
+    unRated();
+  }, []);
 
   const handleGenre = (genre) => {
     if (genre) {
@@ -54,8 +39,15 @@ const RatePresenter = (props) => {
     }
   };
 
-  const burst = {
-    color: "green",
+  const unRated = () => {
+    const liked = props.liked;
+    const disliked = props.disliked;
+    const filtered = props.topRated.filter(
+      (d) =>
+        !liked.find((id) => id.id === d.id) &&
+        !disliked.find((id) => id.id === d.id)
+    );
+    setMovies(filtered);
   };
 
   return props.loading ? (
@@ -63,41 +55,9 @@ const RatePresenter = (props) => {
   ) : (
     <Container>
       <Header>
-        <h2>
-          <span
-            style={
-              total < 30
-                ? { color: "#fd7e14" }
-                : prevCount === 29
-                ? burst
-                : null
-            }
-          >
-            {total}
-          </span>
-          <span> / 30</span>
-        </h2>
-        {total >= 30 ? (
-          <div
-            style={{
-              display: "flex",
-            }}
-          >
-            <h4>You rated 30 movies! Keep rating or </h4>
-            <Link to="/profile">
-              <h4
-                style={{
-                  borderBottom: `3px solid #172d6e`,
-                  marginLeft: "6px",
-                }}
-              >
-                See your profile
-              </h4>
-            </Link>
-          </div>
-        ) : (
-          <h4>Please rate at least 30 movies you watched</h4>
-        )}
+        <h2>Rate more movies</h2>
+        <h4>Keep rating to get more personalized recommendations</h4>
+
         <div
           style={{
             display: "flex",
@@ -110,9 +70,9 @@ const RatePresenter = (props) => {
         </div>
       </Header>
 
-      {props.topRated && props.topRated.length > 0 && (
-        <Section title="Rate movies you watched">
-          {props.topRated.map((movie) => (
+      {movies && movies.length > 0 && (
+        <Section>
+          {movies.map((movie) => (
             <PosterList
               key={movie.id}
               rate={true}
@@ -189,7 +149,7 @@ const Footer = styled.div`
   padding: 0 1em;
 `;
 
-RatePresenter.propTypes = {
+ConPresenter.propTypes = {
   nowPlaying: PropTypes.array,
   popular: PropTypes.array,
   upcoming: PropTypes.array,
@@ -206,5 +166,5 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, { likeItem, dislikeItem })(
-  RatePresenter
+  ConPresenter
 );

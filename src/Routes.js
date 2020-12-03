@@ -14,6 +14,7 @@ import Home from "./pages/Movies";
 import Search from "./pages/Search";
 import TV from "./pages/TV";
 import Rate from "./mypages/Rate";
+import Continue from "./mypages/Continue";
 import Profile from "./mypages/Profile";
 
 const Routes = () => {
@@ -27,6 +28,7 @@ const Routes = () => {
           <Route exact path="/tv" component={TV} />
           <Route exact path="/rate" component={Rate} />
           <Route exact path="/profile" component={Profile} />
+          <Route exact path="/continue" component={Continue} />
           <Redirect from="*" to="/" />
         </Switch>
       </>

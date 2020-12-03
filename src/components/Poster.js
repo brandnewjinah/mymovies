@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 //import styles and assets
 import styled from "styled-components";
-import noImage from "../assets/noimage.jpg";
+// import noImage from "../assets/noimage.jpg";
 
 const Poster = ({ id, imageUrl, title, rating, year }) => {
   return (

@@ -78,6 +78,12 @@ export const movieApi = {
   topRated: (page) => getAnything("/movie/top_rated", { page }),
   movie: (id) => getAnything(`/movie/${id}`, { append_to_response: "videos" }),
   similar: (id) => getAnything(`/movie/${id}/similar`),
+  discover: (id) =>
+    getAnything(`/discover/movie`, {
+      with_genres: id,
+      sort_by: "vote_count.desc",
+    }),
+  keyword: (id) => getAnything(`/movie/${id}/keywords`),
   search: (query) => getAnything("/search/movie", { query }),
 };
 
