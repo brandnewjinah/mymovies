@@ -1,33 +1,36 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 //import styles and assets
 import styled from "styled-components";
 // import noImage from "../assets/noimage.jpg";
 
-const Poster = ({ id, imageUrl, title, rating, year }) => {
+const Poster = ({ id, imageUrl, title, rating, year, isMovie = false }) => {
   return (
-    <Container>
-      <ImageContainer>
-        <Image
-          bgUrl={
-            imageUrl
-              ? `https://image.tmdb.org/t/p/w500${imageUrl}`
-              : "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty-300x240.jpg"
-          }
-        ></Image>
-        <Rating>
-          <span role="img" aria-label="rating">
-            ⭐
-          </span>{" "}
-          {rating}
-        </Rating>
-      </ImageContainer>
-      <Title>
-        {title.length > 18 ? `${title.substring(0, 18)}...` : title}
-      </Title>
-      <Year>{year}</Year>
-    </Container>
+    <Link to={isMovie ? `/movie/${id}` : `/tv/${id}`}>
+      <Container>
+        <ImageContainer>
+          <Image
+            bgUrl={
+              imageUrl
+                ? `https://image.tmdb.org/t/p/w500${imageUrl}`
+                : "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty-300x240.jpg"
+            }
+          ></Image>
+          <Rating>
+            <span role="img" aria-label="rating">
+              ⭐
+            </span>{" "}
+            {rating}
+          </Rating>
+        </ImageContainer>
+        <Title>
+          {title.length > 18 ? `${title.substring(0, 18)}...` : title}
+        </Title>
+        <Year>{year}</Year>
+      </Container>
+    </Link>
   );
 };
 
@@ -37,6 +40,7 @@ Poster.propTyes = {
   title: PropTypes.string.isRequired,
   rating: PropTypes.number,
   year: PropTypes.string,
+  isMovie: PropTypes.bool,
 };
 
 const Container = styled.div`

@@ -31,6 +31,7 @@ const HomePresenter = ({
               title={movie.title}
               rating={movie.vote_average}
               year={movie.release_date}
+              isMovie={true}
             />
           ))}
         </Section>
@@ -45,6 +46,7 @@ const HomePresenter = ({
               title={movie.title}
               rating={movie.vote_average}
               year={movie.release_date}
+              isMovie={true}
             />
           ))}
         </Section>
@@ -59,6 +61,7 @@ const HomePresenter = ({
               title={movie.title}
               rating={movie.vote_average}
               year={movie.release_date}
+              isMovie={true}
             />
           ))}
         </Section>

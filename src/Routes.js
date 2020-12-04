@@ -17,6 +17,7 @@ import Rate from "./mypages/Rate";
 import Continue from "./mypages/Continue";
 import Profile from "./mypages/Profile";
 import Recommend from "./mypages/Recommend";
+import Detail from "./pages/Details";
 
 const Routes = () => {
   return (
@@ -31,6 +32,8 @@ const Routes = () => {
           <Route exact path="/profile" component={Profile} />
           <Route exact path="/recommend" component={Recommend} />
           <Route exact path="/continue" component={Continue} />
+          <Route exact path="/movie/:id" component={Detail} />
+          <Route exact path="/tv/:id" component={Detail} />
           <Redirect from="*" to="/" />
         </Switch>
       </>
