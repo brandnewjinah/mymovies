@@ -131,24 +131,21 @@ const RecommendPresenter = (props) => {
           <Recommendations>
             {/* <h3>Because you like (Foreign)</h3>
             {foreign && foreign.length > 0 && <div>foreign exist</div>} */}
-
-            {props.foreign && props.foreign.length > 0 && (
-              <>
-                <h3>Because you like {language}</h3>
-                <Section2>
-                  {props.foreign.slice(0, 8).map((movie) => (
-                    <PosterList
-                      key={movie.id}
-                      id={movie.id}
-                      imageUrl={movie.poster_path}
-                      title={movie.title}
-                      rating={movie.vote_average}
-                      year={movie.release_date}
-                      genre={handleGenre(movie.genre_ids)}
-                    />
-                  ))}
-                </Section2>
-              </>
+            <h3>Based on your ratings we recommend</h3>
+            {props.unRated && props.unRated.length > 0 && (
+              <Section2>
+                {props.unRated.slice(0, 8).map((movie) => (
+                  <PosterList
+                    key={movie.id}
+                    id={movie.id}
+                    imageUrl={movie.poster_path}
+                    title={movie.title}
+                    rating={movie.vote_average}
+                    year={movie.release_date}
+                    genre={handleGenre(movie.genre_ids)}
+                  />
+                ))}
+              </Section2>
             )}
             <h3>Because you like {likedMovie}</h3>
             {props.similar && props.similar.length > 0 && (
@@ -166,21 +163,23 @@ const RecommendPresenter = (props) => {
                 ))}
               </Section2>
             )}
-            <h3>Based on your ratings we recommend</h3>
-            {props.unRated && props.unRated.length > 0 && (
-              <Section2>
-                {props.unRated.slice(0, 8).map((movie) => (
-                  <PosterList
-                    key={movie.id}
-                    id={movie.id}
-                    imageUrl={movie.poster_path}
-                    title={movie.title}
-                    rating={movie.vote_average}
-                    year={movie.release_date}
-                    genre={handleGenre(movie.genre_ids)}
-                  />
-                ))}
-              </Section2>
+            {props.foreign && props.foreign.length > 0 && (
+              <>
+                <h3>Because you like {language}</h3>
+                <Section2>
+                  {props.foreign.slice(0, 8).map((movie) => (
+                    <PosterList
+                      key={movie.id}
+                      id={movie.id}
+                      imageUrl={movie.poster_path}
+                      title={movie.title}
+                      rating={movie.vote_average}
+                      year={movie.release_date}
+                      genre={handleGenre(movie.genre_ids)}
+                    />
+                  ))}
+                </Section2>
+              </>
             )}
           </Recommendations>
         </>

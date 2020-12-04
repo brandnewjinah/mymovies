@@ -11,8 +11,8 @@ export default withRouter(({ location: { pathname } }) => (
 
       <List>
         <ul>
-          <Item current={pathname === "/"}>
-            <SLink to="/recommend">Your Movies</SLink>
+          <Item current={pathname === "/recommend"}>
+            <SLink to="/recommend">Recommend</SLink>
           </Item>
           <Item current={pathname === "/"}>
             <SLink to="/">Movies</SLink>

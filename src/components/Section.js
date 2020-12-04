@@ -36,8 +36,7 @@ const Title = styled.span`
 const Grid = styled.div`
   margin-top: 25px;
   display: grid;
-  /* grid-template-columns: repeat(auto-fill, 125px); */
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(auto-fill, 125px);
   grid-gap: 25px;
 `;
 

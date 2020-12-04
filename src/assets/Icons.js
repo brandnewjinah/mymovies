@@ -68,4 +68,22 @@ export const ArrowRight = ({ width, height, stroke, color, fill }) => {
   );
 };
 
+export const ChevronDown = ({ width, height, stroke, color }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth={stroke}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
+  );
+};
+
 //width="20" height="20" color="#000" stroke="2"

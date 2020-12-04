@@ -20,7 +20,7 @@ const Poster = ({ id, imageUrl, title, rating, year }) => {
           <span role="img" aria-label="rating">
             ⭐
           </span>{" "}
-          {rating / 10}
+          {rating}
         </Rating>
       </ImageContainer>
       <Title>

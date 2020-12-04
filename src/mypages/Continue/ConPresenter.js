@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
+import Select from "react-select";
 
 //import components
 import { Section } from "../../components/Section2";
 import PosterList from "../../components/PosterList";
 import Indicator from "../../components/Indicator";
+import Dropdown from "../../components/Dropdown";
 
 //redux
 import { connect } from "react-redux";
@@ -13,7 +15,28 @@ import { likeItem, dislikeItem } from "../../store/movies";
 //import styles and assets
 import styled from "styled-components";
 
+//data
+const data = [
+  { name: "By Popularity", path: "popularity.desc" },
+  { name: "By Vote Average", path: "vote_average.desc" },
+  { name: "By Vote Count", path: "vote.count.desc" },
+];
+
+const genre = [
+  { value: "Front-end", label: "Front-end", color: "#00B8D9" },
+  { value: "Back-end", label: "Back-end", color: "#5243AA" },
+  { value: "UX/UI", label: "UX/UI", color: "#FF5630" },
+  {
+    value: "Product Management",
+    label: "Product Management",
+    color: "#FF8B00",
+  },
+  { value: "Marketing", label: "Marketing", color: "#FFC400" },
+  { value: "HR", label: "HR", color: "#36B37E" },
+];
+
 const ConPresenter = (props) => {
+  const [selected, setSelected] = useState(data[0].name);
   const handleLike = (movie) => {
     props.likeItem(movie);
   };
@@ -32,20 +55,90 @@ const ConPresenter = (props) => {
     }
   };
 
+  const handleSelection = (d) => {
+    setSelected(d.name);
+    props.fireSelection(d.path);
+  };
+
+  const handleChange = (value) => {
+    if (value === null) {
+      props.fireExclusion("");
+    } else {
+      const result = value.map((o) => o.id);
+      props.fireExclusion(result.toString());
+    }
+  };
+
+  const customStyles = {
+    control: (styles) => ({
+      ...styles,
+      border: 0,
+      borderRadius: 0,
+      borderBottom: `3px solid #172d6e`,
+      boxShadow: "none",
+      paddingTop: `2px`,
+      minWidth: `auto`,
+    }),
+    placeholder: (styles) => ({
+      ...styles,
+      fontSize: `1rem`,
+      position: `static`,
+      top: `auto`,
+      transform: `none`,
+    }),
+    multiValue: (styles) => ({
+      ...styles,
+      backgroundColor: `transparent`,
+    }),
+    multiValueLabel: (styles) => ({
+      ...styles,
+      color: `#de576d`,
+      fontSize: `1.05rem`,
+    }),
+  };
   return props.loading ? (
     <Indicator />
   ) : (
     <Container>
       <Header>
         <h2>Rate more movies</h2>
-        <h4>Keep rating to get more personalized recommendations</h4>
-
+        <div style={{ display: `flex`, marginTop: `1em` }}>
+          <Dropdown
+            selected={selected}
+            data={data}
+            handleSelection={(d) => handleSelection(d)}
+          />
+        </div>
+        <Multi>
+          <h4>But don't show me</h4>
+          <div>
+            <Select
+              isMulti
+              menuPlacement="auto"
+              menuPosition="fixed"
+              placeholder="Select genres"
+              styles={customStyles}
+              defaultValue={[]}
+              options={props.genres.map((item) => ({
+                label: item.name,
+                value: item.name,
+                id: item.id,
+              }))}
+              onChange={handleChange}
+              components={{
+                DropdownIndicator: () => null,
+                IndicatorSeparator: () => null,
+                ClearIndicator: () => null,
+              }}
+            />
+          </div>
+        </Multi>
         <div
           style={{
             display: "flex",
           }}
         >
-          <Button onClick={props.nextPage}>More</Button>
+          {/* <Button onClick={props.nextPage}>More</Button> */}
         </div>
       </Header>
 
@@ -76,7 +169,7 @@ const ConPresenter = (props) => {
       )}
 
       <Footer>
-        <div>You rated {props.liked.length + props.disliked.length} / 30</div>
+        <div>You rated {props.liked.length + props.disliked.length}</div>
         <Button onClick={props.nextPage}>More</Button>
       </Footer>
     </Container>
@@ -84,17 +177,19 @@ const ConPresenter = (props) => {
 };
 
 const Container = styled.div`
-  margin: 4em auto;
+  margin: 6em auto;
   width: 100%;
   max-width: 1260px;
 `;
 
-const Header = styled.div`
+const Flex = styled.div`
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
+`;
 
+const Header = styled(Flex)`
+  flex-direction: column;
   h2 {
     font-size: 2.8rem;
     font-weight: 500;
@@ -105,6 +200,10 @@ const Header = styled.div`
     margin: 1.5em 0;
     text-rendering: optimizeLegibility;
   }
+`;
+
+const Multi = styled(Flex)`
+  width: 100%;
 `;
 
 const Button = styled.button`

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 // import PropTypes from "prop-types";
 import _ from "lodash";
-import { HorizontalBar } from "react-chartjs-2";
+import { ResponsivePie } from "@nivo/pie";
 
 //import components
 import Indicator from "../../components/Indicator";
+import { Section2 } from "../../components/Section2";
+import PosterList from "../../components/PosterList";
 
 //redux
 import { connect } from "react-redux";
@@ -56,89 +58,96 @@ const ProfilePresenter = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleGenre = (genre) => {
+    if (genre) {
+      const genres = genre.map((g) => {
+        const found = props.genres.find((item) => item.id === g);
+        return found.name;
+      });
+      return genres.slice(0, 2);
+    }
+  };
+
   return (
     <Container>
       {props.loading ? (
         <Indicator />
       ) : (
         <>
+          <Header>
+            <h2>My Movie Analyzer</h2>
+          </Header>
           <Analyser>
-            <div>
-              <HorizontalBar
-                data={{
-                  datasets: [
-                    {
-                      label: "Liked",
-                      data: [(100 * liked) / total],
-                      backgroundColor: "#D6E9C6", // green
-                    },
-                    {
-                      label: "Disliked",
-                      data: [(100 * disliked) / total],
-                      backgroundColor: "#FAEBCC", // yellow
-                    },
-                  ],
-                }}
-                height={400}
-                width={600}
-                options={{
-                  maintainAspectRatio: false,
-
-                  scales: {
-                    xAxes: [
-                      {
-                        gridLines: {
-                          display: false,
-                          drawOnChartArea: false,
-                          drawTicks: false,
-                        },
-                        stacked: true,
-                        ticks: {
-                          display: false,
-                        },
-                      },
-                    ],
-                    yAxes: [
-                      {
-                        gridLines: {
-                          display: false,
-                          drawOnChartArea: false,
-                          drawTicks: false,
-                        },
-                        stacked: true,
-                        ticks: {
-                          display: false,
-                        },
-                      },
-                    ],
-                  },
-                }}
-              />
-            </div>
-            <h4>You rated {total} movies</h4>
-            <h4>You liked {liked} movies</h4>
-            <h4>You disliked {disliked} movies</h4>
-            <h4>language</h4>
-            {language.map((g, idx) => {
-              const found = lanList.find((item) => item.code === g.key);
-              return (
-                <div key={idx}>
-                  {found.english}: {g.count}
-                </div>
-              );
-            })}
-            <h4>genre</h4>
-            {genre.map((g, idx) => {
-              const found = props.genres.find(
-                (item) => item.id === parseInt(g.key)
-              );
-              return (
-                <div key={idx}>
-                  {found.name}: {g.count}
-                </div>
-              );
-            })}
+            <h4>
+              Out of <span>{total}</span> movies watched, I liked{" "}
+              <span>{liked}</span> and disliked <span>{disliked}</span> movies.
+              My favorite genre is{" "}
+              {genre.slice(0, 1).map((g, idx) => {
+                const found = props.genres.find(
+                  (item) => item.id === parseInt(g.key)
+                );
+                return <span key={idx}>{found.name}</span>;
+              })}{" "}
+              followed by{" "}
+              {genre.slice(1, 4).map((g, idx, arr) => {
+                const found = props.genres.find(
+                  (item) => item.id === parseInt(g.key)
+                );
+                if (arr.length - 1 === idx) {
+                  return (
+                    <>
+                      and <span key={idx}>{found.name}</span>
+                    </>
+                  );
+                } else {
+                  return (
+                    <>
+                      <span key={idx}>{found.name}</span>,{" "}
+                    </>
+                  );
+                }
+              })}
+              . I watched primarily in{" "}
+              {language.slice(0, 1).map((g, idx) => {
+                const found = lanList.find((item) => item.code === g.key);
+                return <span key={idx}>{found.english}</span>;
+              })}{" "}
+              but not afraid to watch foreign films in{" "}
+              {language.slice(1).map((g, idx, arr) => {
+                const found = lanList.find((item) => item.code === g.key);
+                if (arr.length - 1 === idx) {
+                  return (
+                    <>
+                      and <span key={idx}>{found.english}</span>
+                    </>
+                  );
+                } else
+                  return (
+                    <>
+                      <span key={idx}>{found.english}</span>,{" "}
+                    </>
+                  );
+              })}
+              . Here are my liked movies:<span>{}</span>
+            </h4>
           </Analyser>
+          <Liked>
+            {array && array.length > 0 && (
+              <Section2>
+                {array.map((movie) => (
+                  <PosterList
+                    key={movie.id}
+                    id={movie.id}
+                    imageUrl={movie.poster_path}
+                    title={movie.title}
+                    rating={movie.vote_average}
+                    year={movie.release_date}
+                    genre={handleGenre(movie.genre_ids)}
+                  />
+                ))}
+              </Section2>
+            )}
+          </Liked>
         </>
       )}
     </Container>
@@ -146,19 +155,58 @@ const ProfilePresenter = (props) => {
 };
 
 const Container = styled.div`
-  margin: 4em auto;
+  margin: 6em auto;
   width: 100%;
   max-width: 1260px;
 `;
 
+const Header = styled(Container)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  h2 {
+    font-size: 2.8rem;
+    font-weight: 500;
+  }
+`;
+
 const Analyser = styled.div`
-  margin: 2em 0;
+  margin: 2em auto;
+  width: 100%;
+  max-width: 960px;
 
   h4 {
-    font-size: 1.125rem;
+    font-size: 1.5rem;
+    line-height: 2.8rem;
+    letter-spacing: 0.125rem;
     margin: 1.5em 0;
     text-rendering: optimizeLegibility;
   }
+
+  span {
+    /* border-bottom: 3px solid #e89161; */
+    position: relative;
+
+    &:after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-bottom: 3px solid #e89161;
+    }
+  }
+`;
+
+const Liked = styled.div`
+  margin: 6em auto;
+  width: 100%;
+`;
+
+const Graph = styled.div`
+  margin: 2em auto;
+  width: 100%;
+  max-width: 960px;
 `;
 
 const mapStateToProps = (state) => {

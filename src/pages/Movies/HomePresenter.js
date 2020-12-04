@@ -27,7 +27,7 @@ const HomePresenter = ({
             <Poster
               key={movie.id}
               id={movie.id}
-              imageurl={movie.poster_path}
+              imageUrl={movie.poster_path}
               title={movie.title}
               rating={movie.vote_average}
               year={movie.release_date}
@@ -41,7 +41,7 @@ const HomePresenter = ({
             <Poster
               key={movie.id}
               id={movie.id}
-              imageurl={movie.poster_path}
+              imageUrl={movie.poster_path}
               title={movie.title}
               rating={movie.vote_average}
               year={movie.release_date}
@@ -55,7 +55,7 @@ const HomePresenter = ({
             <Poster
               key={movie.id}
               id={movie.id}
-              imageurl={movie.poster_path}
+              imageUrl={movie.poster_path}
               title={movie.title}
               rating={movie.vote_average}
               year={movie.release_date}
@@ -77,7 +77,7 @@ HomePresenter.propTypes = {
 };
 
 const Container = styled.div`
-  padding: 0px 10px;
+  padding: 6em 10px;
 `;
 
 export default HomePresenter;

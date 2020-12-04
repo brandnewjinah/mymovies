@@ -98,20 +98,10 @@ const RatePresenter = (props) => {
         ) : (
           <h4>Please rate at least 30 movies you watched</h4>
         )}
-        <div
-          style={{
-            display: "flex",
-          }}
-        >
-          {props.page !== 1 ? (
-            <Button onClick={props.prevPage}>Prev</Button>
-          ) : null}
-          <Button onClick={props.nextPage}>Next</Button>
-        </div>
       </Header>
 
       {props.topRated && props.topRated.length > 0 && (
-        <Section title="Rate movies you watched">
+        <Section>
           {props.topRated.map((movie) => (
             <PosterList
               key={movie.id}
@@ -138,14 +128,23 @@ const RatePresenter = (props) => {
 
       <Footer>
         <div>You rated {props.liked.length + props.disliked.length} / 30</div>
-        <Button onClick={props.nextPage}>Next</Button>
+        <div
+          style={{
+            display: "flex",
+          }}
+        >
+          {props.page !== 1 ? (
+            <Button onClick={props.prevPage}>Prev</Button>
+          ) : null}
+          <Button onClick={props.nextPage}>Next</Button>
+        </div>
       </Footer>
     </Container>
   );
 };
 
 const Container = styled.div`
-  margin: 4em auto;
+  margin: 6em auto;
   width: 100%;
   max-width: 1260px;
 `;

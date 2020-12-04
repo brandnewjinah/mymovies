@@ -43,6 +43,13 @@ export const movieApi = {
       with_original_language: id,
       // sort_by: "vote_count.desc",
     }),
+  rate: (selection, exclude, page) =>
+    getAnything(`/discover/movie`, {
+      page: page,
+      sort_by: selection,
+      "vote_count.gte": 10,
+      without_genres: exclude,
+    }),
   keyword: (id) => getAnything(`/movie/${id}/keywords`),
   search: (query) => getAnything("/search/movie", { query }),
 };

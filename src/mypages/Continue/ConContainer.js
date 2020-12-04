@@ -18,12 +18,18 @@ const ConContainer = (props) => {
 
   let random = Math.floor(Math.random() * 404);
 
-  let [page, setPage] = useState(random);
+  let [page, setPage] = useState(1);
+  let [selection, setSelection] = useState("popularity.desc");
+  let [exclude, setExclude] = useState("");
 
   useEffect(() => {
     const getData = async () => {
       const [genres, genresError] = await movieApi.genre();
-      const [topRated, topRatedError] = await movieApi.topRated(page);
+      const [topRated, topRatedError] = await movieApi.rate(
+        selection,
+        exclude,
+        page
+      );
 
       const filtered = topRated.filter(
         (d) =>
@@ -57,13 +63,21 @@ const ConContainer = (props) => {
       });
     };
     getData();
-  }, [page]);
+  }, [selection, page, exclude]);
 
   const nextPage = () => {
-    setPage(random);
+    setPage(page + 1);
   };
 
-  return <ConPresenter nextPage={nextPage} page={page} {...movies} />;
+  return (
+    <ConPresenter
+      nextPage={nextPage}
+      fireSelection={(s) => setSelection(s)}
+      fireExclusion={(s) => setExclude(s)}
+      page={page}
+      {...movies}
+    />
+  );
 };
 
 const mapStateToProps = (state) => {

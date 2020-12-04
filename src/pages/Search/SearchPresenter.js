@@ -65,7 +65,7 @@ const SearchPresenter = ({
 };
 
 const Container = styled.div`
-  padding: 0px 20px;
+  padding: 6em 20px;
 `;
 
 const Form = styled.form`

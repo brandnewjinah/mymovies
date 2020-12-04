@@ -38,7 +38,9 @@ Section2.propTypes = {
   ]),
 };
 
-const Container = styled.div``;
+const Container = styled.div`
+  margin: 2em auto;
+`;
 
 const Title = styled.span`
   font-size: 24px;
