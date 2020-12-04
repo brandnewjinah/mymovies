@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Helmet from "react-helmet";
 
 import Indicator from "../../components/Indicator";
 import Poster from "../../components/Poster";
@@ -16,9 +17,20 @@ const DetailPresenter = ({
   similarError,
 }) => {
   return loading ? (
-    <Indicator />
+    <>
+      <Indicator />
+      <Helmet>
+        <title>Loading | Movie Rate</title>
+      </Helmet>
+    </>
   ) : (
     <Container>
+      <Helmet>
+        <title>
+          {result.original_title ? result.original_title : result.original_name}
+          | Movie Rate
+        </title>
+      </Helmet>
       <Backdrop
         bgImage={`https://image.tmdb.org/t/p/original${result.backdrop_path}`}
       />

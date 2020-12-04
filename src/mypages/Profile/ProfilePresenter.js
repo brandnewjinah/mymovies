@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 // import PropTypes from "prop-types";
 import _ from "lodash";
-import { ResponsivePie } from "@nivo/pie";
 
 //import components
 import Indicator from "../../components/Indicator";
