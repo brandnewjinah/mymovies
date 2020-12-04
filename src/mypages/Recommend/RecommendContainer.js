@@ -1,31 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { movieApi } from "../../api";
 
-import ProfilePresenter from "./ProfilePresenter";
+import RecommendPresenter from "./RecommendPresenter";
 
 //redux
 import { connect } from "react-redux";
 
-const ProfileContainer = (props) => {
+const RecommendContainer = (props) => {
   const [movies, setMovies] = useState({
     genres: [],
     genresError: null,
+    similar: [],
+    similarError: null,
     discovered: [],
     discoveredError: null,
-    discoveredLan: [],
-    discovereLanError: null,
+    foreign: [],
+    foreignError: null,
     unRated: [],
     loading: true,
   });
 
   const [genId, setGenId] = useState("");
   const [lanId, setLanId] = useState("");
+  const [likedId, setLikedId] = useState();
 
   useEffect(() => {
     const getData = async () => {
       const [genres, genresError] = await movieApi.genre();
       const [discovered, discoveredError] = await movieApi.discover(genId);
-      const [discoveredLan, discovereLanError] = await movieApi.foreign(lanId);
+      const [foreign, foreignError] = await movieApi.foreign(lanId);
+      const [similar, similarError] = await movieApi.similar(likedId);
 
       const filtered = discovered.filter(
         (d) =>
@@ -33,7 +37,7 @@ const ProfileContainer = (props) => {
           !props.disliked.find((id) => id.id === d.id)
       );
 
-      const filteredLn = discoveredLan.filter(
+      const filteredLn = foreign.filter(
         (d) =>
           !props.liked.find((id) => id.id === d.id) &&
           !props.disliked.find((id) => id.id === d.id)
@@ -43,28 +47,23 @@ const ProfileContainer = (props) => {
         loading: false,
         genres: genres.genres,
         genresError,
+        similar,
+        similarError,
         discovered,
         discoveredError,
-        discoveredLan: filteredLn,
-        discovereLanError,
+        foreign: filteredLn,
+        foreignError,
         unRated: filtered,
       });
     };
     getData();
-  }, [genId, lanId]);
-
-  const recommendGen = (gn) => {
-    setGenId(gn.toString());
-  };
-
-  const recommendLan = (lan) => {
-    setLanId(lan.toString());
-  };
+  }, [genId, lanId, likedId]);
 
   return (
-    <ProfilePresenter
-      topGenres={(gn) => recommendGen(gn)}
-      topLan={(lan) => recommendLan(lan)}
+    <RecommendPresenter
+      findGenres={(gn) => setGenId(gn)}
+      topLan={(lan) => setLanId(lan)}
+      findSimilar={(id) => setLikedId(id)}
       {...movies}
     />
   );
@@ -77,4 +76,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, null)(ProfileContainer);
+export default connect(mapStateToProps, null)(RecommendContainer);

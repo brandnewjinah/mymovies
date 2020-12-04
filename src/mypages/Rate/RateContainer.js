@@ -14,19 +14,18 @@ const RateContainer = () => {
 
   const [page, setPage] = useState(1);
 
-  const getData = async () => {
-    const [genres, genresError] = await movieApi.genre();
-    const [topRated, topRatedError] = await movieApi.topRated(page);
-    setMovies({
-      loading: false,
-      genres: genres.genres,
-      genresError,
-      topRated,
-      topRatedError,
-    });
-  };
-
   useEffect(() => {
+    const getData = async () => {
+      const [genres, genresError] = await movieApi.genre();
+      const [topRated, topRatedError] = await movieApi.topRated(page);
+      setMovies({
+        loading: false,
+        genres: genres.genres,
+        genresError,
+        topRated,
+        topRatedError,
+      });
+    };
     getData();
   }, [page]);
 

@@ -25,12 +25,12 @@ const RatePresenter = (props) => {
     props.dislikeItem(movie);
   };
 
-  const handleRated = () => {
-    const totalRated = props.liked.length + props.disliked.length;
-    setTotal(totalRated);
-  };
-
   useEffect(() => {
+    const handleRated = () => {
+      const totalRated = props.liked.length + props.disliked.length;
+      setTotal(totalRated);
+    };
+
     handleRated();
   }, [props.liked, props.disliked]);
 

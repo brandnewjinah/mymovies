@@ -16,6 +16,7 @@ import TV from "./pages/TV";
 import Rate from "./mypages/Rate";
 import Continue from "./mypages/Continue";
 import Profile from "./mypages/Profile";
+import Recommend from "./mypages/Recommend";
 
 const Routes = () => {
   return (
@@ -28,6 +29,7 @@ const Routes = () => {
           <Route exact path="/tv" component={TV} />
           <Route exact path="/rate" component={Rate} />
           <Route exact path="/profile" component={Profile} />
+          <Route exact path="/recommend" component={Recommend} />
           <Route exact path="/continue" component={Continue} />
           <Redirect from="*" to="/" />
         </Switch>

@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 import _ from "lodash";
+import { HorizontalBar } from "react-chartjs-2";
 
 //import components
 import Indicator from "../../components/Indicator";
-import { Section2 } from "../../components/Section2";
-import PosterList from "../../components/PosterList";
 
 //redux
 import { connect } from "react-redux";
@@ -19,19 +18,11 @@ import styled from "styled-components";
 const ProfilePresenter = (props) => {
   const [language, setLanguage] = useState([]);
   const [genre, setGenre] = useState([]);
-  const [discovered, setDiscovered] = useState([]);
+  const liked = props.liked.length;
+  const disliked = props.disliked.length;
+  const total = liked + disliked;
 
   const array = props.liked;
-
-  const handleGenre = (genre) => {
-    if (genre) {
-      const genres = genre.map((g) => {
-        const found = props.genres.find((item) => item.id === g);
-        return found.name;
-      });
-      return genres.slice(0, 2);
-    }
-  };
 
   const countLan = () => {
     let count = {};
@@ -57,31 +48,12 @@ const ProfilePresenter = (props) => {
     });
     const sorted = _.orderBy(result, "count", "desc");
     setGenre(sorted);
-    const names = sorted.slice(0, 3).map((item) => {
-      return parseInt(item["key"]);
-    });
-    handleReco(names);
-  };
-
-  const handleReco = (topGenre) => {
-    props.topGenres(topGenre);
-  };
-
-  const unRated = () => {
-    const liked = props.liked;
-    const disliked = props.disliked;
-    const filtered = props.discovered.filter(
-      (d) =>
-        !liked.find((id) => id.id === d.id) &&
-        !disliked.find((id) => id.id === d.id)
-    );
-    setDiscovered(filtered);
   };
 
   useEffect(() => {
     countLan();
     countGenre();
-    unRated();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -91,11 +63,61 @@ const ProfilePresenter = (props) => {
       ) : (
         <>
           <Analyser>
-            <h4>
-              You rated {props.liked.length + props.disliked.length} movies
-            </h4>
-            <h4>You liked {props.liked.length} movies</h4>
-            <h4>You disliked {props.disliked.length} movies</h4>
+            <div>
+              <HorizontalBar
+                data={{
+                  datasets: [
+                    {
+                      label: "Liked",
+                      data: [(100 * liked) / total],
+                      backgroundColor: "#D6E9C6", // green
+                    },
+                    {
+                      label: "Disliked",
+                      data: [(100 * disliked) / total],
+                      backgroundColor: "#FAEBCC", // yellow
+                    },
+                  ],
+                }}
+                height={400}
+                width={600}
+                options={{
+                  maintainAspectRatio: false,
+
+                  scales: {
+                    xAxes: [
+                      {
+                        gridLines: {
+                          display: false,
+                          drawOnChartArea: false,
+                          drawTicks: false,
+                        },
+                        stacked: true,
+                        ticks: {
+                          display: false,
+                        },
+                      },
+                    ],
+                    yAxes: [
+                      {
+                        gridLines: {
+                          display: false,
+                          drawOnChartArea: false,
+                          drawTicks: false,
+                        },
+                        stacked: true,
+                        ticks: {
+                          display: false,
+                        },
+                      },
+                    ],
+                  },
+                }}
+              />
+            </div>
+            <h4>You rated {total} movies</h4>
+            <h4>You liked {liked} movies</h4>
+            <h4>You disliked {disliked} movies</h4>
             <h4>language</h4>
             {language.map((g, idx) => {
               const found = lanList.find((item) => item.code === g.key);
@@ -117,54 +139,6 @@ const ProfilePresenter = (props) => {
               );
             })}
           </Analyser>
-          <Recommendations>
-            <h3>Based on your ratings we recommend</h3>
-            {discovered && discovered.length > 0 && (
-              <Section2>
-                {discovered.map((movie) => (
-                  <PosterList
-                    key={movie.id}
-                    id={movie.id}
-                    imageUrl={movie.poster_path}
-                    title={movie.title}
-                    rating={movie.vote_average}
-                    year={movie.release_date}
-                    genre={handleGenre(movie.genre_ids)}
-                  />
-                ))}
-              </Section2>
-            )}
-          </Recommendations>
-          {props.liked && props.liked.length > 0 && (
-            <Section2 title="Liked Movies">
-              {props.liked.map((movie) => (
-                <PosterList
-                  key={movie.id}
-                  id={movie.id}
-                  imageUrl={movie.poster_path}
-                  title={movie.title}
-                  rating={movie.vote_average}
-                  year={movie.release_date}
-                  genre={handleGenre(movie.genre_ids)}
-                />
-              ))}
-            </Section2>
-          )}
-          {props.disliked && props.disliked.length > 0 && (
-            <Section2 title="Disliked Movies">
-              {props.disliked.map((movie) => (
-                <PosterList
-                  key={movie.id}
-                  id={movie.id}
-                  imageUrl={movie.poster_path}
-                  title={movie.title}
-                  rating={movie.vote_average}
-                  year={movie.release_date}
-                  genre={handleGenre(movie.genre_ids)}
-                />
-              ))}
-            </Section2>
-          )}
         </>
       )}
     </Container>
@@ -184,12 +158,6 @@ const Analyser = styled.div`
     font-size: 1.125rem;
     margin: 1.5em 0;
     text-rendering: optimizeLegibility;
-  }
-`;
-
-const Recommendations = styled.div`
-  h3 {
-    font-size: 1.5rem;
   }
 `;
 

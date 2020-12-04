@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
 
 //import components
 import { Section } from "../../components/Section2";
@@ -15,8 +14,6 @@ import { likeItem, dislikeItem } from "../../store/movies";
 import styled from "styled-components";
 
 const ConPresenter = (props) => {
-  const [movies, setMovies] = useState([]);
-
   const handleLike = (movie) => {
     props.likeItem(movie);
   };
@@ -24,10 +21,6 @@ const ConPresenter = (props) => {
   const handleDislike = (movie) => {
     props.dislikeItem(movie);
   };
-
-  useEffect(() => {
-    unRated();
-  }, []);
 
   const handleGenre = (genre) => {
     if (genre) {
@@ -37,17 +30,6 @@ const ConPresenter = (props) => {
       });
       return genres.slice(0, 2);
     }
-  };
-
-  const unRated = () => {
-    const liked = props.liked;
-    const disliked = props.disliked;
-    const filtered = props.topRated.filter(
-      (d) =>
-        !liked.find((id) => id.id === d.id) &&
-        !disliked.find((id) => id.id === d.id)
-    );
-    setMovies(filtered);
   };
 
   return props.loading ? (
@@ -63,16 +45,13 @@ const ConPresenter = (props) => {
             display: "flex",
           }}
         >
-          {props.page !== 1 ? (
-            <Button onClick={props.prevPage}>Prev</Button>
-          ) : null}
-          <Button onClick={props.nextPage}>Next</Button>
+          <Button onClick={props.nextPage}>More</Button>
         </div>
       </Header>
 
-      {movies && movies.length > 0 && (
+      {props.unRated && props.unRated.length > 0 && (
         <Section>
-          {movies.map((movie) => (
+          {props.unRated.map((movie) => (
             <PosterList
               key={movie.id}
               rate={true}
@@ -98,7 +77,7 @@ const ConPresenter = (props) => {
 
       <Footer>
         <div>You rated {props.liked.length + props.disliked.length} / 30</div>
-        <Button onClick={props.nextPage}>Next</Button>
+        <Button onClick={props.nextPage}>More</Button>
       </Footer>
     </Container>
   );
