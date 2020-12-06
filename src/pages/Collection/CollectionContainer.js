@@ -10,7 +10,7 @@ const CollectionContainer = ({ pathname }) => {
 
   const [detail, setDetail] = useState({
     loading: true,
-    result: [],
+    result: {},
     genre: id,
     genres: [],
     genresError: null,
@@ -24,7 +24,7 @@ const CollectionContainer = ({ pathname }) => {
       genres: genres.genres,
       genresError,
       genre: id,
-      result: Oscars,
+      result: Oscars.find((f) => f.id === parseInt(id)),
       loading: false,
     });
   };

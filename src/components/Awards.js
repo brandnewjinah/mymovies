@@ -37,7 +37,7 @@ const Awards = ({ movie }) => {
               award.winners &&
               award.winners
                 .filter((m) => m.id === movie)
-                .map((m) => <span>{m.award}</span>)}
+                .map((m, idx) => <span key={idx}>{m.award}</span>)}
           </Winner>
         </Container>
       )}

@@ -14,7 +14,17 @@ import { likeItem, dislikeItem } from "../../store/movies";
 import styled from "styled-components";
 
 const CollectionPresenter = (props) => {
-  console.log(props.result);
+  const movies = props.result.winners;
+
+  let unique =
+    movies &&
+    movies.filter(
+      (elem, index, self) =>
+        self.findIndex((t) => {
+          return t.id === elem.id;
+        }) === index
+    );
+
   return props.loading ? (
     <>
       <Indicator />
@@ -23,7 +33,26 @@ const CollectionPresenter = (props) => {
       </Helmet>
     </>
   ) : (
-    <Container>collection</Container>
+    <Container>
+      <Header>
+        <h2>{`${props.result.year} ${props.result.name}`} </h2>
+      </Header>
+      {unique && unique.length > 0 && (
+        <Section>
+          {unique.map((movie) => (
+            <PosterList
+              key={movie.id}
+              id={movie.id}
+              imageUrl={movie.poster_path}
+              title={movie.title}
+              year={movie.release_date}
+              // genre={handleGenre(movie.genre_ids)}
+              toDetail={true}
+            />
+          ))}
+        </Section>
+      )}
+    </Container>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Helmet from "react-helmet";
 import { Link } from "react-router-dom";
@@ -92,7 +92,7 @@ const DetailPresenter = (props) => {
               <Item>
                 {props.result.genres &&
                   props.result.genres.map((genre, index) => (
-                    <Link to={`/category/${genre.id}`}>
+                    <Link to={`/category/${genre.id}`} key={index}>
                       <span>{genre.name}</span>
                     </Link>
                   ))}
@@ -170,25 +170,6 @@ const Container = styled.div`
   padding: 50px;
 `;
 
-const Backdrop = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 50%;
-  background: linear-gradient(
-      to right,
-      rgba(255, 255, 255, 1) 150px,
-      rgba(255, 255, 255, 0.84) 100%
-    ),
-    url(${(props) => props.bgImage});
-  /* background-position: center; */
-  background-size: cover;
-  /* filter: blur(3px); */
-  /* opacity: 0.5; */
-  z-index: 0;
-`;
-
 const Content = styled.div`
   margin: 6em auto;
   width: 100%;
@@ -196,16 +177,6 @@ const Content = styled.div`
   position: relative;
   z-index: 1;
   height: 100%;
-`;
-
-const Cover = styled.div`
-  width: 30%;
-  background-image: url(${(props) => props.bgImage});
-  background-position: center center;
-  background-size: cover;
-  height: auto;
-  border-radius: 5px;
-  margin-right: 30px;
 `;
 
 const Header = styled.div`
