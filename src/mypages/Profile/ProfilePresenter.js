@@ -19,6 +19,7 @@ import styled from "styled-components";
 const ProfilePresenter = (props) => {
   const [language, setLanguage] = useState([]);
   const [genre, setGenre] = useState([]);
+  const [display, setDisplay] = useState([]);
   const liked = props.liked.length;
   const disliked = props.disliked.length;
   const total = liked + disliked;
@@ -40,13 +41,21 @@ const ProfilePresenter = (props) => {
   const countGenre = () => {
     let count = {};
     array.map((m) => {
-      m.genre_ids.forEach((el) => {
-        count[el] = (count[el] || 0) + 1;
-      });
+      m.genre_ids &&
+        m.genre_ids.forEach((el) => {
+          count[el] = (count[el] || 0) + 1;
+        });
+    });
+    array.map((m) => {
+      m.genres &&
+        m.genres.forEach((el) => {
+          count[el.id] = (count[el.id] || 0) + 1;
+        });
     });
     let result = Object.keys(count).map((e) => {
       return { key: e, count: count[e] };
     });
+
     const sorted = _.orderBy(result, "count", "desc");
     setGenre(sorted);
   };
@@ -58,13 +67,36 @@ const ProfilePresenter = (props) => {
   }, []);
 
   const handleGenre = (genre) => {
-    if (genre) {
+    if (genre.some((obj) => Object.keys(obj).includes("id"))) {
+      const genres = genre.map((g) => {
+        return g.name;
+      });
+      return genres.slice(0, 2);
+    } else if (genre) {
       const genres = genre.map((g) => {
         const found = props.genres.find((item) => item.id === g);
         return found.name;
       });
       return genres.slice(0, 2);
     }
+  };
+
+  const loadMovies = (arr) => {
+    setDisplay(arr);
+  };
+
+  const filterGenre = (id) => {
+    const result = props.liked.filter(
+      (m) => m.genre_ids && m.genre_ids.includes(id)
+    );
+    setDisplay(result);
+  };
+
+  const filterLanguage = (code) => {
+    const result = props.liked.filter(
+      (m) => m.original_language && m.original_language === code
+    );
+    setDisplay(result);
   };
 
   return (
@@ -79,13 +111,19 @@ const ProfilePresenter = (props) => {
           <Analyser>
             <h4>
               Out of <span>{total}</span> movies watched, I liked{" "}
-              <span>{liked}</span> and disliked <span>{disliked}</span> movies.
-              My favorite genre is{" "}
+              <span onClick={() => loadMovies(props.liked)}>{liked}</span> and
+              disliked{" "}
+              <span onClick={() => loadMovies(props.disliked)}>{disliked}</span>{" "}
+              movies. My favorite genre is{" "}
               {genre.slice(0, 1).map((g, idx) => {
                 const found = props.genres.find(
                   (item) => item.id === parseInt(g.key)
                 );
-                return <span key={idx}>{found.name}</span>;
+                return (
+                  <span key={idx} onClick={() => filterGenre(found.id)}>
+                    {found.name}
+                  </span>
+                );
               })}{" "}
               followed by{" "}
               {genre.slice(1, 4).map((g, idx, arr) => {
@@ -95,13 +133,19 @@ const ProfilePresenter = (props) => {
                 if (arr.length - 1 === idx) {
                   return (
                     <>
-                      and <span key={idx}>{found.name}</span>
+                      and{" "}
+                      <span key={idx} onClick={() => filterGenre(found.id)}>
+                        {found.name}
+                      </span>
                     </>
                   );
                 } else {
                   return (
                     <>
-                      <span key={idx}>{found.name}</span>,{" "}
+                      <span key={idx} onClick={() => filterGenre(found.id)}>
+                        {found.name}
+                      </span>
+                      ,{" "}
                     </>
                   );
                 }
@@ -109,21 +153,37 @@ const ProfilePresenter = (props) => {
               . I watched primarily in{" "}
               {language.slice(0, 1).map((g, idx) => {
                 const found = lanList.find((item) => item.code === g.key);
-                return <span key={idx}>{found.english}</span>;
+                return (
+                  <span key={idx} onClick={() => filterLanguage(found.code)}>
+                    {found.english}
+                  </span>
+                );
               })}{" "}
-              but not afraid to watch foreign films in{" "}
+              but was not afraid to watch foreign films in{" "}
               {language.slice(1).map((g, idx, arr) => {
                 const found = lanList.find((item) => item.code === g.key);
                 if (arr.length - 1 === idx) {
                   return (
                     <>
-                      and <span key={idx}>{found.english}</span>
+                      and{" "}
+                      <span
+                        key={idx}
+                        onClick={() => filterLanguage(found.code)}
+                      >
+                        {found.english}
+                      </span>
                     </>
                   );
                 } else
                   return (
                     <>
-                      <span key={idx}>{found.english}</span>,{" "}
+                      <span
+                        key={idx}
+                        onClick={() => filterLanguage(found.code)}
+                      >
+                        {found.english}
+                      </span>
+                      ,{" "}
                     </>
                   );
               })}
@@ -131,7 +191,7 @@ const ProfilePresenter = (props) => {
             </h4>
           </Analyser>
           <Liked>
-            {array && array.length > 0 && (
+            {/* {array && array.length > 0 && (
               <Section2>
                 {array.map((movie) => (
                   <PosterList
@@ -141,7 +201,24 @@ const ProfilePresenter = (props) => {
                     title={movie.title}
                     rating={movie.vote_average}
                     year={movie.release_date}
-                    genre={handleGenre(movie.genre_ids)}
+                    genre={handleGenre(movie.genre_ids || movie.genres)}
+                    toDetail={true}
+                  />
+                ))}
+              </Section2>
+            )} */}
+            {display && display.length > 0 && (
+              <Section2>
+                {display.map((movie) => (
+                  <PosterList
+                    key={movie.id}
+                    id={movie.id}
+                    imageUrl={movie.poster_path}
+                    title={movie.title}
+                    rating={movie.vote_average}
+                    year={movie.release_date}
+                    genre={handleGenre(movie.genre_ids || movie.genres)}
+                    toDetail={true}
                   />
                 ))}
               </Section2>
@@ -185,6 +262,7 @@ const Analyser = styled.div`
   span {
     /* border-bottom: 3px solid #e89161; */
     position: relative;
+    cursor: pointer;
 
     &:after {
       content: "";

@@ -57,9 +57,16 @@ const RecommendPresenter = (props) => {
   const countGenre = () => {
     let count = {};
     liked.map((m) => {
-      m.genre_ids.forEach((el) => {
-        count[el] = (count[el] || 0) + 1;
-      });
+      m.genre_ids &&
+        m.genre_ids.forEach((el) => {
+          count[el] = (count[el] || 0) + 1;
+        });
+    });
+    liked.map((m) => {
+      m.genres &&
+        m.genres.forEach((el) => {
+          count[el.id] = (count[el.id] || 0) + 1;
+        });
     });
     let result = Object.keys(count).map((e) => {
       return { key: e, count: count[e] };
@@ -143,6 +150,7 @@ const RecommendPresenter = (props) => {
                     rating={movie.vote_average}
                     year={movie.release_date}
                     genre={handleGenre(movie.genre_ids)}
+                    toDetail={true}
                   />
                 ))}
               </Section2>
@@ -159,6 +167,7 @@ const RecommendPresenter = (props) => {
                     rating={movie.vote_average}
                     year={movie.release_date}
                     genre={handleGenre(movie.genre_ids)}
+                    toDetail={true}
                   />
                 ))}
               </Section2>
@@ -175,7 +184,7 @@ const RecommendPresenter = (props) => {
                       title={movie.title}
                       rating={movie.vote_average}
                       year={movie.release_date}
-                      genre={handleGenre(movie.genre_ids)}
+                      toDetail={true}
                     />
                   ))}
                 </Section2>

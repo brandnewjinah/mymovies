@@ -18,6 +18,8 @@ import Continue from "./mypages/Continue";
 import Profile from "./mypages/Profile";
 import Recommend from "./mypages/Recommend";
 import Detail from "./pages/Details";
+import Category from "./pages/Category";
+import Collection from "./pages/Collection";
 
 const Routes = () => {
   return (
@@ -34,6 +36,8 @@ const Routes = () => {
           <Route exact path="/continue" component={Continue} />
           <Route exact path="/movie/:id" component={Detail} />
           <Route exact path="/tv/:id" component={Detail} />
+          <Route exact path="/category/:id" component={Category} />
+          <Route exact path="/collection/:id" component={Collection} />
           <Redirect from="*" to="/" />
         </Switch>
       </>

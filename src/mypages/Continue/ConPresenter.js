@@ -163,6 +163,7 @@ const ConPresenter = (props) => {
               }
               onClick1={() => handleLike(movie)}
               onClick2={() => handleDislike(movie)}
+              isRate={true}
             />
           ))}
         </Section>

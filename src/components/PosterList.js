@@ -1,11 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 //import styles and assets
 import styled from "styled-components";
 import { Heart, BrokenHeart } from "../assets/Icons";
 
 const Poster = ({
+  id,
   rate,
   imageUrl,
   liked,
@@ -15,43 +17,46 @@ const Poster = ({
   genre,
   onClick1,
   onClick2,
+  toDetail,
 }) => {
   return (
-    <Container>
-      <ImageContainer>
-        <Image
-          src={
-            imageUrl
-              ? `https://image.tmdb.org/t/p/w500${imageUrl}`
-              : "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty-300x240.jpg"
-          }
-        />
-        {rate && (
-          <Rating>
-            <div
-              style={liked ? { backgroundColor: "#91b04f" } : null}
-              onClick={() => onClick1()}
-            >
-              <Heart width="26" height="26" fill="#fff" />
-            </div>
-            <div
-              style={disliked ? { backgroundColor: "#de7747" } : null}
-              onClick={() => onClick2()}
-            >
-              <BrokenHeart width="26" height="26" fill="#fff" />
-            </div>
-          </Rating>
-        )}
-      </ImageContainer>
+    <Link to={toDetail && `/movie/${id}`}>
+      <Container>
+        <ImageContainer>
+          <Image
+            src={
+              imageUrl
+                ? `https://image.tmdb.org/t/p/w500${imageUrl}`
+                : "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty-300x240.jpg"
+            }
+          />
+          {rate && (
+            <Rating>
+              <div
+                style={liked ? { backgroundColor: "#91b04f" } : null}
+                onClick={() => onClick1()}
+              >
+                <Heart width="26" height="26" fill="#fff" />
+              </div>
+              <div
+                style={disliked ? { backgroundColor: "#de7747" } : null}
+                onClick={() => onClick2()}
+              >
+                <BrokenHeart width="26" height="26" fill="#fff" />
+              </div>
+            </Rating>
+          )}
+        </ImageContainer>
 
-      <Title>
-        {title.length > 20 ? `${title.substring(0, 22)}...` : title}
-      </Title>
-      <Details>
-        <div>{year.substring(0, 4)}</div>
-        <div>{genre && genre.join(" \u00B7 ")}</div>
-      </Details>
-    </Container>
+        <Title>
+          {title.length > 20 ? `${title.substring(0, 22)}...` : title}
+        </Title>
+        <Details>
+          <div>{year.substring(0, 4)}</div>
+          <div>{genre && genre.join(" \u00B7 ")}</div>
+        </Details>
+      </Container>
+    </Link>
   );
 };
 

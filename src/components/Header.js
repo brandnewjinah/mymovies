@@ -45,7 +45,7 @@ const Container = styled.header`
   justify-content: space-between;
   align-items: center;
   background-color: #fff;
-  z-index: 10;
+  z-index: 1;
   box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.05);
 `;
 

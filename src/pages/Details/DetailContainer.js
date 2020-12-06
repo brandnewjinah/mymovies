@@ -34,7 +34,6 @@ const DetailContainer = ({ pathname }) => {
       similarError,
       loading: false,
     });
-    console.log("id", location.pathname);
   };
 
   useEffect(() => {
