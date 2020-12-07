@@ -14,7 +14,7 @@ import { likeItem, dislikeItem } from "../../store/movies";
 import styled from "styled-components";
 
 const CategoryPresenter = (props) => {
-  const currentGenre = parseInt(props.genre);
+  const currentGenre = props.genre && parseInt(props.genre);
 
   const handleGenre = () => {
     if (currentGenre) {
@@ -39,7 +39,10 @@ const CategoryPresenter = (props) => {
         </title> */}
       </Helmet>
       <Header>
-        <h2>{handleGenre()}</h2>
+        <h2>{props.genre && handleGenre()}</h2>
+      </Header>
+      <Header>
+        <h2>{props.keyword && props.keyword.name}</h2>
       </Header>
       {props.result && props.result.length > 0 && (
         <Section>
@@ -58,6 +61,7 @@ const CategoryPresenter = (props) => {
         </Section>
       )}
     </Container>
+    // <Container>container</Container>
   );
 };
 

@@ -32,10 +32,17 @@ export const movieApi = {
   topRated: (page) => getAnything("/movie/top_rated", { page }),
   movie: (id) => getAnything(`/movie/${id}`, { append_to_response: "videos" }),
   similar: (id) => getAnything(`/movie/${id}/similar`, { movie_id: id }),
+  recommend: (id) =>
+    getAnything(`/movie/${id}/recommendations`, { movie_id: id }),
   discover: (id) =>
     getAnything(`/discover/movie`, {
       with_genres: id,
       page: random,
+      sort_by: "vote_count.desc",
+    }),
+  discoverKeyword: (id) =>
+    getAnything(`/discover/movie`, {
+      with_keywords: id,
       sort_by: "vote_count.desc",
     }),
   foreign: (id) =>
@@ -51,6 +58,7 @@ export const movieApi = {
       without_genres: exclude,
     }),
   keyword: (id) => getAnything(`/movie/${id}/keywords`),
+  keywordlist: (id) => getAnything(`/keyword/${id}`),
   search: (query) => getAnything("/search/movie", { query }),
 };
 
@@ -61,5 +69,6 @@ export const tvApi = {
   thisWeek: () => getAnything("/tv/on_the_air"),
   show: (id) => getAnything(`/tv/${id}`, { append_to_response: "vidoes" }),
   similar: (id) => getAnything(`/tv/${id}/similar`),
+  recommend: (id) => getAnything(`/tv/${id}/recommendations`, { tv_id: id }),
   search: (query) => getAnything("/search/tv", { query }),
 };

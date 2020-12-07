@@ -16,8 +16,6 @@ const ConContainer = (props) => {
     loading: true,
   });
 
-  let random = Math.floor(Math.random() * 404);
-
   let [page, setPage] = useState(1);
   let [selection, setSelection] = useState("popularity.desc");
   let [exclude, setExclude] = useState("");
@@ -74,6 +72,7 @@ const ConContainer = (props) => {
       nextPage={nextPage}
       fireSelection={(s) => setSelection(s)}
       fireExclusion={(s) => setExclude(s)}
+      firePage={(s) => setPage(s)}
       page={page}
       {...movies}
     />

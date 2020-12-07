@@ -20,19 +20,7 @@ const data = [
   { name: "By Popularity", path: "popularity.desc" },
   { name: "By Vote Average", path: "vote_average.desc" },
   { name: "By Vote Count", path: "vote.count.desc" },
-];
-
-const genre = [
-  { value: "Front-end", label: "Front-end", color: "#00B8D9" },
-  { value: "Back-end", label: "Back-end", color: "#5243AA" },
-  { value: "UX/UI", label: "UX/UI", color: "#FF5630" },
-  {
-    value: "Product Management",
-    label: "Product Management",
-    color: "#FF8B00",
-  },
-  { value: "Marketing", label: "Marketing", color: "#FFC400" },
-  { value: "HR", label: "HR", color: "#36B37E" },
+  { name: "Random", path: "popularity.desc" },
 ];
 
 const ConPresenter = (props) => {
@@ -57,7 +45,13 @@ const ConPresenter = (props) => {
 
   const handleSelection = (d) => {
     setSelected(d.name);
-    props.fireSelection(d.path);
+
+    if (d.name === "Random") {
+      let random = Math.floor(Math.random() * 404);
+      props.firePage(random);
+    } else {
+      props.fireSelection(d.path);
+    }
   };
 
   const handleChange = (value) => {

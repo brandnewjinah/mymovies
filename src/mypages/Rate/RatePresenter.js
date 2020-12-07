@@ -34,16 +34,6 @@ const RatePresenter = (props) => {
     handleRated();
   }, [props.liked, props.disliked]);
 
-  const usePrevious = (value) => {
-    const ref = useRef();
-    useEffect(() => {
-      ref.current = value;
-    });
-    return ref.current;
-  };
-
-  const prevCount = usePrevious(total);
-
   const handleGenre = (genre) => {
     if (genre) {
       const genres = genre.map((g) => {
@@ -53,6 +43,19 @@ const RatePresenter = (props) => {
       return genres.slice(0, 2);
     }
   };
+
+  // Find out previous count
+  // if total rated count reaches 30 from 29, create a burst animation
+
+  const usePrevious = (value) => {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = value;
+    });
+    return ref.current;
+  };
+
+  const prevCount = usePrevious(total);
 
   const burst = {
     color: "green",
@@ -96,7 +99,7 @@ const RatePresenter = (props) => {
             </Link>
           </div>
         ) : (
-          <h4>Please rate at least 30 movies you watched</h4>
+          <h4>Please rate at least 30 movies to get started</h4>
         )}
       </Header>
 

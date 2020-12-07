@@ -134,6 +134,16 @@ const DetailPresenter = (props) => {
             </Part>
           </Data>
         </Header>
+        <More>
+          <div>keywords</div>
+          <div>
+            {props.keyword.keywords.map((k) => (
+              <Link to={`/keyword/${k.id}`}>
+                <span key={k.id}>{k.name}</span>
+              </Link>
+            ))}
+          </div>
+        </More>
         {props.similar && props.similar.length > 0 && (
           <Section title="Similar">
             {props.similar.slice(0, 5).map((movie) => (
@@ -266,6 +276,16 @@ const Overview = styled.p`
   font-size: 15px;
   opacity: 0.8;
   line-height: 1.5;
+`;
+
+const More = styled.div`
+  margin: 2em 0;
+
+  a {
+    &:not(:last-child):after {
+      content: ", ";
+    }
+  }
 `;
 
 const mapStateToProps = (state) => {

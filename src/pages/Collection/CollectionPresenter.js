@@ -14,16 +14,18 @@ import { likeItem, dislikeItem } from "../../store/movies";
 import styled from "styled-components";
 
 const CollectionPresenter = (props) => {
-  const movies = props.result.winners;
+  const movies = props.result;
 
   let unique =
-    movies &&
-    movies.filter(
-      (elem, index, self) =>
-        self.findIndex((t) => {
-          return t.id === elem.id;
-        }) === index
-    );
+    props.collection_id < 100
+      ? movies
+      : movies.winners &&
+        movies.winners.filter(
+          (elem, index, self) =>
+            self.findIndex((t) => {
+              return t.id === elem.id;
+            }) === index
+        );
 
   return props.loading ? (
     <>
@@ -35,7 +37,11 @@ const CollectionPresenter = (props) => {
   ) : (
     <Container>
       <Header>
-        <h2>{`${props.result.year} ${props.result.name}`} </h2>
+        <h2>
+          {props.collection_id < 100
+            ? props.result[0].award
+            : `${props.result.year} ${props.result.name}`}
+        </h2>
       </Header>
       {unique && unique.length > 0 && (
         <Section>

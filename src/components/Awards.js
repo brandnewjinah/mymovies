@@ -37,7 +37,11 @@ const Awards = ({ movie }) => {
               award.winners &&
               award.winners
                 .filter((m) => m.id === movie)
-                .map((m, idx) => <span key={idx}>{m.award}</span>)}
+                .map((m, idx) => (
+                  <Link to={`/collection/${m.award_id}`}>
+                    <span key={idx}>{m.award}</span>
+                  </Link>
+                ))}
           </Winner>
         </Container>
       )}
@@ -51,7 +55,7 @@ const Container = styled.div`
 `;
 
 const Winner = styled.div`
-  span {
+  a {
     &:not(:last-child):after {
       content: ", ";
     }

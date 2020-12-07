@@ -48,10 +48,10 @@ const Title = styled.span`
 `;
 
 const Grid = styled.div`
-  margin-top: 25px;
+  margin-top: 2em;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  grid-gap: 25px;
+  grid-gap: 2em;
 `;
 
 const Grid2 = styled.div`

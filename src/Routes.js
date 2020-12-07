@@ -38,6 +38,7 @@ const Routes = () => {
           <Route exact path="/tv/:id" component={Detail} />
           <Route exact path="/category/:id" component={Category} />
           <Route exact path="/collection/:id" component={Collection} />
+          <Route exact path="/keyword/:id" component={Category} />
           <Redirect from="*" to="/" />
         </Switch>
       </>

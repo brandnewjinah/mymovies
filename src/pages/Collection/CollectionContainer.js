@@ -11,7 +11,7 @@ const CollectionContainer = ({ pathname }) => {
   const [detail, setDetail] = useState({
     loading: true,
     result: {},
-    genre: id,
+    collection_id: 0,
     genres: [],
     genresError: null,
     resultError: null,
@@ -20,13 +20,27 @@ const CollectionContainer = ({ pathname }) => {
   const getData = async () => {
     const [genres, genresError] = await movieApi.genre();
 
-    setDetail({
-      genres: genres.genres,
-      genresError,
-      genre: id,
-      result: Oscars.find((f) => f.id === parseInt(id)),
-      loading: false,
-    });
+    // if id is collection id
+    // if id is award id
+    const idNum = parseInt(id);
+
+    if (idNum < 100) {
+      setDetail({
+        genres: genres.genres,
+        genresError,
+        collection_id: idNum,
+        result: Oscars.map((m) => m.winners.find((f) => f.award_id === idNum)),
+        loading: false,
+      });
+    } else {
+      setDetail({
+        genres: genres.genres,
+        genresError,
+        collection_id: idNum,
+        result: Oscars.find((f) => f.id === idNum),
+        loading: false,
+      });
+    }
   };
 
   useEffect(() => {
