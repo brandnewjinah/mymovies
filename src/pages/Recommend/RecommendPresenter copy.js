@@ -19,9 +19,45 @@ import styled from "styled-components";
 const RecommendPresenter = (props) => {
   const [language, setLanguage] = useState("");
   const [likedMovie, setLikedMovie] = useState("");
+  const [likedMovie2, setLikedMovie2] = useState("");
   const [discovered, setDiscovered] = useState([]);
 
   const liked = props.liked;
+
+  // const { width } = CaptureResize();
+  // const [currentDevice, setCurrentDevice] = useState(
+  //   width > 1024
+  //     ? "desktop"
+  //     : width > 840
+  //     ? "laptop"
+  //     : width > 650
+  //     ? "tablet"
+  //     : "mobile"
+  // );
+
+  const [sliced, setSliced] = useState({
+    rec: { begin: 0, end: 6 },
+  });
+
+  const handleNextSlice = () => {
+    let newSliced = { ...sliced };
+    let newRect = { ...sliced.rec };
+    if (newRect.begin < 18) {
+      newRect = { begin: newRect.begin + 6, end: newRect.end + 6 };
+      newSliced = { ...newSliced, rec: newRect };
+      setSliced(newSliced);
+    }
+  };
+
+  const handlePrevSlice = () => {
+    let newSliced = { ...sliced };
+    let newRect = { ...sliced.rec };
+    if (newRect.begin !== 0) {
+      newRect = { begin: newRect.begin - 6, end: newRect.end - 6 };
+      newSliced = { ...newSliced, rec: newRect };
+      setSliced(newSliced);
+    }
+  };
 
   //see if there's non-en movie in your liked movies
 
@@ -138,10 +174,12 @@ const RecommendPresenter = (props) => {
           <Recommendations>
             {/* <h3>Because you like (Foreign)</h3>
             {foreign && foreign.length > 0 && <div>foreign exist</div>} */}
-            <h3>Based on your ratings we recommend</h3>
+            <Heading>
+              <h3>Based on your ratings we recommend</h3>
+            </Heading>
             {props.unRated && props.unRated.length > 0 && (
               <Section2>
-                {props.unRated.slice(0, 8).map((movie) => (
+                {props.unRated.slice(0, 6).map((movie) => (
                   <PosterList
                     key={movie.id}
                     id={movie.id}
@@ -155,28 +193,39 @@ const RecommendPresenter = (props) => {
                 ))}
               </Section2>
             )}
-            <h3>Because you like {likedMovie}</h3>
+            <Heading>
+              <h3>Because you like {likedMovie}</h3>
+              <div className="pagination">
+                <div className="prev" onClick={handlePrevSlice}>
+                  prev
+                </div>
+                <div onClick={handleNextSlice}>next</div>
+              </div>
+            </Heading>
             {props.similar && props.similar.length > 0 && (
               <Section2>
-                {props.similar.slice(0, 8).map((movie) => (
-                  <PosterList
-                    key={movie.id}
-                    id={movie.id}
-                    imageUrl={movie.poster_path}
-                    title={movie.title}
-                    rating={movie.vote_average}
-                    year={movie.release_date}
-                    genre={handleGenre(movie.genre_ids)}
-                    toDetail={true}
-                  />
-                ))}
+                {props.similar
+                  .slice(sliced.rec.begin, sliced.rec.end)
+                  .map((movie) => (
+                    <PosterList
+                      key={movie.id}
+                      id={movie.id}
+                      imageUrl={movie.poster_path}
+                      title={movie.title}
+                      rating={movie.vote_average}
+                      year={movie.release_date}
+                      genre={handleGenre(movie.genre_ids)}
+                      toDetail={true}
+                    />
+                  ))}
               </Section2>
             )}
+
             {props.foreign && props.foreign.length > 0 && (
               <>
                 <h3>Because you like {language}</h3>
                 <Section2>
-                  {props.foreign.slice(0, 8).map((movie) => (
+                  {props.foreign.slice(0, 6).map((movie) => (
                     <PosterList
                       key={movie.id}
                       id={movie.id}
@@ -201,6 +250,10 @@ const Container = styled.div`
   margin: 4em auto;
   width: 100%;
   max-width: 1260px;
+
+  @media (max-width: 840px) {
+    margin: 2em;
+  }
 `;
 
 const Analyser = styled.div`
@@ -213,6 +266,19 @@ const Analyser = styled.div`
   }
 `;
 
+const Heading = styled.div`
+  display: flex;
+  justify-content: space-between;
+
+  .pagination {
+    display: flex;
+  }
+
+  .prev {
+    margin-right: 0.5em;
+  }
+`;
+
 const Recommendations = styled.div`
   h3 {
     font-size: 1.5rem;
@@ -221,8 +287,8 @@ const Recommendations = styled.div`
 
 const mapStateToProps = (state) => {
   return {
-    liked: state.liked,
-    disliked: state.disliked,
+    liked: state.rate.liked,
+    disliked: state.rate.disliked,
   };
 };
 

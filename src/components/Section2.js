@@ -40,6 +40,10 @@ Section2.propTypes = {
 
 const Container = styled.div`
   margin: 2em auto;
+
+  @media (max-width: 1200px) {
+    margin: 2em;
+  }
 `;
 
 const Title = styled.span`
@@ -51,12 +55,36 @@ const Grid = styled.div`
   margin-top: 2em;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
+  /* grid-auto-rows: 1fr; */
   grid-gap: 2em;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 2em;
+  }
+
+  @media (max-width: 840px) {
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 2em;
+  }
+
+  @media (max-width: 640px) {
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 2em;
+  }
 `;
 
 const Grid2 = styled.div`
   margin-top: 25px;
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   grid-gap: 25px;
+
+  @media (max-width: 840px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  @media (max-width: 380px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 `;

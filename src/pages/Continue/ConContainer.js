@@ -81,8 +81,8 @@ const ConContainer = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    liked: state.liked,
-    disliked: state.disliked,
+    liked: state.rate.liked,
+    disliked: state.rate.disliked,
   };
 };
 

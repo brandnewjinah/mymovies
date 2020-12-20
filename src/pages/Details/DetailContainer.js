@@ -26,8 +26,8 @@ const DetailContainer = ({ pathname }) => {
       ? await movieApi.movie(id)
       : await tvApi.show(id);
     const [similar, similarError] = location.pathname.includes("/movie/")
-      ? await movieApi.recommend(id)
-      : await tvApi.recommend(id);
+      ? await movieApi.similar(id)
+      : await tvApi.similar(id);
     const [keyword, keywordError] = location.pathname.includes("/movie/")
       ? await movieApi.keyword(id)
       : await tvApi.keyword(id);

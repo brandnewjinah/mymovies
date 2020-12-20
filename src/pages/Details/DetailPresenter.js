@@ -134,8 +134,8 @@ const DetailPresenter = (props) => {
             </Part>
           </Data>
         </Header>
-        <More>
-          <div>keywords</div>
+        <Keywords>
+          <h6>keywords</h6>
           <div>
             {props.keyword.keywords.map((k) => (
               <Link to={`/keyword/${k.id}`}>
@@ -143,7 +143,7 @@ const DetailPresenter = (props) => {
               </Link>
             ))}
           </div>
-        </More>
+        </Keywords>
         {props.similar && props.similar.length > 0 && (
           <Section title="Similar">
             {props.similar.slice(0, 5).map((movie) => (
@@ -278,20 +278,30 @@ const Overview = styled.p`
   line-height: 1.5;
 `;
 
-const More = styled.div`
+const Keywords = styled.div`
   margin: 2em 0;
 
-  a {
-    &:not(:last-child):after {
-      content: ", ";
+  h6 {
+    font-size: 1.125rem;
+  }
+
+  span {
+    display: inline-block;
+    background-color: #eee;
+    padding: 0.3rem 0.75rem 0.3rem 0.75rem;
+    border-radius: 1em;
+    margin: 0.5em;
+
+    &:first-child {
+      margin-left: 0;
     }
   }
 `;
 
 const mapStateToProps = (state) => {
   return {
-    liked: state.liked,
-    disliked: state.disliked,
+    liked: state.rate.liked,
+    disliked: state.rate.disliked,
   };
 };
 

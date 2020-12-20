@@ -14,6 +14,7 @@ import { likeItem, dislikeItem } from "../../store/movies";
 
 //import styles and assets
 import styled from "styled-components";
+import { primary } from "../../components/Colors";
 
 //data
 const data = [
@@ -172,9 +173,11 @@ const ConPresenter = (props) => {
 };
 
 const Container = styled.div`
-  margin: 6em auto;
   width: 100%;
-  max-width: 1260px;
+  max-width: 1140px;
+  padding: 1em 0;
+  margin: 5em auto;
+  color: ${primary.blue};
 `;
 
 const Flex = styled.div`
@@ -233,8 +236,8 @@ ConPresenter.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    liked: state.liked,
-    disliked: state.disliked,
+    liked: state.rate.liked,
+    disliked: state.rate.disliked,
   };
 };
 

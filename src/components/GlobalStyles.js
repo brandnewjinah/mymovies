@@ -1,26 +1,82 @@
 import { createGlobalStyle } from "styled-components";
-import reset from "styled-reset";
+import { black } from "./Colors";
 
-const globalStyles = createGlobalStyle`
-    ${reset};
-
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Source+Serif+Pro:wght@300;400;600;700&display=swap');
-
-    a {
-        text-decoration: none;
-        color: inherit;
-    }
-    * {
+const GlobalStyle = createGlobalStyle`
+ * {
         box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+    html {
+        width: 100%;
+        height: 100%;
     }
     body {
-        font-family: 'Poppins', sans-serif;
-        font-size: 12px;
-        /* background-color: rgba(20, 20, 20, 1); */
-        background-color: #fff;
-        color: #172d6e;
-        padding-top: 50px; 
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: white;
+        font-size: 1rem;
+        line-height: 1.875rem;
+        font-weight: 400;
+        color: ${black.dark}
     }
+    h1 {
+        font-weight: 600;
+        font-size: 4rem;
+        line-height: 3.75rem;
+    }
+    h2 {
+        font-weight: 600;
+        font-size: 3rem;
+        line-height: 3.4rem;
+    }
+    h3 {
+        font-weight: 500;
+        font-size: 2rem;
+        line-height: 3.5rem;
+    }
+    h4 {
+        font-weight: 500;
+        font-size: 1.35rem;
+    }
+    h5 {
+        font-weight: 500;
+        font-size: 1.25rem;
+    }
+    h6 {
+        font-weight: 500;
+        font-size: 1rem;
+    }
+    ul {
+        list-style-position: inside;
+        text-indent:-20px;
+    }
+    li {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+    a {
+        /* display: inline-block; */
+        text-decoration: none;
+        text-decoration-skip-ink: auto;
+        color: inherit;
+        cursor: pointer;
+        transition: opacity 0.2s ease-in-out;
+ 
+        &:hover,
+        &:focus {
+          outline: 0;
+          opacity: 0.75;
+        }
+    }
+    code {
+        font-size: 1.125rem;
+        background-color: #edf2f7;
+        padding: 0 .5rem;
+    }
+  
 `;
 
-export default globalStyles;
+export default GlobalStyle;

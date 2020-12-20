@@ -25,6 +25,7 @@ const RateContainer = () => {
         topRated,
         topRatedError,
       });
+      window.scrollTo(0, 0);
     };
     getData();
   }, [page]);

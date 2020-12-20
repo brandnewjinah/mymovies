@@ -14,9 +14,8 @@ import { likeItem, dislikeItem } from "../../store/movies";
 import styled from "styled-components";
 
 const CategoryPresenter = (props) => {
-  const currentGenre = props.genre && parseInt(props.genre);
-
   const handleGenre = () => {
+    const currentGenre = parseInt(props.genre);
     if (currentGenre) {
       const found = props.genres.find((item) => item.id === currentGenre);
       return found.name;
@@ -40,9 +39,7 @@ const CategoryPresenter = (props) => {
       </Helmet>
       <Header>
         <h2>{props.genre && handleGenre()}</h2>
-      </Header>
-      <Header>
-        <h2>{props.keyword && props.keyword.name}</h2>
+        <h3>{props.keyword && props.keyword.name}</h3>
       </Header>
       {props.result && props.result.length > 0 && (
         <Section>
@@ -92,10 +89,10 @@ const Header = styled(Flex)`
     font-weight: 500;
   }
 
-  h4 {
-    font-size: 1.125rem;
+  h3 {
+    font-size: 1.75rem;
+    font-weight: 500;
     margin: 1.5em 0;
-    text-rendering: optimizeLegibility;
   }
 `;
 const mapStateToProps = (state) => {

@@ -9,10 +9,11 @@ import Indicator from "../../components/Indicator";
 
 //redux
 import { connect } from "react-redux";
-import { likeItem, dislikeItem } from "../../store/movies";
+import { likeItem, dislikeItem } from "../../reducers/rateReducer";
 
 //import styles and assets
 import styled from "styled-components";
+import { primary } from "../../components/Colors";
 
 const RatePresenter = (props) => {
   const [total, setTotal] = useState(0);
@@ -58,7 +59,7 @@ const RatePresenter = (props) => {
   const prevCount = usePrevious(total);
 
   const burst = {
-    color: "green",
+    color: primary.green,
   };
 
   return props.loading ? (
@@ -70,7 +71,7 @@ const RatePresenter = (props) => {
           <span
             style={
               total < 30
-                ? { color: "#fd7e14" }
+                ? { color: primary.yellow }
                 : prevCount === 29
                 ? burst
                 : null
@@ -81,21 +82,10 @@ const RatePresenter = (props) => {
           <span> / 30</span>
         </h2>
         {total >= 30 ? (
-          <div
-            style={{
-              display: "flex",
-            }}
-          >
-            <h4>You rated 30 movies! Keep rating or </h4>
+          <div className="section">
+            <h5>You rated 30 movies! Keep rating or </h5>
             <Link to="/profile">
-              <h4
-                style={{
-                  borderBottom: `3px solid #172d6e`,
-                  marginLeft: "6px",
-                }}
-              >
-                See your profile
-              </h4>
+              <h5 className="link">See your profile</h5>
             </Link>
           </div>
         ) : (
@@ -130,7 +120,7 @@ const RatePresenter = (props) => {
       )}
 
       <Footer>
-        <div>You rated {props.liked.length + props.disliked.length} / 30</div>
+        <p>You rated {props.liked.length + props.disliked.length} / 30</p>
         <div
           style={{
             display: "flex",
@@ -146,27 +136,45 @@ const RatePresenter = (props) => {
   );
 };
 
-const Container = styled.div`
-  margin: 6em auto;
-  width: 100%;
-  max-width: 1260px;
+const Flex = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
-const Header = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+const Container = styled.div`
+  width: 100%;
+  max-width: 1140px;
+  padding: 2em 0;
+  margin: 5em auto 0;
+`;
 
-  h2 {
-    font-size: 2.8rem;
-    font-weight: 500;
+const Header = styled(Flex)`
+  justify-content: center;
+  flex-direction: column;
+  color: ${primary.blue};
+
+  .section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25em 0;
   }
 
-  h4 {
-    font-size: 1.125rem;
-    margin: 1.5em 0;
-    text-rendering: optimizeLegibility;
+  .link {
+    border-bottom: 3px solid #172d6e;
+    margin-left: 6px;
+  }
+
+  @media (max-width: 640px) {
+    h5 {
+      font-size: 1.125rem;
+      text-align: center;
+    }
+
+    .section {
+      flex-direction: column;
+      padding: 1.25em 1em;
+    }
   }
 `;
 
@@ -184,11 +192,18 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
-const Footer = styled.div`
-  display: flex;
+const Footer = styled(Flex)`
   justify-content: space-between;
-  align-items: center;
   padding: 0 1em;
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+
+    p {
+      font-size: 0.875rem;
+      line-height: 3rem;
+    }
+  }
 `;
 
 RatePresenter.propTypes = {
@@ -202,8 +217,8 @@ RatePresenter.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    liked: state.liked,
-    disliked: state.disliked,
+    liked: state.rate.liked,
+    disliked: state.rate.disliked,
   };
 };
 

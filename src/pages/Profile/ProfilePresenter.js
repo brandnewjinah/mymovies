@@ -15,11 +15,12 @@ import { lanList } from "../../data/language";
 
 //import styles and assets
 import styled from "styled-components";
+import { primary } from "../../components/Colors";
 
 const ProfilePresenter = (props) => {
   const [language, setLanguage] = useState([]);
   const [genre, setGenre] = useState([]);
-  const [display, setDisplay] = useState([]);
+  const [display, setDisplay] = useState([...props.liked, ...props.disliked]);
   const liked = props.liked.length;
   const disliked = props.disliked.length;
   const total = liked + disliked;
@@ -110,7 +111,13 @@ const ProfilePresenter = (props) => {
           </Header>
           <Analyser>
             <h4>
-              Out of <span>{total}</span> movies watched, I liked{" "}
+              Out of{" "}
+              <span
+                onClick={() => loadMovies([...props.liked, ...props.disliked])}
+              >
+                {total}
+              </span>{" "}
+              movies watched, I liked{" "}
               <span onClick={() => loadMovies(props.liked)}>{liked}</span> and
               disliked{" "}
               <span onClick={() => loadMovies(props.disliked)}>{disliked}</span>{" "}
@@ -231,15 +238,19 @@ const ProfilePresenter = (props) => {
 };
 
 const Container = styled.div`
-  margin: 6em auto;
   width: 100%;
-  max-width: 1260px;
+  max-width: 1140px;
+  padding: 1em 0;
+  margin: 5em auto;
+  color: ${primary.blue};
 `;
 
-const Header = styled(Container)`
+const Header = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 2em 0;
+
   h2 {
     font-size: 2.8rem;
     font-weight: 500;
@@ -288,8 +299,8 @@ const Graph = styled.div`
 
 const mapStateToProps = (state) => {
   return {
-    liked: state.liked,
-    disliked: state.disliked,
+    liked: state.rate.liked,
+    disliked: state.rate.disliked,
   };
 };
 

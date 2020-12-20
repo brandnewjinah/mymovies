@@ -12,6 +12,8 @@ const RecommendContainer = (props) => {
     genresError: null,
     similar: [],
     similarError: null,
+    similar2: [],
+    similarError2: null,
     discovered: [],
     discoveredError: null,
     foreign: [],
@@ -23,6 +25,7 @@ const RecommendContainer = (props) => {
   const [genId, setGenId] = useState("");
   const [lanId, setLanId] = useState("");
   const [likedId, setLikedId] = useState();
+  const [likedId2, setLikedId2] = useState();
 
   useEffect(() => {
     const getData = async () => {
@@ -30,6 +33,7 @@ const RecommendContainer = (props) => {
       const [discovered, discoveredError] = await movieApi.discover(genId);
       const [foreign, foreignError] = await movieApi.foreign(lanId);
       const [similar, similarError] = await movieApi.similar(likedId);
+      const [similar2, similarError2] = await movieApi.similar(likedId2);
 
       const filtered = discovered.filter(
         (d) =>
@@ -45,10 +49,12 @@ const RecommendContainer = (props) => {
 
       setMovies({
         loading: false,
-        genres: genres.genres,
-        genresError,
         similar,
         similarError,
+        similar2,
+        similarError2,
+        genres: genres.genres,
+        genresError,
         discovered,
         discoveredError,
         foreign: filteredLn,
@@ -63,7 +69,8 @@ const RecommendContainer = (props) => {
     <RecommendPresenter
       findGenres={(gn) => setGenId(gn)}
       topLan={(lan) => setLanId(lan)}
-      findSimilar={(id) => setLikedId(id)}
+      findSimilar1={(id) => setLikedId(id)}
+      findSimilar2={(id) => setLikedId2(id)}
       {...movies}
     />
   );
@@ -71,8 +78,8 @@ const RecommendContainer = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    liked: state.liked,
-    disliked: state.disliked,
+    liked: state.rate.liked,
+    disliked: state.rate.disliked,
   };
 };
 
