@@ -5,14 +5,17 @@ import { Link } from "react-router-dom";
 import ModalVideo from "react-modal-video";
 import "react-modal-video/scss/modal-video.scss";
 
+//import components
 import Indicator from "../../components/Indicator";
 import Poster from "../../components/Poster";
 import Section from "../../components/Section";
 import Awards from "../../components/Awards";
+import Chips from "../../components/Chips";
 
 //redux
 import { connect } from "react-redux";
 import { likeItem, dislikeItem } from "../../store/movies";
+import { addKeyword } from "../../reducers/keywordReducer";
 
 //import styles
 import styled from "styled-components";
@@ -27,6 +30,20 @@ const DetailPresenter = (props) => {
 
   const handleDislike = (movie) => {
     props.dislikeItem(movie);
+  };
+
+  const saveKeyword = (k) => {
+    let key = { ...k, movieId: props.result.id };
+    props.addKeyword(key);
+  };
+
+  //first filter all keywords that this movie is included in
+  //then use that filtered arr to test in chips
+
+  const filterKeywords = () => {
+    const arr = props.keywords;
+    const filtered = arr.filter((f) => f.movies.includes(props.result.id));
+    return filtered;
   };
 
   return props.loading ? (
@@ -135,12 +152,24 @@ const DetailPresenter = (props) => {
           </Data>
         </Header>
         <Keywords>
-          <h6>keywords</h6>
+          <h6>Keywords</h6>
+          <p>
+            If you liked this movie, tell us why by checking the appropriate
+            keyword
+          </p>
           <div>
-            {props.keyword.keywords.map((k) => (
-              <Link to={`/keyword/${k.id}`}>
-                <span key={k.id}>{k.name}</span>
-              </Link>
+            {props.keyword.keywords.map((k, idx) => (
+              <Chips
+                key={idx}
+                label={k.name}
+                url={k.id}
+                saved={
+                  filterKeywords().find((item) => item.id === k.id)
+                    ? true
+                    : false
+                }
+                saveKeyword={() => saveKeyword(k)}
+              />
             ))}
           </div>
         </Keywords>
@@ -174,7 +203,7 @@ DetailPresenter.propTypes = {
 
 const Container = styled.div`
   /* margin: 6em auto; */
-  height: calc(100vh - 50px);
+  height: 100%;
   width: 100%;
   position: relative;
   padding: 50px;
@@ -302,9 +331,12 @@ const mapStateToProps = (state) => {
   return {
     liked: state.rate.liked,
     disliked: state.rate.disliked,
+    keywords: state.keywords.myKeywords,
   };
 };
 
-export default connect(mapStateToProps, { likeItem, dislikeItem })(
-  DetailPresenter
-);
+export default connect(mapStateToProps, {
+  likeItem,
+  dislikeItem,
+  addKeyword,
+})(DetailPresenter);

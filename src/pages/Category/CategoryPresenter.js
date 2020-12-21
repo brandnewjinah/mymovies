@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import Helmet from "react-helmet";
 
@@ -57,6 +57,12 @@ const CategoryPresenter = (props) => {
           ))}
         </Section>
       )}
+      <Footer>
+        {props.page !== 1 ? (
+          <Button onClick={props.prevPage}>Prev</Button>
+        ) : null}
+        <Button onClick={props.nextPage}>Next</Button>
+      </Footer>
     </Container>
     // <Container>container</Container>
   );
@@ -71,9 +77,10 @@ CategoryPresenter.propTypes = {
 };
 
 const Container = styled.div`
-  margin: 6em auto;
   width: 100%;
-  max-width: 1260px;
+  max-width: 1140px;
+  padding: 1em 0;
+  margin: 5em auto;
 `;
 
 const Flex = styled.div`
@@ -95,6 +102,35 @@ const Header = styled(Flex)`
     margin: 1.5em 0;
   }
 `;
+
+const Button = styled.button`
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  border: transparent;
+  font-family: "Poppins", sans-serif;
+  color: #172d6e;
+  font-size: 1.125rem;
+  font-weight: 400;
+  border-bottom: 3px solid #172d6e;
+  margin: 0 0.5em;
+  cursor: pointer;
+`;
+
+const Footer = styled(Flex)`
+  justify-content: space-between;
+  padding: 0 1em;
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+
+    p {
+      font-size: 0.875rem;
+      line-height: 3rem;
+    }
+  }
+`;
+
 const mapStateToProps = (state) => {
   return {
     liked: state.liked,

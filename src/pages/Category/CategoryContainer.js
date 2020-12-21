@@ -19,9 +19,11 @@ const CategoryContainer = ({ pathname }) => {
     resultError: null,
   });
 
+  const [page, setPage] = useState(1);
+
   const getData = async () => {
     if (location.pathname.includes("/keyword/")) {
-      const [result, resultError] = await movieApi.discoverKeyword(id);
+      const [result, resultError] = await movieApi.discoverKeyword(id, page);
       const [keyword, keywordError] = await movieApi.keywordlist(id);
 
       setDetail({
@@ -68,9 +70,13 @@ const CategoryContainer = ({ pathname }) => {
 
   useEffect(() => {
     getData();
-  }, [id]);
+  }, [id, page]);
 
-  return <CategoryPresenter {...detail} />;
+  const nextPage = () => {
+    setPage(page + 1);
+  };
+
+  return <CategoryPresenter nextPage={nextPage} page={page} {...detail} />;
 };
 
 export default CategoryContainer;

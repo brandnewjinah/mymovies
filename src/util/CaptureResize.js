@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 const CaptureResize = () => {
   const [width, setWidth] = useState(window.innerWidth);

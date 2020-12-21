@@ -56,6 +56,7 @@ const Label = styled.div`
 
 const Selection = styled.ul`
   width: 100%;
+  min-width: 190px;
   position: relative;
   z-index: 10;
   ul {

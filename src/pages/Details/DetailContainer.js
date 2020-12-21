@@ -19,6 +19,7 @@ const DetailContainer = ({ pathname }) => {
     similarError: null,
     keyword: [],
     keywordError: null,
+    id: id,
   });
 
   const getData = async () => {

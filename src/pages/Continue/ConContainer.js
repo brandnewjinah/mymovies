@@ -59,6 +59,7 @@ const ConContainer = (props) => {
         topRatedError,
         unRated: filtered,
       });
+      window.scrollTo(0, 0);
     };
     getData();
   }, [selection, page, exclude]);

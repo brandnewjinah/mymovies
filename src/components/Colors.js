@@ -21,11 +21,10 @@ export const primary = {
   beige: "#f2ecdf",
   blue: "#0e3354",
   orange: "#d46f4a",
-  darksage: "#6e7e74",
-  wintergreen: "#184c5f",
   white: "#fafafa",
   yellow: "#e5ad51",
-  green: "#60753b",
+  // green: "#60753b",
+  green: "#91b04f",
   pink: "#e5a0b3",
   brown: "#bd986f",
 };

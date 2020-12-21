@@ -89,6 +89,25 @@ const RecommendPresenter = (props) => {
     props.findGenres(names.toString());
   };
 
+  //send api based on your favorite keywords
+  const basedonKeywords = () => {
+    const sorted = _.orderBy(
+      props.keywords,
+      (key) => {
+        return key.movies.length;
+      },
+      ["desc"]
+    );
+
+    //get top 3
+    const names = sorted.slice(0, 1).map((item) => {
+      return item.id;
+    });
+
+    // api call
+    props.findKeywords(names.toString());
+  };
+
   //send api based on random liked movie
   const [likedMovie, setLikedMovie] = useState("");
   const [likedMovie2, setLikedMovie2] = useState("");
@@ -113,6 +132,7 @@ const RecommendPresenter = (props) => {
 
   useEffect(() => {
     basedonGenres();
+    basedonKeywords();
     basedonLiked();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -130,6 +150,26 @@ const RecommendPresenter = (props) => {
             {props.unRated && props.unRated.length > 0 && (
               <Section>
                 {props.unRated.slice(0, 5).map((movie) => (
+                  <PosterList
+                    key={movie.id}
+                    id={movie.id}
+                    imageUrl={movie.poster_path}
+                    title={movie.title}
+                    rating={movie.vote_average}
+                    year={movie.release_date}
+                    genre={getGenre(movie.genre_ids)}
+                    toDetail={true}
+                  />
+                ))}
+              </Section>
+            )}
+
+            <Heading>
+              <h3>Based on your favorite topics we recommend</h3>
+            </Heading>
+            {props.discoveredKeyword && props.discoveredKeyword.length > 0 && (
+              <Section>
+                {props.discoveredKeyword.slice(0, 5).map((movie) => (
                   <PosterList
                     key={movie.id}
                     id={movie.id}
@@ -240,6 +280,7 @@ const mapStateToProps = (state) => {
   return {
     liked: state.rate.liked,
     disliked: state.rate.disliked,
+    keywords: state.keywords.myKeywords,
   };
 };
 

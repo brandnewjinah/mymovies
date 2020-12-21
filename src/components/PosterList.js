@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 //import styles and assets
 import styled from "styled-components";
@@ -20,6 +20,7 @@ const Poster = ({
   onClick2,
   toDetail,
 }) => {
+  const history = useHistory();
   const [errImg, setErrImg] = useState(false);
 
   const handleDefaultImg = (e) => {
@@ -28,57 +29,61 @@ const Poster = ({
     }
   };
 
+  const pushTo = () => {
+    history.push(`/movie/${id}`);
+  };
+
   return (
-    <Link to={toDetail && `/movie/${id}`}>
-      <Container>
-        <ImageContainer>
-          {errImg ? (
-            <ErrorImg>
-              <Film width="24" height="24" color="#000" stroke="2" />
-            </ErrorImg>
-          ) : (
-            <Image
-              onError={handleDefaultImg}
-              src={
-                imageUrl
-                  ? `https://image.tmdb.org/t/p/w500${imageUrl}`
-                  : setErrImg(true)
-              }
-            />
-          )}
-          {rate && (
-            <Rating>
-              <div
-                style={liked ? { backgroundColor: primary.green } : null}
-                onClick={() => onClick1()}
-              >
-                <Heart width="26" height="26" fill="#fff" />
-              </div>
-              <div
-                style={disliked ? { backgroundColor: "#de7747" } : null}
-                onClick={() => onClick2()}
-              >
-                <BrokenHeart width="26" height="26" fill="#fff" />
-              </div>
-            </Rating>
-          )}
-        </ImageContainer>
-        <Detail>
-          <h6>{title.length > 13 ? `${title.substring(0, 15)}...` : title}</h6>
-          <p>{year.substring(0, 4)}</p>
-          {/* <p>
+    // <Link to={toDetail && `/movie/${id}`}>
+    <Container onClick={toDetail && pushTo}>
+      <ImageContainer>
+        {errImg ? (
+          <ErrorImg>
+            <Film width="24" height="24" color="#000" stroke="2" />
+          </ErrorImg>
+        ) : (
+          <Image
+            onError={handleDefaultImg}
+            src={
+              imageUrl
+                ? `https://image.tmdb.org/t/p/w500${imageUrl}`
+                : setErrImg(true)
+            }
+          />
+        )}
+        {rate && (
+          <Rating>
+            <div
+              style={liked ? { backgroundColor: primary.green } : null}
+              onClick={() => onClick1()}
+            >
+              <Heart width="26" height="26" fill="#fff" />
+            </div>
+            <div
+              style={disliked ? { backgroundColor: "#de7747" } : null}
+              onClick={() => onClick2()}
+            >
+              <BrokenHeart width="26" height="26" fill="#fff" />
+            </div>
+          </Rating>
+        )}
+      </ImageContainer>
+
+      <Detail onClick={pushTo}>
+        <h6>{title.length > 13 ? `${title.substring(0, 15)}...` : title}</h6>
+        <p>{year.substring(0, 4)}</p>
+        {/* <p>
             {genre && genre.join(" \u00B7 ").length > 18
               ? `${genre.join(" \u00B7 ").substring(0, 18)}...`
               : genre.join(" \u00B7 ")}
           </p> */}
-          <p>
-            {genre && genre.join(" \u00B7 ").length > 18
-              ? `${genre && genre.join(" \u00B7 ").substring(0, 18)}...`
-              : genre && genre.join(" \u00B7 ")}
-          </p>
-        </Detail>
-      </Container>
-    </Link>
+        <p>
+          {genre && genre.join(" \u00B7 ").length > 18
+            ? `${genre && genre.join(" \u00B7 ").substring(0, 18)}...`
+            : genre && genre.join(" \u00B7 ")}
+        </p>
+      </Detail>
+    </Container>
   );
 };
 
@@ -154,6 +159,7 @@ const Detail = styled(Flex)`
   height: 26%;
   flex-direction: column;
   padding-bottom: 1em;
+  cursor: pointer;
   /* background-color: coral; */
 
   h6 {

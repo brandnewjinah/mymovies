@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 // import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import _ from "lodash";
 
 //import components
@@ -100,6 +101,17 @@ const ProfilePresenter = (props) => {
     setDisplay(result);
   };
 
+  const keywordtest = () => {
+    const sorted = _.orderBy(
+      props.keywords,
+      (key) => {
+        return key.movies.length;
+      },
+      ["desc"]
+    );
+    return sorted;
+  };
+
   return (
     <Container>
       {props.loading ? (
@@ -112,24 +124,28 @@ const ProfilePresenter = (props) => {
           <Analyser>
             <h4>
               Out of{" "}
-              <span
+              <Underline
                 onClick={() => loadMovies([...props.liked, ...props.disliked])}
               >
                 {total}
-              </span>{" "}
+              </Underline>{" "}
               movies watched, I liked{" "}
-              <span onClick={() => loadMovies(props.liked)}>{liked}</span> and
-              disliked{" "}
-              <span onClick={() => loadMovies(props.disliked)}>{disliked}</span>{" "}
+              <Underline onClick={() => loadMovies(props.liked)}>
+                {liked}
+              </Underline>{" "}
+              and disliked{" "}
+              <Underline onClick={() => loadMovies(props.disliked)}>
+                {disliked}
+              </Underline>{" "}
               movies. My favorite genre is{" "}
               {genre.slice(0, 1).map((g, idx) => {
                 const found = props.genres.find(
                   (item) => item.id === parseInt(g.key)
                 );
                 return (
-                  <span key={idx} onClick={() => filterGenre(found.id)}>
+                  <Underline key={idx} onClick={() => filterGenre(found.id)}>
                     {found.name}
-                  </span>
+                  </Underline>
                 );
               })}{" "}
               followed by{" "}
@@ -139,21 +155,21 @@ const ProfilePresenter = (props) => {
                 );
                 if (arr.length - 1 === idx) {
                   return (
-                    <>
+                    <span key={idx}>
                       and{" "}
-                      <span key={idx} onClick={() => filterGenre(found.id)}>
+                      <Underline onClick={() => filterGenre(found.id)}>
                         {found.name}
-                      </span>
-                    </>
+                      </Underline>
+                    </span>
                   );
                 } else {
                   return (
-                    <>
-                      <span key={idx} onClick={() => filterGenre(found.id)}>
+                    <span key={idx}>
+                      <Underline onClick={() => filterGenre(found.id)}>
                         {found.name}
-                      </span>
+                      </Underline>
                       ,{" "}
-                    </>
+                    </span>
                   );
                 }
               })}
@@ -161,41 +177,69 @@ const ProfilePresenter = (props) => {
               {language.slice(0, 1).map((g, idx) => {
                 const found = lanList.find((item) => item.code === g.key);
                 return (
-                  <span key={idx} onClick={() => filterLanguage(found.code)}>
+                  <Underline
+                    key={idx}
+                    onClick={() => filterLanguage(found.code)}
+                  >
                     {found.english}
-                  </span>
+                  </Underline>
                 );
               })}{" "}
-              but was not afraid to watch foreign films in{" "}
+              but also watched foreign films in{" "}
               {language.slice(1).map((g, idx, arr) => {
                 const found = lanList.find((item) => item.code === g.key);
                 if (arr.length - 1 === idx) {
                   return (
-                    <>
-                      and{" "}
-                      <span
-                        key={idx}
-                        onClick={() => filterLanguage(found.code)}
-                      >
-                        {found.english}
+                    found !== undefined && (
+                      <span key={idx}>
+                        and{" "}
+                        <Underline onClick={() => filterLanguage(found.code)}>
+                          {found.english}
+                        </Underline>
                       </span>
-                    </>
+                    )
                   );
                 } else
                   return (
-                    <>
-                      <span
-                        key={idx}
-                        onClick={() => filterLanguage(found.code)}
-                      >
-                        {found.english}
+                    found !== undefined && (
+                      <span key={idx}>
+                        <Underline onClick={() => filterLanguage(found.code)}>
+                          {found.english}
+                        </Underline>
+                        ,{" "}
                       </span>
-                      ,{" "}
-                    </>
+                    )
                   );
               })}
               . Here are my liked movies:<span>{}</span>
             </h4>
+            <h6>
+              Some of the topics I enjoy the most are{" "}
+              {keywordtest()
+                .slice(0, 3)
+                .map((k, idx, arr) =>
+                  arr.length > 1 && idx === arr.length - 1 ? (
+                    <span key={idx}>
+                      and{" "}
+                      <Link to={`/keyword/${k.id}`}>
+                        <Underline>{k.name}</Underline>
+                      </Link>
+                      .
+                    </span>
+                  ) : idx === arr.length - 1 ? (
+                    <Link to={`/keyword/${k.id}`}>
+                      <Underline key={idx}>{k.name}</Underline>
+                    </Link>
+                  ) : (
+                    <span key={idx}>
+                      <Link to={`/keyword/${k.id}`}>
+                        <Underline>{k.name}</Underline>
+                      </Link>
+                      ,{" "}
+                    </span>
+                  )
+                )}
+            </h6>
           </Analyser>
           <Liked>
             {/* {array && array.length > 0 && (
@@ -271,8 +315,7 @@ const Analyser = styled.div`
   }
 
   span {
-    /* border-bottom: 3px solid #e89161; */
-    position: relative;
+    /* position: relative;
     cursor: pointer;
 
     &:after {
@@ -282,7 +325,21 @@ const Analyser = styled.div`
       right: 0;
       bottom: 0;
       border-bottom: 3px solid #e89161;
-    }
+    } */
+  }
+`;
+
+const Underline = styled.span`
+  position: relative;
+
+  cursor: pointer;
+  &:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-bottom: 3px solid #e89161;
   }
 `;
 
@@ -301,6 +358,7 @@ const mapStateToProps = (state) => {
   return {
     liked: state.rate.liked,
     disliked: state.rate.disliked,
+    keywords: state.keywords.myKeywords,
   };
 };
 

@@ -100,6 +100,10 @@ export const lanList = [
     code: "ch",
   },
   {
+    english: "Chinese",
+    code: "cn",
+  },
+  {
     english: "Corsican",
     code: "co",
   },

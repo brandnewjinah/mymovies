@@ -51,6 +51,7 @@ const GlobalStyle = createGlobalStyle`
     }
     ul {
         list-style-position: inside;
+        list-style-type: none;
         text-indent:-20px;
     }
     li {

@@ -16,6 +16,8 @@ const RecommendContainer = (props) => {
     similarError2: null,
     discovered: [],
     discoveredError: null,
+    discoveredKeyword: [],
+    discoveredKeywordError: null,
     foreign: [],
     foreignError: null,
     unRated: [],
@@ -23,6 +25,7 @@ const RecommendContainer = (props) => {
   });
 
   const [genId, setGenId] = useState("");
+  const [keyword, setKeyword] = useState("");
   const [lanId, setLanId] = useState("");
   const [likedId, setLikedId] = useState();
   const [likedId2, setLikedId2] = useState();
@@ -30,7 +33,14 @@ const RecommendContainer = (props) => {
   useEffect(() => {
     const getData = async () => {
       const [genres, genresError] = await movieApi.genre();
-      const [discovered, discoveredError] = await movieApi.discover(genId);
+      const [discovered, discoveredError] = await movieApi.discover(
+        genId,
+        null
+      );
+      const [
+        discoveredKeyword,
+        discoveredKeywordError,
+      ] = await movieApi.discover(null, keyword);
       const [foreign, foreignError] = await movieApi.foreign(lanId);
       const [similar, similarError] = await movieApi.similar(likedId);
       const [similar2, similarError2] = await movieApi.similar(likedId2);
@@ -57,6 +67,8 @@ const RecommendContainer = (props) => {
         genresError,
         discovered,
         discoveredError,
+        discoveredKeyword,
+        discoveredKeywordError,
         foreign: filteredLn,
         foreignError,
         unRated: filtered,
@@ -68,6 +80,7 @@ const RecommendContainer = (props) => {
   return (
     <RecommendPresenter
       findGenres={(gn) => setGenId(gn)}
+      findKeywords={(key) => setKeyword(key)}
       topLan={(lan) => setLanId(lan)}
       findSimilar1={(id) => setLikedId(id)}
       findSimilar2={(id) => setLikedId2(id)}
