@@ -41,6 +41,7 @@ const Routes = () => {
             <Route exact path="/category/:id" component={Category} />
             <Route exact path="/collection/:id" component={Collection} />
             <Route exact path="/keyword/:id" component={Category} />
+            <Route exact path="/director/:id" component={Category} />
           </Layout>
           <Redirect from="*" to="/" />
         </Switch>

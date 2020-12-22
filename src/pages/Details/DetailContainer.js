@@ -4,47 +4,52 @@ import { useParams, useLocation } from "react-router-dom";
 
 import DetailPresenter from "./DetailPresenter";
 
-//import styles
-import styled from "styled-components";
-
 const DetailContainer = ({ pathname }) => {
   let { id } = useParams();
   let location = useLocation();
 
   const [detail, setDetail] = useState({
     loading: true,
+    id: id,
     result: {},
     resultError: null,
-    similar: [],
-    similarError: null,
+    recommend: [],
+    recommendError: null,
     keyword: [],
     keywordError: null,
-    id: id,
+    credits: {},
+    creditsError: null,
   });
 
-  const getData = async () => {
-    const [result, resultError] = location.pathname.includes("/movie/")
-      ? await movieApi.movie(id)
-      : await tvApi.show(id);
-    const [similar, similarError] = location.pathname.includes("/movie/")
-      ? await movieApi.similar(id)
-      : await tvApi.similar(id);
-    const [keyword, keywordError] = location.pathname.includes("/movie/")
-      ? await movieApi.keyword(id)
-      : await tvApi.keyword(id);
-
-    setDetail({
-      result,
-      resultError,
-      similar,
-      similarError,
-      keyword,
-      keywordError,
-      loading: false,
-    });
-  };
-
   useEffect(() => {
+    const getData = async () => {
+      const [result, resultError] = location.pathname.includes("/movie/")
+        ? await movieApi.movie(id)
+        : await tvApi.show(id);
+      const [recommend, recommendError] = location.pathname.includes("/movie/")
+        ? await movieApi.recommend(id)
+        : await tvApi.recommend(id);
+      const [keyword, keywordError] = location.pathname.includes("/movie/")
+        ? await movieApi.keyword(id)
+        : await tvApi.keyword(id);
+      const [credits, creditsError] = await movieApi.credits(id);
+
+      const filtered =
+        credits.crew && credits.crew.find((c) => c.job === "Director");
+
+      setDetail({
+        result,
+        resultError,
+        recommend,
+        recommendError,
+        keyword,
+        keywordError,
+        loading: false,
+        credits: filtered,
+        creditsError,
+      });
+    };
+
     getData();
   }, [id]);
 

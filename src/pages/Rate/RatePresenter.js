@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { movieApi } from "../../api";
 
 //import components
 import { Section } from "../../components/Section2";
@@ -18,9 +19,21 @@ import { primary } from "../../components/Colors";
 const RatePresenter = (props) => {
   const [total, setTotal] = useState(0);
 
-  const handleLike = (movie) => {
-    props.likeItem(movie);
+  const handleLike = async (movie) => {
+    const [credits, creditsError] = await movieApi.credits(movie.id);
+    const director =
+      credits && credits.crew && credits.crew.find((c) => c.job === "Director");
+    const likedMovie = {
+      ...movie,
+      director: { id: director.id, name: director.name },
+    };
+    props.likeItem(likedMovie);
   };
+
+  // const handleLike = (movie) => {
+
+  //   // props.likeItem(movie);
+  // };
 
   const handleDislike = (movie) => {
     props.dislikeItem(movie);

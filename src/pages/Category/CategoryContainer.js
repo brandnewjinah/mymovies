@@ -15,6 +15,8 @@ const CategoryContainer = ({ pathname }) => {
     genres: [],
     keyword: {},
     keywordError: null,
+    director: {},
+    directorError: null,
     genresError: null,
     resultError: null,
   });
@@ -36,8 +38,9 @@ const CategoryContainer = ({ pathname }) => {
     }
 
     if (location.pathname.includes("/category/")) {
-      const [result, resultError] = await movieApi.discover(id);
+      const [result, resultError] = await movieApi.discover(id, null, null);
       const [genres, genresError] = await movieApi.genre();
+      console.log(result);
 
       setDetail({
         result,
@@ -45,6 +48,19 @@ const CategoryContainer = ({ pathname }) => {
         genres: genres.genres,
         genresError,
         genre: id,
+        loading: false,
+      });
+    }
+
+    if (location.pathname.includes("/director/")) {
+      const [result, resultError] = await movieApi.discoverCrew(id);
+      const [director, directorError] = await movieApi.person(id);
+
+      setDetail({
+        director,
+        directorError,
+        result,
+        resultError,
         loading: false,
       });
     }

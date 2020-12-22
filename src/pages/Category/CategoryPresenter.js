@@ -40,6 +40,7 @@ const CategoryPresenter = (props) => {
       <Header>
         <h2>{props.genre && handleGenre()}</h2>
         <h3>{props.keyword && props.keyword.name}</h3>
+        <h3>{props.director && props.director.name}</h3>
       </Header>
       {props.result && props.result.length > 0 && (
         <Section>

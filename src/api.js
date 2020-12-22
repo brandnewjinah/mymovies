@@ -34,10 +34,11 @@ export const movieApi = {
   similar: (id) => getAnything(`/movie/${id}/similar`, { movie_id: id }),
   recommend: (id) =>
     getAnything(`/movie/${id}/recommendations`, { movie_id: id }),
-  discover: (id, keyword) =>
+  discover: (id, keyword, director) =>
     getAnything(`/discover/movie`, {
       with_genres: id,
       with_keywords: keyword,
+      with_crew: director,
       page: random,
       sort_by: "vote_count.desc",
     }),
@@ -45,6 +46,11 @@ export const movieApi = {
     getAnything(`/discover/movie`, {
       with_keywords: id,
       page: page,
+      sort_by: "vote_count.desc",
+    }),
+  discoverCrew: (id) =>
+    getAnything(`/discover/movie`, {
+      with_crew: id,
       sort_by: "vote_count.desc",
     }),
   foreign: (id) =>
@@ -62,6 +68,7 @@ export const movieApi = {
   keyword: (id) => getAnything(`/movie/${id}/keywords`),
   keywordlist: (id) => getAnything(`/keyword/${id}`),
   credits: (id) => getAnything(`/movie/${id}/credits`),
+  person: (id) => getAnything(`/person/${id}`),
   search: (query) => getAnything("/search/movie", { query }),
 };
 

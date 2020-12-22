@@ -25,7 +25,11 @@ const DetailPresenter = (props) => {
   const [isOpen, setOpen] = useState(false);
 
   const handleLike = (movie) => {
-    props.likeItem(movie);
+    const thisMovie = {
+      ...movie,
+      director: { name: props.credits.name, id: props.credits.id },
+    };
+    props.likeItem(thisMovie);
   };
 
   const handleDislike = (movie) => {
@@ -98,6 +102,11 @@ const DetailPresenter = (props) => {
             </Title>
             <Subtitle>
               {props.result.original_title && props.result.original_title}
+            </Subtitle>
+            <Subtitle>
+              <Link to={`/director/${props.credits.id}`}>
+                {props.credits.name}
+              </Link>
             </Subtitle>
             <ItemContainer>
               <Item>
@@ -173,9 +182,9 @@ const DetailPresenter = (props) => {
             ))}
           </div>
         </Keywords>
-        {props.similar && props.similar.length > 0 && (
+        {props.recommend && props.recommend.length > 0 && (
           <Section title="Similar">
-            {props.similar.slice(0, 5).map((movie) => (
+            {props.recommend.slice(0, 5).map((movie) => (
               <Poster
                 key={movie.id}
                 id={movie.id}
@@ -197,8 +206,8 @@ DetailPresenter.propTypes = {
   loading: PropTypes.bool.isRequired,
   result: PropTypes.object,
   resultError: PropTypes.string,
-  similar: PropTypes.array,
-  similarError: PropTypes.string,
+  recommend: PropTypes.array,
+  recommendError: PropTypes.string,
 };
 
 const Container = styled.div`

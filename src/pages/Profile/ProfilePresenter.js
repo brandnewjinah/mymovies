@@ -1,36 +1,95 @@
 import React, { useEffect, useState } from "react";
 // import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
 import _ from "lodash";
 
 //import components
 import Indicator from "../../components/Indicator";
 import { Section2 } from "../../components/Section2";
 import PosterList from "../../components/PosterList";
+import Analyser from "./ProfileAnalyser";
 
 //redux
 import { connect } from "react-redux";
-
-//data
-import { lanList } from "../../data/language";
 
 //import styles and assets
 import styled from "styled-components";
 import { primary } from "../../components/Colors";
 
 const ProfilePresenter = (props) => {
+  const [movies, setMovies] = useState([...props.liked, ...props.disliked]);
+  const [topGenres, setTopGenres] = useState([]);
   const [language, setLanguage] = useState([]);
-  const [genre, setGenre] = useState([]);
-  const [display, setDisplay] = useState([...props.liked, ...props.disliked]);
+  const [crew, setCrew] = useState([]);
+  const [keywords, setKeywords] = useState([]);
   const liked = props.liked.length;
   const disliked = props.disliked.length;
   const total = liked + disliked;
 
-  const array = props.liked;
+  //get top genres from liked movies
+  const countGenre = () => {
+    let count = {};
+    props.liked.map((movie) => {
+      movie.genre_ids &&
+        movie.genre_ids.forEach((item) => {
+          count[item] = (count[item] || 0) + 1;
+        });
+      return count;
+    });
+    props.liked.map((movie) => {
+      movie.genres &&
+        movie.genres.forEach((item) => {
+          count[item.id] = (count[item.id] || 0) + 1;
+        });
+      return count;
+    });
+    let result = Object.keys(count).map((e) => {
+      return { key: e, count: count[e] };
+    });
+
+    const sorted = _.orderBy(result, "count", "desc");
+    setTopGenres(sorted);
+  };
+
+  //get genres for each movie
+  const handleGenre = (genre) => {
+    //genre in array like [12, 23, 34]
+    if (genre.some((obj) => Object.keys(obj).includes("id"))) {
+      const genres = genre.map((g) => {
+        return g.name;
+      });
+      return genres.slice(0, 2);
+    } else if (genre) {
+      const genres = genre.map((g) => {
+        //get updated genres list from the server, and return genre name that matches genre id
+        const found = props.genres.find((item) => item.id === g);
+        return found.name;
+      });
+      return genres.slice(0, 2);
+    }
+  };
+
+  //to load corresponding movies on underline click
+  const filterMovies = (arr) => {
+    setMovies(arr);
+  };
+
+  //to load movies under each genre
+  const filterGenre = (id) => {
+    const result = props.liked.filter(
+      (m) => m.genre_ids && m.genre_ids.includes(id)
+    );
+
+    const result2 = props.liked.filter(
+      (m) => m.genres && m.genres.find((g) => g.id === id)
+    );
+
+    const combined = [...result, ...result2];
+    setMovies(combined);
+  };
 
   const countLan = () => {
     let count = {};
-    array.forEach((el) => {
+    props.liked.forEach((el) => {
       count[el.original_language] = (count[el.original_language] || 0) + 1;
     });
     let result = Object.keys(count).map((e) => {
@@ -40,68 +99,45 @@ const ProfilePresenter = (props) => {
     setLanguage(sorted);
   };
 
-  const countGenre = () => {
-    let count = {};
-    array.map((m) => {
-      m.genre_ids &&
-        m.genre_ids.forEach((el) => {
-          count[el] = (count[el] || 0) + 1;
-        });
-    });
-    array.map((m) => {
-      m.genres &&
-        m.genres.forEach((el) => {
-          count[el.id] = (count[el.id] || 0) + 1;
-        });
-    });
-    let result = Object.keys(count).map((e) => {
-      return { key: e, count: count[e] };
-    });
-
-    const sorted = _.orderBy(result, "count", "desc");
-    setGenre(sorted);
-  };
-
-  useEffect(() => {
-    countLan();
-    countGenre();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const handleGenre = (genre) => {
-    if (genre.some((obj) => Object.keys(obj).includes("id"))) {
-      const genres = genre.map((g) => {
-        return g.name;
-      });
-      return genres.slice(0, 2);
-    } else if (genre) {
-      const genres = genre.map((g) => {
-        const found = props.genres.find((item) => item.id === g);
-        return found.name;
-      });
-      return genres.slice(0, 2);
-    }
-  };
-
-  const loadMovies = (arr) => {
-    setDisplay(arr);
-  };
-
-  const filterGenre = (id) => {
-    const result = props.liked.filter(
-      (m) => m.genre_ids && m.genre_ids.includes(id)
-    );
-    setDisplay(result);
-  };
-
   const filterLanguage = (code) => {
     const result = props.liked.filter(
       (m) => m.original_language && m.original_language === code
     );
-    setDisplay(result);
+    setMovies(result);
   };
 
-  const keywordtest = () => {
+  const countCrew = () => {
+    let list = [];
+
+    props.liked.forEach((item) => {
+      let newItem = {
+        id: item.director.id,
+        name: item.director.name,
+        count: 1,
+      };
+
+      //see if director exists in count
+      let exists = list.find((item) => item.id === newItem.id);
+      if (exists) {
+        let newExists = { ...exists, count: exists.count + 1 };
+        let index = list.findIndex((item) => item.id === exists.id);
+        list[index] = newExists;
+      } else {
+        list = [...list, newItem];
+      }
+    });
+
+    const sorted = _.orderBy(
+      list,
+      (key) => {
+        return key.count;
+      },
+      ["desc"]
+    );
+    setCrew(sorted);
+  };
+
+  const countKeywords = () => {
     const sorted = _.orderBy(
       props.keywords,
       (key) => {
@@ -109,8 +145,16 @@ const ProfilePresenter = (props) => {
       },
       ["desc"]
     );
-    return sorted;
+    setKeywords(sorted);
   };
+
+  useEffect(() => {
+    countLan();
+    countGenre();
+    countCrew();
+    countKeywords();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Container>
@@ -119,148 +163,33 @@ const ProfilePresenter = (props) => {
       ) : (
         <>
           <Header>
-            <h2>My Movie Analyzer</h2>
+            <h2>My Movie Profile</h2>
           </Header>
-          <Analyser>
-            <h4>
-              Out of{" "}
-              <Underline
-                onClick={() => loadMovies([...props.liked, ...props.disliked])}
-              >
-                {total}
-              </Underline>{" "}
-              movies watched, I liked{" "}
-              <Underline onClick={() => loadMovies(props.liked)}>
-                {liked}
-              </Underline>{" "}
-              and disliked{" "}
-              <Underline onClick={() => loadMovies(props.disliked)}>
-                {disliked}
-              </Underline>{" "}
-              movies. My favorite genre is{" "}
-              {genre.slice(0, 1).map((g, idx) => {
-                const found = props.genres.find(
-                  (item) => item.id === parseInt(g.key)
-                );
-                return (
-                  <Underline key={idx} onClick={() => filterGenre(found.id)}>
-                    {found.name}
-                  </Underline>
-                );
-              })}{" "}
-              followed by{" "}
-              {genre.slice(1, 4).map((g, idx, arr) => {
-                const found = props.genres.find(
-                  (item) => item.id === parseInt(g.key)
-                );
-                if (arr.length - 1 === idx) {
-                  return (
-                    <span key={idx}>
-                      and{" "}
-                      <Underline onClick={() => filterGenre(found.id)}>
-                        {found.name}
-                      </Underline>
-                    </span>
-                  );
-                } else {
-                  return (
-                    <span key={idx}>
-                      <Underline onClick={() => filterGenre(found.id)}>
-                        {found.name}
-                      </Underline>
-                      ,{" "}
-                    </span>
-                  );
-                }
-              })}
-              . I watched primarily in{" "}
-              {language.slice(0, 1).map((g, idx) => {
-                const found = lanList.find((item) => item.code === g.key);
-                return (
-                  <Underline
-                    key={idx}
-                    onClick={() => filterLanguage(found.code)}
-                  >
-                    {found.english}
-                  </Underline>
-                );
-              })}{" "}
-              but also watched foreign films in{" "}
-              {language.slice(1).map((g, idx, arr) => {
-                const found = lanList.find((item) => item.code === g.key);
-                if (arr.length - 1 === idx) {
-                  return (
-                    found !== undefined && (
-                      <span key={idx}>
-                        and{" "}
-                        <Underline onClick={() => filterLanguage(found.code)}>
-                          {found.english}
-                        </Underline>
-                      </span>
-                    )
-                  );
-                } else
-                  return (
-                    found !== undefined && (
-                      <span key={idx}>
-                        <Underline onClick={() => filterLanguage(found.code)}>
-                          {found.english}
-                        </Underline>
-                        ,{" "}
-                      </span>
-                    )
-                  );
-              })}
-              . Here are my liked movies:<span>{}</span>
-            </h4>
-            <h6>
-              Some of the topics I enjoy the most are{" "}
-              {keywordtest()
-                .slice(0, 3)
-                .map((k, idx, arr) =>
-                  arr.length > 1 && idx === arr.length - 1 ? (
-                    <span key={idx}>
-                      and{" "}
-                      <Link to={`/keyword/${k.id}`}>
-                        <Underline>{k.name}</Underline>
-                      </Link>
-                      .
-                    </span>
-                  ) : idx === arr.length - 1 ? (
-                    <Link to={`/keyword/${k.id}`}>
-                      <Underline key={idx}>{k.name}</Underline>
-                    </Link>
-                  ) : (
-                    <span key={idx}>
-                      <Link to={`/keyword/${k.id}`}>
-                        <Underline>{k.name}</Underline>
-                      </Link>
-                      ,{" "}
-                    </span>
-                  )
-                )}
-            </h6>
-          </Analyser>
-          <Liked>
-            {/* {array && array.length > 0 && (
+          <Analyser
+            total={total}
+            liked={liked}
+            disliked={disliked}
+            filterAllMovies={() =>
+              filterMovies([...props.liked, ...props.disliked])
+            }
+            filterLikedMovies={() => filterMovies(props.liked)}
+            filterDislikedMovies={() => filterMovies(props.disliked)}
+            topGenres={topGenres}
+            availGenres={props.genres}
+            filterGenre1={(id) => filterGenre(id)}
+            filterGenre2={(id) => filterGenre(id)}
+            filterGenre3={(id) => filterGenre(id)}
+            language={language}
+            filterLanguage1={(code) => filterLanguage(code)}
+            filterLanguage2={(code) => filterLanguage(code)}
+            filterLanguage3={(code) => filterLanguage(code)}
+            crew={crew}
+            keywords={keywords}
+          />
+          <MovieList>
+            {movies && movies.length > 0 && (
               <Section2>
-                {array.map((movie) => (
-                  <PosterList
-                    key={movie.id}
-                    id={movie.id}
-                    imageUrl={movie.poster_path}
-                    title={movie.title}
-                    rating={movie.vote_average}
-                    year={movie.release_date}
-                    genre={handleGenre(movie.genre_ids || movie.genres)}
-                    toDetail={true}
-                  />
-                ))}
-              </Section2>
-            )} */}
-            {display && display.length > 0 && (
-              <Section2>
-                {display.map((movie) => (
+                {movies.map((movie) => (
                   <PosterList
                     key={movie.id}
                     id={movie.id}
@@ -274,7 +203,7 @@ const ProfilePresenter = (props) => {
                 ))}
               </Section2>
             )}
-          </Liked>
+          </MovieList>
         </>
       )}
     </Container>
@@ -301,61 +230,14 @@ const Header = styled.div`
   }
 `;
 
-const Analyser = styled.div`
-  margin: 2em auto;
-  width: 100%;
-  max-width: 960px;
-
-  h4 {
-    font-size: 1.5rem;
-    line-height: 2.8rem;
-    letter-spacing: 0.125rem;
-    margin: 1.5em 0;
-    text-rendering: optimizeLegibility;
-  }
-
-  span {
-    /* position: relative;
-    cursor: pointer;
-
-    &:after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      border-bottom: 3px solid #e89161;
-    } */
-  }
-`;
-
-const Underline = styled.span`
-  position: relative;
-
-  cursor: pointer;
-  &:after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-bottom: 3px solid #e89161;
-  }
-`;
-
-const Liked = styled.div`
+const MovieList = styled.div`
   margin: 6em auto;
   width: 100%;
 `;
 
-const Graph = styled.div`
-  margin: 2em auto;
-  width: 100%;
-  max-width: 960px;
-`;
-
 const mapStateToProps = (state) => {
   return {
+    rate: state.rate,
     liked: state.rate.liked,
     disliked: state.rate.disliked,
     keywords: state.keywords.myKeywords,
