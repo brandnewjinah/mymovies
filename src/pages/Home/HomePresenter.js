@@ -20,7 +20,7 @@ const HomePresenter = () => {
       <Container>
         <div>
           <h1>
-            Rate movies you've watched. Get a personalized analyser. Get
+            Rate movies you've watched. Get a personalized movie profile. Get
             recommendations based on your watch history.
           </h1>
           <div className="start" onClick={handleNext}>
