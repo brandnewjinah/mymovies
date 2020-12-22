@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const TMDB_KEY = "4b658a749eb62093dc853c9e394cfcc7";
-let random = Math.floor(Math.random() * 11);
+let random = Math.floor((Math.random() + 0.1) * 11);
 
 const makeRequest = (path, params) =>
   axios.get(`https://api.themoviedb.org/3${path}`, {
@@ -25,23 +25,26 @@ const getAnything = async (path, params = {}) => {
 };
 
 export const movieApi = {
-  nowPlaying: () => getAnything("/movie/now_playing"),
-  popular: () => getAnything("/movie/popular"),
-  upcoming: () => getAnything("/movie/upcoming"),
-  genre: () => getAnything("/genre/movie/list"),
   topRated: (page) => getAnything("/movie/top_rated", { page }),
-  movie: (id) => getAnything(`/movie/${id}`, { append_to_response: "videos" }),
-  similar: (id) => getAnything(`/movie/${id}/similar`, { movie_id: id }),
-  recommend: (id) =>
-    getAnything(`/movie/${id}/recommendations`, { movie_id: id }),
-  discover: (id, keyword, director) =>
+  discover: (genres, keyword, director) =>
     getAnything(`/discover/movie`, {
-      with_genres: id,
+      with_genres: genres,
       with_keywords: keyword,
       with_crew: director,
       page: random,
       sort_by: "vote_count.desc",
     }),
+  recommend: (id) =>
+    getAnything(`/movie/${id}/recommendations`, { movie_id: id }),
+
+  nowPlaying: () => getAnything("/movie/now_playing"),
+  popular: () => getAnything("/movie/popular"),
+  upcoming: () => getAnything("/movie/upcoming"),
+  genre: () => getAnything("/genre/movie/list"),
+
+  movie: (id) => getAnything(`/movie/${id}`, { append_to_response: "videos" }),
+  similar: (id) => getAnything(`/movie/${id}/similar`, { movie_id: id }),
+
   discoverKeyword: (id, page) =>
     getAnything(`/discover/movie`, {
       with_keywords: id,

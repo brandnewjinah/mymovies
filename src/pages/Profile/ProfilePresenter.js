@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 // import PropTypes from "prop-types";
 import _ from "lodash";
 
+//import utils
+import { CountGenres } from "../../util/LikeCounter";
+import { getGenre } from "../../util/GetGenres";
+
 //import components
 import Indicator from "../../components/Indicator";
 import { Section2 } from "../../components/Section2";
@@ -27,45 +31,10 @@ const ProfilePresenter = (props) => {
 
   //get top genres from liked movies
   const countGenre = () => {
-    let count = {};
-    props.liked.map((movie) => {
-      movie.genre_ids &&
-        movie.genre_ids.forEach((item) => {
-          count[item] = (count[item] || 0) + 1;
-        });
-      return count;
-    });
-    props.liked.map((movie) => {
-      movie.genres &&
-        movie.genres.forEach((item) => {
-          count[item.id] = (count[item.id] || 0) + 1;
-        });
-      return count;
-    });
-    let result = Object.keys(count).map((e) => {
-      return { key: e, count: count[e] };
-    });
+    //get liked genres
+    const sorted = CountGenres(props.liked);
 
-    const sorted = _.orderBy(result, "count", "desc");
     setTopGenres(sorted);
-  };
-
-  //get genres for each movie
-  const handleGenre = (genre) => {
-    //genre in array like [12, 23, 34]
-    if (genre.some((obj) => Object.keys(obj).includes("id"))) {
-      const genres = genre.map((g) => {
-        return g.name;
-      });
-      return genres.slice(0, 2);
-    } else if (genre) {
-      const genres = genre.map((g) => {
-        //get updated genres list from the server, and return genre name that matches genre id
-        const found = props.genres.find((item) => item.id === g);
-        return found.name;
-      });
-      return genres.slice(0, 2);
-    }
   };
 
   //to load corresponding movies on underline click
@@ -197,7 +166,10 @@ const ProfilePresenter = (props) => {
                     title={movie.title}
                     rating={movie.vote_average}
                     year={movie.release_date}
-                    genre={handleGenre(movie.genre_ids || movie.genres)}
+                    genre={getGenre(
+                      props.genres,
+                      movie.genre_ids || movie.genres
+                    )}
                     toDetail={true}
                   />
                 ))}

@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 // import PropTypes from "prop-types";
 import _ from "lodash";
 
-import CaptureResize from "../../util/CaptureResize";
+//import utils
+import { CountGenres } from "../../util/LikeCounter";
 
 //import components
 import Indicator from "../../components/Indicator";
@@ -57,28 +58,8 @@ const RecommendPresenter = (props) => {
 
   //send api based on your top 3 favorite genres
   const basedonGenres = () => {
-    let count = {};
-
-    //count genre id occurrence
-    liked.map((m) => {
-      m.genre_ids &&
-        m.genre_ids.forEach((item) => {
-          count[item] = (count[item] || 0) + 1;
-        });
-    });
-
-    // liked.map((m) => {
-    //   m.genres &&
-    //     m.genres.forEach((item) => {
-    //       count[item.id] = (count[item.id] || 0) + 1;
-    //     });
-    // });
-
-    //convert into object and sort by highest
-    let result = Object.keys(count).map((e) => {
-      return { key: e, count: count[e] };
-    });
-    const sorted = _.orderBy(result, "count", "desc");
+    //get liked genres
+    const sorted = CountGenres(liked);
 
     //get top 3
     const names = sorted.slice(0, 3).map((item) => {
@@ -90,6 +71,8 @@ const RecommendPresenter = (props) => {
   };
 
   //send api based on your favorite keywords
+  const [likedKeyword, setlikedKeyword] = useState("");
+
   const basedonKeywords = () => {
     const sorted = _.orderBy(
       props.keywords,
@@ -99,35 +82,31 @@ const RecommendPresenter = (props) => {
       ["desc"]
     );
 
-    //get top 3
-    const names = sorted.slice(0, 1).map((item) => {
-      return item.id;
-    });
+    let random = Math.floor(Math.random() * 3);
+    const names = sorted[random];
 
     // api call
-    props.findKeywords(names.toString());
+    props.findKeywords(names.id.toString());
+    setlikedKeyword(names.name);
   };
 
   //send api based on random liked movie
   const [likedMovie, setLikedMovie] = useState("");
-  const [likedMovie2, setLikedMovie2] = useState("");
 
   const basedonLiked = () => {
-    //get two unique random numbers
-    let random = [];
-    while (random.length < 2) {
-      let random1 = Math.floor(Math.random() * liked.length);
-      if (random.indexOf(random1 === -1)) random.push(random1);
-    }
+    // //get two unique random numbers
+    // let random = [];
+    // while (random.length < 2) {
+    //   let random1 = Math.floor(Math.random() * liked.length);
+    //   if (random.indexOf(random1 === -1)) random.push(random1);
+    // }
 
-    const likedMovie1 = liked[random[0]];
-    const likedMovie2 = liked[random[1]];
+    let random = Math.floor((Math.random() + 0.1) * liked.length);
+    const likedMovie = liked[random];
 
-    props.findSimilar1(likedMovie1.id);
-    props.findSimilar2(likedMovie2.id);
-
-    setLikedMovie(likedMovie1.title);
-    setLikedMovie2(likedMovie2.title);
+    props.findSimilar(likedMovie.id);
+    setLikedMovie(likedMovie.title);
+    console.log(likedMovie.id);
   };
 
   useEffect(() => {
@@ -145,11 +124,11 @@ const RecommendPresenter = (props) => {
         <>
           <Recommendations>
             <Heading>
-              <h3>Based on your ratings we recommend</h3>
+              <h3>Based on your favorite genres we recommend</h3>
             </Heading>
-            {props.unRated && props.unRated.length > 0 && (
+            {props.filteredGenres && props.filteredGenres.length > 0 && (
               <Section>
-                {props.unRated.slice(0, 5).map((movie) => (
+                {props.filteredGenres.slice(0, 5).map((movie) => (
                   <PosterList
                     key={movie.id}
                     id={movie.id}
@@ -165,11 +144,11 @@ const RecommendPresenter = (props) => {
             )}
 
             <Heading>
-              <h3>Based on your favorite topics we recommend</h3>
+              <h3>{likedKeyword}</h3>
             </Heading>
-            {props.discoveredKeyword && props.discoveredKeyword.length > 0 && (
+            {props.filteredKeywords && props.filteredKeywords.length > 0 && (
               <Section>
-                {props.discoveredKeyword.slice(0, 5).map((movie) => (
+                {props.filteredKeywords.slice(0, 5).map((movie) => (
                   <PosterList
                     key={movie.id}
                     id={movie.id}
@@ -193,50 +172,23 @@ const RecommendPresenter = (props) => {
                 <div onClick={() => handleNextSlice("liked1")}>next</div>
               </div>
             </Heading>
-            {props.similar && props.similar.length > 0 && (
+            {props.Recommended && props.Recommended.length > 0 && (
               <Section>
-                {props.similar
-                  .slice(sliced.liked1.begin, sliced.liked1.end)
-                  .map((movie) => (
-                    <PosterList
-                      key={movie.id}
-                      id={movie.id}
-                      imageUrl={movie.poster_path}
-                      title={movie.title}
-                      rating={movie.vote_average}
-                      year={movie.release_date}
-                      genre={getGenre(movie.genre_ids)}
-                      toDetail={true}
-                    />
-                  ))}
-              </Section>
-            )}
-
-            <Heading>
-              <h3>Because you like {likedMovie2}</h3>
-              <div className="pagination">
-                <div className="prev" onClick={() => handlePrevSlice("liked2")}>
-                  prev
-                </div>
-                <div onClick={() => handleNextSlice("liked2")}>next</div>
-              </div>
-            </Heading>
-            {props.similar2 && props.similar2.length > 0 && (
-              <Section>
-                {props.similar2
-                  .slice(sliced.liked2.begin, sliced.liked2.end)
-                  .map((movie) => (
-                    <PosterList
-                      key={movie.id}
-                      id={movie.id}
-                      imageUrl={movie.poster_path}
-                      title={movie.title}
-                      rating={movie.vote_average}
-                      year={movie.release_date}
-                      genre={getGenre(movie.genre_ids)}
-                      toDetail={true}
-                    />
-                  ))}
+                {props.Recommended.slice(
+                  sliced.liked1.begin,
+                  sliced.liked1.end
+                ).map((movie) => (
+                  <PosterList
+                    key={movie.id}
+                    id={movie.id}
+                    imageUrl={movie.poster_path}
+                    title={movie.title}
+                    rating={movie.vote_average}
+                    year={movie.release_date}
+                    genre={getGenre(movie.genre_ids)}
+                    toDetail={true}
+                  />
+                ))}
               </Section>
             )}
           </Recommendations>

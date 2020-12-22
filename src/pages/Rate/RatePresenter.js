@@ -3,6 +3,9 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { movieApi } from "../../api";
 
+//import utils
+import { getGenre } from "../../util/GetGenres";
+
 //import components
 import { Section } from "../../components/Section2";
 import PosterList from "../../components/PosterList";
@@ -20,20 +23,19 @@ const RatePresenter = (props) => {
   const [total, setTotal] = useState(0);
 
   const handleLike = async (movie) => {
-    const [credits, creditsError] = await movieApi.credits(movie.id);
+    const credits = await movieApi.credits(movie.id);
+
     const director =
-      credits && credits.crew && credits.crew.find((c) => c.job === "Director");
+      credits &&
+      credits[0].crew &&
+      credits[0].crew.find((c) => c.job === "Director");
+
     const likedMovie = {
       ...movie,
       director: { id: director.id, name: director.name },
     };
     props.likeItem(likedMovie);
   };
-
-  // const handleLike = (movie) => {
-
-  //   // props.likeItem(movie);
-  // };
 
   const handleDislike = (movie) => {
     props.dislikeItem(movie);
@@ -47,16 +49,6 @@ const RatePresenter = (props) => {
 
     handleRated();
   }, [props.liked, props.disliked]);
-
-  const handleGenre = (genre) => {
-    if (genre) {
-      const genres = genre.map((g) => {
-        const found = props.genres.find((item) => item.id === g);
-        return found.name;
-      });
-      return genres.slice(0, 2);
-    }
-  };
 
   // Find out previous count
   // if total rated count reaches 30 from 29, create a burst animation
@@ -102,7 +94,7 @@ const RatePresenter = (props) => {
             </Link>
           </div>
         ) : (
-          <h4>Please rate at least 30 movies to get started</h4>
+          <h5>Please rate at least 30 movies to get started</h5>
         )}
       </Header>
 
@@ -117,7 +109,7 @@ const RatePresenter = (props) => {
               title={movie.title}
               rating={movie.vote_average}
               year={movie.release_date}
-              genre={handleGenre(movie.genre_ids)}
+              genre={getGenre(props.genres, movie.genre_ids)}
               liked={
                 props.liked && props.liked.find((item) => item.id === movie.id)
               }

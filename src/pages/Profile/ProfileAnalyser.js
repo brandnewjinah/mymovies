@@ -42,7 +42,7 @@ const Analyser = ({
             );
             if (arr.length === 1) {
               return (
-                <span>
+                <span key={idx}>
                   <Underline onClick={() => filterGenre1(likedGenres.id)}>
                     {likedGenres.name}
                   </Underline>
@@ -51,7 +51,7 @@ const Analyser = ({
               );
             } else if (arr.length - 1 === idx) {
               return (
-                <span>
+                <span key={idx}>
                   and{" "}
                   <Underline onClick={() => filterGenre2(likedGenres.id)}>
                     {likedGenres.name}
@@ -61,7 +61,7 @@ const Analyser = ({
               );
             } else {
               return (
-                <span>
+                <span key={idx}>
                   <Underline onClick={() => filterGenre3(likedGenres.id)}>
                     {likedGenres.name}
                   </Underline>
@@ -75,7 +75,7 @@ const Analyser = ({
             const likedLanguage = lanList.find((item) => item.code === g.key);
             if (arr.length === 1) {
               return (
-                <span>
+                <span key={idx}>
                   <Underline
                     onClick={() => filterLanguage1(likedLanguage.code)}
                   >
@@ -86,7 +86,7 @@ const Analyser = ({
               );
             } else if (arr.length - 1 === idx) {
               return (
-                <span>
+                <span key={idx}>
                   and{" "}
                   <Underline
                     onClick={() => filterLanguage2(likedLanguage.code)}
@@ -98,7 +98,7 @@ const Analyser = ({
               );
             } else {
               return (
-                <span>
+                <span key={idx}>
                   <Underline
                     onClick={() => filterLanguage3(likedLanguage.code)}
                   >
@@ -117,7 +117,7 @@ const Analyser = ({
           {crew.slice(0, 3).map((c, idx, arr) => {
             if (arr.length === 1) {
               return (
-                <span>
+                <span key={idx}>
                   <Link to={`/director/${c.id}`}>
                     <Underline>{c.name}</Underline>
                   </Link>
@@ -126,7 +126,7 @@ const Analyser = ({
               );
             } else if (arr.length - 1 === idx) {
               return (
-                <span>
+                <span key={idx}>
                   and{" "}
                   <Link to={`/director/${c.id}`}>
                     <Underline>{c.name}</Underline>
@@ -136,7 +136,7 @@ const Analyser = ({
               );
             } else {
               return (
-                <span>
+                <span key={idx}>
                   <Link to={`/director/${c.id}`}>
                     <Underline>{c.name}</Underline>
                   </Link>
@@ -154,7 +154,7 @@ const Analyser = ({
             {keywords.slice(0, 3).map((k, idx, arr) => {
               if (arr.length === 1) {
                 return (
-                  <span>
+                  <span key={idx}>
                     <Link to={`/keyword/${k.id}`}>
                       <Underline>{k.name}</Underline>
                     </Link>
@@ -163,7 +163,7 @@ const Analyser = ({
                 );
               } else if (arr.length - 1 === idx) {
                 return (
-                  <span>
+                  <span key={idx}>
                     and{" "}
                     <Link to={`/keyword/${k.id}`}>
                       <Underline>{k.name}</Underline>
@@ -173,7 +173,7 @@ const Analyser = ({
                 );
               } else {
                 return (
-                  <span>
+                  <span key={idx}>
                     <Link to={`/keyword/${k.id}`}>
                       <Underline>{k.name}</Underline>
                     </Link>

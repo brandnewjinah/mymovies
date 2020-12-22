@@ -2,119 +2,24 @@ import React, { useEffect, useState } from "react";
 // import PropTypes from "prop-types";
 import _ from "lodash";
 
+import CaptureResize from "../../util/CaptureResize";
+
 //import components
 import Indicator from "../../components/Indicator";
-import { Section2 } from "../../components/Section2";
+import { Section } from "../../components/Section2";
 import PosterList from "../../components/PosterList";
 
 //redux
 import { connect } from "react-redux";
 
-//data
-import { lanList } from "../../data/language";
-
 //import styles and assets
 import styled from "styled-components";
 
 const RecommendPresenter = (props) => {
-  const [language, setLanguage] = useState("");
-  const [likedMovie, setLikedMovie] = useState("");
-  const [likedMovie2, setLikedMovie2] = useState("");
-  const [discovered, setDiscovered] = useState([]);
-
+  // global
   const liked = props.liked;
 
-  // const { width } = CaptureResize();
-  // const [currentDevice, setCurrentDevice] = useState(
-  //   width > 1024
-  //     ? "desktop"
-  //     : width > 840
-  //     ? "laptop"
-  //     : width > 650
-  //     ? "tablet"
-  //     : "mobile"
-  // );
-
-  const [sliced, setSliced] = useState({
-    rec: { begin: 0, end: 6 },
-  });
-
-  const handleNextSlice = () => {
-    let newSliced = { ...sliced };
-    let newRect = { ...sliced.rec };
-    if (newRect.begin < 18) {
-      newRect = { begin: newRect.begin + 6, end: newRect.end + 6 };
-      newSliced = { ...newSliced, rec: newRect };
-      setSliced(newSliced);
-    }
-  };
-
-  const handlePrevSlice = () => {
-    let newSliced = { ...sliced };
-    let newRect = { ...sliced.rec };
-    if (newRect.begin !== 0) {
-      newRect = { begin: newRect.begin - 6, end: newRect.end - 6 };
-      newSliced = { ...newSliced, rec: newRect };
-      setSliced(newSliced);
-    }
-  };
-
-  //see if there's non-en movie in your liked movies
-
-  const handleForeign = () => {
-    let count = {};
-    liked.forEach((el) => {
-      count[el.original_language] = (count[el.original_language] || 0) + 1;
-    });
-    let result = Object.keys(count).map((e) => {
-      return { key: e, count: count[e] };
-    });
-    const sorted = _.orderBy(result, "count", "desc");
-    const foreign = sorted.filter((lan) => lan.key !== "en");
-    const code = foreign.slice(0, 1).map((item) => {
-      return item.key;
-    });
-    props.topLan(code.toString());
-    const found = lanList.find((item) => item.code === code.toString());
-    setLanguage(found.english);
-  };
-
-  //get random movie from your liked movies - to find similar movies
-
-  const similarMovie = () => {
-    let random = Math.floor(Math.random() * liked.length);
-    const likedMovie = liked[random];
-    props.findSimilar(likedMovie.id);
-    setLikedMovie(likedMovie.title);
-  };
-
-  //recommend based on your top 3 favorite genres
-
-  const countGenre = () => {
-    let count = {};
-    liked.map((m) => {
-      m.genre_ids &&
-        m.genre_ids.forEach((el) => {
-          count[el] = (count[el] || 0) + 1;
-        });
-    });
-    liked.map((m) => {
-      m.genres &&
-        m.genres.forEach((el) => {
-          count[el.id] = (count[el.id] || 0) + 1;
-        });
-    });
-    let result = Object.keys(count).map((e) => {
-      return { key: e, count: count[e] };
-    });
-    const sorted = _.orderBy(result, "count", "desc");
-    const names = sorted.slice(0, 3).map((item) => {
-      return parseInt(item["key"]);
-    });
-    props.findGenres(names.toString());
-  };
-
-  const handleGenre = (genre) => {
+  const getGenre = (genre) => {
     if (genre) {
       const genres = genre.map((g) => {
         const found = props.genres.find((item) => item.id === g);
@@ -124,22 +29,111 @@ const RecommendPresenter = (props) => {
     }
   };
 
-  const unRated = () => {
-    const liked = props.liked;
-    const disliked = props.disliked;
-    const filtered = props.discovered.filter(
-      (d) =>
-        !liked.find((id) => id.id === d.id) &&
-        !disliked.find((id) => id.id === d.id)
+  // handle prev next pagination
+  const [sliced, setSliced] = useState({
+    liked1: { begin: 0, end: 5 },
+    liked2: { begin: 0, end: 5 },
+  });
+
+  const handleNextSlice = (item) => {
+    let newSliced = { ...sliced };
+    let newLiked = { ...newSliced[item] };
+    if (newLiked.begin < 15) {
+      newLiked = { begin: newLiked.begin + 5, end: newLiked.end + 5 };
+      newSliced = { ...newSliced, [item]: newLiked };
+      setSliced(newSliced);
+    }
+  };
+
+  const handlePrevSlice = (item) => {
+    let newSliced = { ...sliced };
+    let newLiked = { ...newSliced[item] };
+    if (newLiked.begin !== 0) {
+      newLiked = { begin: newLiked.begin - 5, end: newLiked.end - 5 };
+      newSliced = { ...newSliced, [item]: newLiked };
+      setSliced(newSliced);
+    }
+  };
+
+  //send api based on your top 3 favorite genres
+  const basedonGenres = () => {
+    let count = {};
+
+    //count genre id occurrence
+    liked.map((m) => {
+      m.genre_ids &&
+        m.genre_ids.forEach((item) => {
+          count[item] = (count[item] || 0) + 1;
+        });
+    });
+
+    // liked.map((m) => {
+    //   m.genres &&
+    //     m.genres.forEach((item) => {
+    //       count[item.id] = (count[item.id] || 0) + 1;
+    //     });
+    // });
+
+    //convert into object and sort by highest
+    let result = Object.keys(count).map((e) => {
+      return { key: e, count: count[e] };
+    });
+    const sorted = _.orderBy(result, "count", "desc");
+
+    //get top 3
+    const names = sorted.slice(0, 3).map((item) => {
+      return parseInt(item["key"]);
+    });
+
+    //api call
+    props.findGenres(names.toString());
+  };
+
+  //send api based on your favorite keywords
+  const basedonKeywords = () => {
+    const sorted = _.orderBy(
+      props.keywords,
+      (key) => {
+        return key.movies.length;
+      },
+      ["desc"]
     );
-    setDiscovered(filtered);
+
+    //get top 3
+    const names = sorted.slice(0, 1).map((item) => {
+      return item.id;
+    });
+
+    // api call
+    props.findKeywords(names.toString());
+  };
+
+  //send api based on random liked movie
+  const [likedMovie, setLikedMovie] = useState("");
+  const [likedMovie2, setLikedMovie2] = useState("");
+
+  const basedonLiked = () => {
+    //get two unique random numbers
+    let random = [];
+    while (random.length < 2) {
+      let random1 = Math.floor(Math.random() * liked.length);
+      if (random.indexOf(random1 === -1)) random.push(random1);
+    }
+
+    const likedMovie1 = liked[random[0]];
+    const likedMovie2 = liked[random[1]];
+
+    props.findSimilar1(likedMovie1.id);
+    props.findSimilar2(likedMovie2.id);
+
+    setLikedMovie(likedMovie1.title);
+    setLikedMovie2(likedMovie2.title);
   };
 
   useEffect(() => {
-    handleForeign();
-    similarMovie();
-    countGenre();
-    unRated();
+    basedonGenres();
+    basedonKeywords();
+    basedonLiked();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -149,37 +143,13 @@ const RecommendPresenter = (props) => {
         <Indicator />
       ) : (
         <>
-          <Analyser>
-            {/* <h4>language</h4>
-            {language.map((g, idx) => {
-              const found = lanList.find((item) => item.code === g.key);
-              return (
-                <div key={idx}>
-                  {found.english}: {g.count}
-                </div>
-              );
-            })} */}
-            {/* <h4>genre</h4>
-            {genre.map((g, idx) => {
-              const found = props.genres.find(
-                (item) => item.id === parseInt(g.key)
-              );
-              return (
-                <div key={idx}>
-                  {found.name}: {g.count}
-                </div>
-              );
-            })} */}
-          </Analyser>
           <Recommendations>
-            {/* <h3>Because you like (Foreign)</h3>
-            {foreign && foreign.length > 0 && <div>foreign exist</div>} */}
             <Heading>
               <h3>Based on your ratings we recommend</h3>
             </Heading>
             {props.unRated && props.unRated.length > 0 && (
-              <Section2>
-                {props.unRated.slice(0, 6).map((movie) => (
+              <Section>
+                {props.unRated.slice(0, 5).map((movie) => (
                   <PosterList
                     key={movie.id}
                     id={movie.id}
@@ -187,25 +157,46 @@ const RecommendPresenter = (props) => {
                     title={movie.title}
                     rating={movie.vote_average}
                     year={movie.release_date}
-                    genre={handleGenre(movie.genre_ids)}
+                    genre={getGenre(movie.genre_ids)}
                     toDetail={true}
                   />
                 ))}
-              </Section2>
+              </Section>
             )}
+
+            <Heading>
+              <h3>Based on your favorite topics we recommend</h3>
+            </Heading>
+            {props.discoveredKeyword && props.discoveredKeyword.length > 0 && (
+              <Section>
+                {props.discoveredKeyword.slice(0, 5).map((movie) => (
+                  <PosterList
+                    key={movie.id}
+                    id={movie.id}
+                    imageUrl={movie.poster_path}
+                    title={movie.title}
+                    rating={movie.vote_average}
+                    year={movie.release_date}
+                    genre={getGenre(movie.genre_ids)}
+                    toDetail={true}
+                  />
+                ))}
+              </Section>
+            )}
+
             <Heading>
               <h3>Because you like {likedMovie}</h3>
               <div className="pagination">
-                <div className="prev" onClick={handlePrevSlice}>
+                <div className="prev" onClick={() => handlePrevSlice("liked1")}>
                   prev
                 </div>
-                <div onClick={handleNextSlice}>next</div>
+                <div onClick={() => handleNextSlice("liked1")}>next</div>
               </div>
             </Heading>
             {props.similar && props.similar.length > 0 && (
-              <Section2>
+              <Section>
                 {props.similar
-                  .slice(sliced.rec.begin, sliced.rec.end)
+                  .slice(sliced.liked1.begin, sliced.liked1.end)
                   .map((movie) => (
                     <PosterList
                       key={movie.id}
@@ -214,18 +205,27 @@ const RecommendPresenter = (props) => {
                       title={movie.title}
                       rating={movie.vote_average}
                       year={movie.release_date}
-                      genre={handleGenre(movie.genre_ids)}
+                      genre={getGenre(movie.genre_ids)}
                       toDetail={true}
                     />
                   ))}
-              </Section2>
+              </Section>
             )}
 
-            {props.foreign && props.foreign.length > 0 && (
-              <>
-                <h3>Because you like {language}</h3>
-                <Section2>
-                  {props.foreign.slice(0, 6).map((movie) => (
+            <Heading>
+              <h3>Because you like {likedMovie2}</h3>
+              <div className="pagination">
+                <div className="prev" onClick={() => handlePrevSlice("liked2")}>
+                  prev
+                </div>
+                <div onClick={() => handleNextSlice("liked2")}>next</div>
+              </div>
+            </Heading>
+            {props.similar2 && props.similar2.length > 0 && (
+              <Section>
+                {props.similar2
+                  .slice(sliced.liked2.begin, sliced.liked2.end)
+                  .map((movie) => (
                     <PosterList
                       key={movie.id}
                       id={movie.id}
@@ -233,11 +233,11 @@ const RecommendPresenter = (props) => {
                       title={movie.title}
                       rating={movie.vote_average}
                       year={movie.release_date}
+                      genre={getGenre(movie.genre_ids)}
                       toDetail={true}
                     />
                   ))}
-                </Section2>
-              </>
+              </Section>
             )}
           </Recommendations>
         </>
@@ -247,22 +247,13 @@ const RecommendPresenter = (props) => {
 };
 
 const Container = styled.div`
-  margin: 4em auto;
   width: 100%;
-  max-width: 1260px;
+  max-width: 1140px;
+  padding: 2em 0;
+  margin: 5em auto 0;
 
   @media (max-width: 840px) {
     margin: 2em;
-  }
-`;
-
-const Analyser = styled.div`
-  margin: 2em 0;
-
-  h4 {
-    font-size: 1.125rem;
-    margin: 1.5em 0;
-    text-rendering: optimizeLegibility;
   }
 `;
 
@@ -289,6 +280,7 @@ const mapStateToProps = (state) => {
   return {
     liked: state.rate.liked,
     disliked: state.rate.disliked,
+    keywords: state.keywords.myKeywords,
   };
 };
 
