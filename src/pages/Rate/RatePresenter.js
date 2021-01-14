@@ -94,7 +94,9 @@ const RatePresenter = (props) => {
             </Link>
           </div>
         ) : (
-          <h5>Please rate at least 30 movies to get started</h5>
+          <div className="section">
+            <h5>Rate at least 30 movies to get your personalized profile</h5>
+          </div>
         )}
       </Header>
 
@@ -157,6 +159,7 @@ const Header = styled(Flex)`
   justify-content: center;
   flex-direction: column;
   color: ${primary.blue};
+  padding: 0 2em;
 
   .section {
     display: flex;
@@ -173,6 +176,7 @@ const Header = styled(Flex)`
   @media (max-width: 640px) {
     h5 {
       font-size: 1.125rem;
+      line-height: 1.75rem;
       text-align: center;
     }
 
@@ -199,7 +203,7 @@ const Button = styled.button`
 
 const Footer = styled(Flex)`
   justify-content: space-between;
-  padding: 0 1em;
+  padding: 1em;
 
   @media (max-width: 640px) {
     flex-direction: column;

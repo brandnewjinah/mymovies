@@ -7,78 +7,33 @@ import RecommendPresenter from "./RecommendPresenter";
 import { connect } from "react-redux";
 
 const RecommendContainer = (props) => {
+  const liked = props.liked;
   const [movies, setMovies] = useState({
-    loading: true,
-    genres: [],
-    genresError: null,
-    filteredGenres: [],
-    filteredKeywords: [],
-    discoveredGenres: [],
-    discoveredGenresError: null,
-    discoveredKeyword: [],
-    discoveredKeywordError: null,
-    Recommended: [],
-    RecommendedError: [],
+    likedMovie: {},
+    recommended: [],
+    recommendedError: null,
   });
-
-  const [genId, setGenId] = useState("");
-  const [keyword, setKeyword] = useState("");
-  const [lanId, setLanId] = useState("");
-  const [likedId, setLikedId] = useState();
 
   useEffect(() => {
     const getData = async () => {
-      const [genres, genresError] = await movieApi.genre();
+      let random = Math.floor(Math.random() * liked.length) + 1;
+      let likedMovie = liked[random];
 
-      const [discoveredGenres, discoveredGenresError] = await movieApi.discover(
-        genId,
-        null,
-        null
+      const [recommended, recommendedError] = await movieApi.recommend(
+        likedMovie.id
       );
-      const [
-        discoveredKeywords,
-        discoveredKeywordsError,
-      ] = await movieApi.discover(null, keyword, null);
-      const [Recommended, RecommendedError] = await movieApi.recommend(likedId);
-
-      const filteredGenres = discoveredGenres.filter(
-        (d) =>
-          !props.liked.find((id) => id.id === d.id) &&
-          !props.disliked.find((id) => id.id === d.id)
-      );
-
-      const filteredKeywords = discoveredKeywords.filter(
-        (d) =>
-          !props.liked.find((id) => id.id === d.id) &&
-          !props.disliked.find((id) => id.id === d.id)
-      );
+      // const [genres, genresError] = await movieApi.genre();
 
       setMovies({
-        loading: false,
-        genres: genres.genres,
-        genresError,
-        discoveredGenres,
-        discoveredGenresError,
-        discoveredKeywords,
-        discoveredKeywordsError,
-        filteredGenres,
-        filteredKeywords,
-        Recommended,
-        RecommendedError,
+        likedMovie,
+        recommended,
+        recommendedError,
       });
     };
-    getData();
-  }, [genId, lanId, likedId]);
 
-  return (
-    <RecommendPresenter
-      findGenres={(gn) => setGenId(gn)}
-      findKeywords={(key) => setKeyword(key)}
-      topLan={(lan) => setLanId(lan)}
-      findSimilar={(id) => setLikedId(id)}
-      {...movies}
-    />
-  );
+    getData();
+  }, []);
+  return <RecommendPresenter {...movies} />;
 };
 
 const mapStateToProps = (state) => {

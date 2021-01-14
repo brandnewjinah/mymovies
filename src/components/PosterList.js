@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 //import styles and assets
 import styled from "styled-components";
 import { Heart, BrokenHeart, Film } from "../assets/Icons";
-import { primary } from "./Colors";
+import { primary, gray } from "./Colors";
 
 const Poster = ({
   id,
@@ -21,11 +21,11 @@ const Poster = ({
   toDetail,
 }) => {
   const history = useHistory();
-  const [errImg, setErrImg] = useState(false);
+  const [emptyImg, setEmptyImg] = useState(false);
 
-  const handleDefaultImg = (e) => {
+  const handleNoImg = (e) => {
     if (e.type === "error") {
-      setErrImg(true);
+      setEmptyImg(true);
     }
   };
 
@@ -33,55 +33,55 @@ const Poster = ({
     history.push(`/movie/${id}`);
   };
 
+  const rateMovie = (
+    <>
+      <div
+        style={liked ? { backgroundColor: primary.green } : null}
+        onClick={() => onClick1()}
+      >
+        <Heart width="26" height="26" fill="#fff" />
+      </div>
+      <div
+        style={disliked ? { backgroundColor: primary.orange } : null}
+        onClick={() => onClick2()}
+      >
+        <BrokenHeart width="26" height="26" fill="#fff" />
+      </div>
+    </>
+  );
+
   return (
-    // <Link to={toDetail && `/movie/${id}`}>
     <Container onClick={toDetail && pushTo}>
       <ImageContainer>
-        {errImg ? (
-          <ErrorImg>
+        {emptyImg ? (
+          <EmptyImg>
             <Film width="24" height="24" color="#000" stroke="2" />
-          </ErrorImg>
+          </EmptyImg>
         ) : (
           <Image
-            onError={handleDefaultImg}
+            onError={handleNoImg}
             src={
               imageUrl
                 ? `https://image.tmdb.org/t/p/w500${imageUrl}`
-                : setErrImg(true)
+                : setEmptyImg(true)
             }
           />
         )}
-        {rate && (
-          <Rating>
-            <div
-              style={liked ? { backgroundColor: primary.green } : null}
-              onClick={() => onClick1()}
-            >
-              <Heart width="26" height="26" fill="#fff" />
-            </div>
-            <div
-              style={disliked ? { backgroundColor: "#de7747" } : null}
-              onClick={() => onClick2()}
-            >
-              <BrokenHeart width="26" height="26" fill="#fff" />
-            </div>
-          </Rating>
-        )}
+        {rate && <Rating>{rateMovie}</Rating>}
       </ImageContainer>
 
-      <Detail onClick={pushTo}>
-        <h6>{title.length > 13 ? `${title.substring(0, 15)}...` : title}</h6>
-        <p>{year.substring(0, 4)}</p>
-        {/* <p>
+      <Detail>
+        <div onClick={pushTo} className="content">
+          <h6>{title.length > 14 ? `${title.substring(0, 16)}...` : title}</h6>
+
+          <p>{year.substring(0, 4)}</p>
+          <p>
             {genre && genre.join(" \u00B7 ").length > 18
-              ? `${genre.join(" \u00B7 ").substring(0, 18)}...`
-              : genre.join(" \u00B7 ")}
-          </p> */}
-        <p>
-          {genre && genre.join(" \u00B7 ").length > 18
-            ? `${genre && genre.join(" \u00B7 ").substring(0, 18)}...`
-            : genre && genre.join(" \u00B7 ")}
-        </p>
+              ? `${genre && genre.join(" \u00B7 ").substring(0, 18)}...`
+              : genre && genre.join(" \u00B7 ")}
+          </p>
+        </div>
+        {rate && <div className="ratingmobile">{rateMovie}</div>}
       </Detail>
     </Container>
   );
@@ -90,28 +90,28 @@ const Poster = ({
 const Flex = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
 `;
 
 const Container = styled(Flex)`
   width: 100%;
   height: 100%;
   flex-direction: column;
-  /* background-color: Gainsboro; */
+
+  @media (max-width: 540px) {
+    flex-direction: row;
+  }
 `;
 
 const Image = styled.img`
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.1);
   object-fit: cover;
-  /* object-fit: contain; */
   border-radius: 8px;
   transition: opacity 0.1s linear;
 `;
 
-const ErrorImg = styled.div`
-  display: flex;
-  align-items: center;
+const EmptyImg = styled(Flex)`
   justify-content: center;
   width: 202px;
   height: 304px;
@@ -119,29 +119,30 @@ const ErrorImg = styled.div`
   background-color: rgba(0, 0, 0, 0.1);
 `;
 
-const Rating = styled.div`
+const Rating = styled(Flex)`
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  text-align: center;
   opacity: 0;
-  display: flex;
 
   div {
-    margin: 0 1em;
-    padding: 1em;
-    cursor: pointer;
-    background-color: #999999;
-    border-radius: 100%;
     display: flex;
+    border-radius: 100%;
+    background-color: ${gray.darkgray};
+    padding: 1em;
+    margin: 0 1em;
+    cursor: pointer;
+  }
+
+  @media (max-width: 540px) {
+    display: none;
   }
 `;
 
-const ImageContainer = styled.div`
-  height: 74%;
+const ImageContainer = styled(Flex)`
   position: relative;
-  /* background-color: magenta; */
+  height: 79%;
 
   &:hover {
     ${Image} {
@@ -152,15 +153,25 @@ const ImageContainer = styled.div`
       opacity: 1;
     }
   }
+
+  @media (max-width: 540px) {
+    height: 100%;
+    flex: 0 1 40%;
+
+    &:hover {
+      ${Image} {
+        opacity: 1;
+      }
+    }
+  }
 `;
 
 const Detail = styled(Flex)`
   width: 100%;
-  height: 26%;
+  height: 21%;
   flex-direction: column;
-  padding-bottom: 1em;
-  cursor: pointer;
-  /* background-color: coral; */
+  justify-content: start;
+  text-align: center;
 
   h6 {
     margin: 0.5em 0 0.25em;
@@ -171,9 +182,37 @@ const Detail = styled(Flex)`
     line-height: 1.25rem;
   }
 
-  @media (max-width: 640px) {
+  .content {
+    cursor: pointer;
+  }
+
+  .ratingmobile {
+    display: none;
+  }
+
+  @media (max-width: 540px) {
+    height: 100%;
+    flex: 0 1 60%;
+    justify-content: center;
+    align-items: start;
+    text-align: left;
+    padding-left: 1em;
+
     h6 {
       font-size: 0.875rem;
+    }
+
+    .ratingmobile {
+      display: flex;
+
+      div {
+        display: flex;
+        background-color: ${gray.darkgray};
+        padding: 0.5em;
+        border-radius: 100%;
+        margin: 1em 1em 0 0;
+        cursor: pointer;
+      }
     }
   }
 `;
