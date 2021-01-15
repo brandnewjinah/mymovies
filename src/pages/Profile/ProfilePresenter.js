@@ -9,7 +9,7 @@ import { getGenre } from "../../util/GetGenres";
 //import components
 import Indicator from "../../components/Indicator";
 import { Section2 } from "../../components/Section2";
-import PosterList from "../../components/PosterList";
+import Poster from "../../components/Poster";
 import Analyser from "./ProfileAnalyser";
 
 //redux
@@ -159,7 +159,7 @@ const ProfilePresenter = (props) => {
             {movies && movies.length > 0 && (
               <Section2>
                 {movies.map((movie) => (
-                  <PosterList
+                  <Poster
                     key={movie.id}
                     id={movie.id}
                     imageUrl={movie.poster_path}
@@ -182,29 +182,43 @@ const ProfilePresenter = (props) => {
   );
 };
 
+const Flex = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 const Container = styled.div`
   width: 100%;
   max-width: 1140px;
-  padding: 1em 0;
+  padding: 2em 0;
   margin: 5em auto;
   color: ${primary.blue};
 `;
 
-const Header = styled.div`
-  display: flex;
-  align-items: center;
+const Header = styled(Flex)`
   justify-content: center;
-  padding: 2em 0;
+  padding: 0 2em;
 
   h2 {
     font-size: 2.8rem;
     font-weight: 500;
+  }
+
+  @media (max-width: 640px) {
+    h2 {
+      font-size: 2rem;
+      text-align: center;
+    }
   }
 `;
 
 const MovieList = styled.div`
   margin: 6em auto;
   width: 100%;
+
+  @media (max-width: 640px) {
+    margin: 3em auto;
+  }
 `;
 
 const mapStateToProps = (state) => {

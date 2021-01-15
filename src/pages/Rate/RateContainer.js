@@ -41,6 +41,8 @@ const RateContainer = () => {
     }
   };
 
+  console.log(movies);
+
   return (
     <RatePresenter
       nextPage={nextPage}

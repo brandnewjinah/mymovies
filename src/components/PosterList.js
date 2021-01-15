@@ -51,7 +51,10 @@ const Poster = ({
   );
 
   return (
-    <Container onClick={toDetail && pushTo}>
+    <Container
+      onClick={toDetail && pushTo}
+      style={toDetail && { cursor: `pointer` }}
+    >
       <ImageContainer>
         {emptyImg ? (
           <EmptyImg>
@@ -72,12 +75,14 @@ const Poster = ({
 
       <Detail>
         <div onClick={pushTo} className="content">
-          <h6>{title.length > 14 ? `${title.substring(0, 16)}...` : title}</h6>
-
+          <h6 className="title">
+            {title.length > 17 ? `${title.substring(0, 19)}...` : title}
+          </h6>
+          <h6 className="titleMobile">{title}</h6>
           <p>{year.substring(0, 4)}</p>
           <p>
-            {genre && genre.join(" \u00B7 ").length > 18
-              ? `${genre && genre.join(" \u00B7 ").substring(0, 18)}...`
+            {genre && genre.join(" \u00B7 ").length > 20
+              ? `${genre && genre.join(" \u00B7 ").substring(0, 20)}...`
               : genre && genre.join(" \u00B7 ")}
           </p>
         </div>
@@ -175,6 +180,8 @@ const Detail = styled(Flex)`
 
   h6 {
     margin: 0.5em 0 0.25em;
+    display: inline-block;
+    width: 100%;
   }
 
   p {
@@ -183,7 +190,16 @@ const Detail = styled(Flex)`
   }
 
   .content {
+    width: 100%;
     cursor: pointer;
+  }
+
+  .title {
+    display: inline-block;
+  }
+
+  .titleMobile {
+    display: none;
   }
 
   .ratingmobile {
@@ -200,6 +216,15 @@ const Detail = styled(Flex)`
 
     h6 {
       font-size: 0.875rem;
+    }
+
+    .title {
+      display: none;
+    }
+
+    .titleMobile {
+      display: block;
+      line-height: 1.25rem;
     }
 
     .ratingmobile {

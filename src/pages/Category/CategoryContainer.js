@@ -24,31 +24,33 @@ const CategoryContainer = ({ pathname }) => {
   const [page, setPage] = useState(1);
 
   const getData = async () => {
+    const [genres, genresError] = await movieApi.genre();
+
     if (location.pathname.includes("/keyword/")) {
       const [result, resultError] = await movieApi.discoverKeyword(id, page);
       const [keyword, keywordError] = await movieApi.keywordlist(id);
 
       setDetail({
+        loading: false,
+        genres: genres.genres,
+        genresError,
         result,
         resultError,
         keyword,
         keywordError,
-        loading: false,
       });
     }
 
     if (location.pathname.includes("/category/")) {
       const [result, resultError] = await movieApi.discover(id, null, null);
-      const [genres, genresError] = await movieApi.genre();
-      console.log(result);
 
       setDetail({
+        loading: false,
         result,
         resultError,
         genres: genres.genres,
         genresError,
         genre: id,
-        loading: false,
       });
     }
 
@@ -57,11 +59,13 @@ const CategoryContainer = ({ pathname }) => {
       const [director, directorError] = await movieApi.person(id);
 
       setDetail({
+        loading: false,
+        genres: genres.genres,
+        genresError,
         director,
         directorError,
         result,
         resultError,
-        loading: false,
       });
     }
 
@@ -92,6 +96,7 @@ const CategoryContainer = ({ pathname }) => {
     setPage(page + 1);
   };
 
+  console.log(detail);
   return <CategoryPresenter nextPage={nextPage} page={page} {...detail} />;
 };
 

@@ -75,16 +75,23 @@ const Grid = styled.div`
 `;
 
 const Grid2 = styled.div`
-  margin-top: 25px;
+  margin-top: 2em;
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  grid-gap: 25px;
+  grid-gap: 2em;
 
-  @media (max-width: 840px) {
+  @media (max-width: 1024px) {
     grid-template-columns: repeat(4, 1fr);
+    grid-gap: 2em;
   }
 
-  @media (max-width: 380px) {
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 2em;
+  }
+
+  @media (max-width: 540px) {
     grid-template-columns: repeat(2, 1fr);
+    grid-gap: 2em;
   }
 `;

@@ -19,7 +19,9 @@ const ProfileContainer = () => {
         genres: genres.genres,
         genresError,
       });
+      window.scrollTo(0, 0);
     };
+
     getData();
   }, []);
 

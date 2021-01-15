@@ -193,13 +193,22 @@ const Container = styled.div`
   margin: 2em auto;
   width: 100%;
   max-width: 960px;
+  padding: 0 2em;
 
   h4 {
     font-size: 1.5rem;
     line-height: 2.8rem;
+    /* text-align: center; */
     letter-spacing: 0.125rem;
     margin: 1.5em 0;
     text-rendering: optimizeLegibility;
+  }
+
+  @media (max-width: 640px) {
+    h4 {
+      font-size: 1.25rem;
+      line-height: 2.25rem;
+    }
   }
 `;
 
@@ -207,8 +216,9 @@ const Section = styled.div``;
 
 const Underline = styled.span`
   position: relative;
-
   cursor: pointer;
+  white-space: nowrap;
+
   &:after {
     content: "";
     position: absolute;

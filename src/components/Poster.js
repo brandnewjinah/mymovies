@@ -1,91 +1,151 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 //import styles and assets
 import styled from "styled-components";
-// import noImage from "../assets/noimage.jpg";
+import { Film } from "../assets/Icons";
+import { primary, gray } from "./Colors";
 
-const Poster = ({ id, imageUrl, title, rating, year, isMovie = false }) => {
+const Poster = ({
+  id,
+  imageUrl,
+  title,
+  year,
+  genre,
+
+  toDetail,
+}) => {
+  const history = useHistory();
+  const [emptyImg, setEmptyImg] = useState(false);
+
+  const handleNoImg = (e) => {
+    if (e.type === "error") {
+      setEmptyImg(true);
+    }
+  };
+
+  const pushTo = () => {
+    history.push(`/movie/${id}`);
+  };
+
   return (
-    <Link to={isMovie ? `/movie/${id}` : `/tv/${id}`}>
-      <Container>
-        <ImageContainer>
+    <Container
+      onClick={toDetail && pushTo}
+      style={toDetail && { cursor: `pointer` }}
+    >
+      <ImageContainer>
+        {emptyImg ? (
+          <EmptyImg>
+            <Film width="24" height="24" color="#000" stroke="2" />
+          </EmptyImg>
+        ) : (
           <Image
-            bgUrl={
+            onError={handleNoImg}
+            src={
               imageUrl
                 ? `https://image.tmdb.org/t/p/w500${imageUrl}`
-                : "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty-300x240.jpg"
+                : setEmptyImg(true)
             }
-          ></Image>
-          <Rating>
-            <span role="img" aria-label="rating">
-              ⭐
-            </span>{" "}
-            {rating}
-          </Rating>
-        </ImageContainer>
-        <Title>
-          {title.length > 18 ? `${title.substring(0, 18)}...` : title}
-        </Title>
-        <Year>{year}</Year>
-      </Container>
-    </Link>
+          />
+        )}
+      </ImageContainer>
+
+      <Detail>
+        <div onClick={pushTo} className="content">
+          <h6>{title.length > 10 ? `${title.substring(0, 12)}...` : title}</h6>
+
+          <p>{year.substring(0, 4)}</p>
+          <p>
+            {genre && genre.join(" \u00B7 ").length > 18
+              ? `${genre && genre.join(" \u00B7 ").substring(0, 18)}...`
+              : genre && genre.join(" \u00B7 ")}
+          </p>
+        </div>
+      </Detail>
+    </Container>
   );
 };
+
+const Flex = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Container = styled(Flex)`
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+`;
+
+const Image = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: opacity 0.1s linear;
+`;
+
+const EmptyImg = styled(Flex)`
+  justify-content: center;
+  width: 202px;
+  height: 304px;
+  border-radius: 8px;
+  background-color: rgba(0, 0, 0, 0.1);
+`;
+
+const ImageContainer = styled(Flex)`
+  position: relative;
+  height: 74%;
+
+  &:hover {
+    ${Image} {
+      opacity: 0.3;
+    }
+  }
+
+  @media (max-width: 540px) {
+    &:hover {
+      ${Image} {
+        opacity: 1;
+      }
+    }
+  }
+`;
+
+const Detail = styled(Flex)`
+  width: 100%;
+  height: 26%;
+  flex-direction: column;
+  justify-content: start;
+  text-align: center;
+
+  h6 {
+    margin: 0.5em 0 0.25em;
+  }
+
+  p {
+    font-size: 0.75rem;
+    line-height: 1.25rem;
+  }
+
+  .content {
+    cursor: pointer;
+  }
+
+  @media (max-width: 540px) {
+    h6 {
+      font-size: 0.875rem;
+    }
+  }
+`;
 
 Poster.propTyes = {
   id: PropTypes.number.isRequired,
   imageUrl: PropTypes.string,
   title: PropTypes.string.isRequired,
-  rating: PropTypes.number,
   year: PropTypes.string,
-  isMovie: PropTypes.bool,
 };
-
-const Container = styled.div`
-  font-size: 12px;
-`;
-
-const Image = styled.div`
-  background-image: url(${(props) => props.bgUrl});
-  height: 180px;
-  background-size: cover;
-  border-radius: 4px;
-  background-position: center center;
-  transition: opacity 0.1s linear;
-`;
-
-const Rating = styled.span`
-  bottom: 10px;
-  right: 10px;
-  position: absolute;
-  opacity: 0;
-  transition: opacity 0.1s linear;
-`;
-
-const ImageContainer = styled.div`
-  margin-bottom: 7px;
-  position: relative;
-  &:hover {
-    ${Image} {
-      opacity: 0.3;
-    }
-
-    ${Rating} {
-      opacity: 1;
-    }
-  }
-`;
-
-const Title = styled.span`
-  display: block;
-  margin-bottom: 3px;
-`;
-
-const Year = styled.span`
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.5);
-`;
 
 export default Poster;

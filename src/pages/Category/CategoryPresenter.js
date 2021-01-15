@@ -6,12 +6,16 @@ import Indicator from "../../components/Indicator";
 import { Section } from "../../components/Section2";
 import PosterList from "../../components/PosterList";
 
+//import utils
+import { getGenre } from "../../util/GetGenres";
+
 //redux
 import { connect } from "react-redux";
 import { likeItem, dislikeItem } from "../../store/movies";
 
 //import styles
 import styled from "styled-components";
+import { primary } from "../../components/Colors";
 
 const CategoryPresenter = (props) => {
   const handleGenre = () => {
@@ -38,9 +42,23 @@ const CategoryPresenter = (props) => {
         </title> */}
       </Helmet>
       <Header>
-        <h2>{props.genre && handleGenre()}</h2>
-        <h3>{props.keyword && props.keyword.name}</h3>
-        <h3>{props.director && props.director.name}</h3>
+        <h3>{props.genre && handleGenre()}</h3>
+        <h3>
+          {props.keyword && (
+            <>
+              <span>Movies with keyword </span>
+              <span className="underline">{props.keyword.name}</span>
+            </>
+          )}
+        </h3>
+        <h3>
+          {props.director && (
+            <>
+              <span>Movies directed by </span>
+              <span className="underline">{props.director.name}</span>
+            </>
+          )}
+        </h3>
       </Header>
       {props.result && props.result.length > 0 && (
         <Section>
@@ -52,6 +70,7 @@ const CategoryPresenter = (props) => {
               title={movie.title}
               rating={movie.vote_average}
               year={movie.release_date}
+              genre={getGenre(props.genres, movie.genre_ids)}
               // genre={handleGenre(movie.genre_ids)}
               toDetail={true}
             />
@@ -69,18 +88,10 @@ const CategoryPresenter = (props) => {
   );
 };
 
-CategoryPresenter.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  result: PropTypes.object,
-  resultError: PropTypes.string,
-  similar: PropTypes.array,
-  similarError: PropTypes.string,
-};
-
 const Container = styled.div`
   width: 100%;
   max-width: 1140px;
-  padding: 1em 0;
+  padding: 2em 0;
   margin: 5em auto;
 `;
 
@@ -92,15 +103,26 @@ const Flex = styled.div`
 
 const Header = styled(Flex)`
   flex-direction: column;
-  h2 {
-    font-size: 2.8rem;
+  padding: 0 2em 1.25em;
+  color: ${primary.blue};
+
+  h3 {
+    font-size: 1.5rem;
     font-weight: 500;
   }
 
-  h3 {
-    font-size: 1.75rem;
-    font-weight: 500;
-    margin: 1.5em 0;
+  .underline {
+    position: relative;
+    white-space: nowrap;
+
+    &:after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-bottom: 3px solid #e89161;
+    }
   }
 `;
 
@@ -131,6 +153,14 @@ const Footer = styled(Flex)`
     }
   }
 `;
+
+CategoryPresenter.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  result: PropTypes.object,
+  resultError: PropTypes.string,
+  similar: PropTypes.array,
+  similarError: PropTypes.string,
+};
 
 const mapStateToProps = (state) => {
   return {

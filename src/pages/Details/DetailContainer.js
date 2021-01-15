@@ -48,6 +48,8 @@ const DetailContainer = ({ pathname }) => {
         credits: filtered,
         creditsError,
       });
+
+      window.scrollTo(0, 0);
     };
 
     getData();
