@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Select from "react-select";
+import { movieApi } from "../../api";
+
+//import utils
+import { getGenre } from "../../util/GetGenres";
 
 //import components
 import { Section } from "../../components/Section2";
-import PosterList from "../../components/PosterList";
+import RatePoster from "../../components/RatePoster";
 import Indicator from "../../components/Indicator";
 import Dropdown from "../../components/Dropdown";
 
@@ -17,50 +21,47 @@ import styled from "styled-components";
 import { primary } from "../../components/Colors";
 
 //data
-const data = [
-  { name: "By Popularity", path: "popularity.desc" },
-  { name: "By Vote Average", path: "vote_average.desc" },
-  { name: "By Vote Count", path: "vote.count.desc" },
-  { name: "Random", path: "popularity.desc" },
-];
+import { dropdown } from "../../data/options";
 
 const ConPresenter = (props) => {
-  const [selected, setSelected] = useState(data[0].name);
-  const handleLike = (movie) => {
-    props.likeItem(movie);
+  const [selected, setSelected] = useState(dropdown[0].name);
+
+  const handleLike = async (movie) => {
+    const credits = await movieApi.credits(movie.id);
+
+    const director =
+      credits &&
+      credits[0].crew &&
+      credits[0].crew.find((c) => c.job === "Director");
+
+    const likedMovie = {
+      ...movie,
+      director: { id: director.id, name: director.name },
+    };
+
+    props.likeItem(likedMovie);
   };
 
   const handleDislike = (movie) => {
     props.dislikeItem(movie);
   };
 
-  const handleGenre = (genre) => {
-    if (genre) {
-      const genres = genre.map((g) => {
-        const found = props.genres.find((item) => item.id === g);
-        return found.name;
-      });
-      return genres.slice(0, 2);
-    }
-  };
-
   const handleSelection = (d) => {
     setSelected(d.name);
-
     if (d.name === "Random") {
       let random = Math.floor(Math.random() * 404);
-      props.firePage(random);
+      props.handlePage(random);
     } else {
-      props.fireSelection(d.path);
+      props.handleSort(d.path);
     }
   };
 
   const handleChange = (value) => {
     if (value === null) {
-      props.fireExclusion("");
+      props.handleExclusion("");
     } else {
       const result = value.map((o) => o.id);
-      props.fireExclusion(result.toString());
+      props.handleExclusion(result.toString());
     }
   };
 
@@ -96,16 +97,16 @@ const ConPresenter = (props) => {
   ) : (
     <Container>
       <Header>
-        <h2>Rate more movies</h2>
+        <h3>Rate more movies</h3>
         <div style={{ display: `flex`, marginTop: `1em` }}>
           <Dropdown
             selected={selected}
-            data={data}
+            data={dropdown}
             handleSelection={(d) => handleSelection(d)}
           />
         </div>
         <Multi>
-          <h4>But don't show me</h4>
+          <h4>Exclude</h4>
           <div>
             <Select
               isMulti
@@ -137,10 +138,10 @@ const ConPresenter = (props) => {
         </div>
       </Header>
 
-      {props.unRated && props.unRated.length > 0 && (
+      {props.results && props.results.length > 0 && (
         <Section>
-          {props.unRated.map((movie) => (
-            <PosterList
+          {props.results.map((movie) => (
+            <RatePoster
               key={movie.id}
               rate={true}
               id={movie.id}
@@ -148,7 +149,7 @@ const ConPresenter = (props) => {
               title={movie.title}
               rating={movie.vote_average}
               year={movie.release_date}
-              genre={handleGenre(movie.genre_ids)}
+              genre={getGenre(props.genres, movie.genre_ids)}
               liked={
                 props.liked && props.liked.find((item) => item.id === movie.id)
               }
@@ -175,8 +176,7 @@ const ConPresenter = (props) => {
 const Container = styled.div`
   width: 100%;
   max-width: 1140px;
-  padding: 1em 0;
-  margin: 5em auto;
+  margin: 7em auto;
   color: ${primary.blue};
 `;
 
@@ -188,15 +188,20 @@ const Flex = styled.div`
 
 const Header = styled(Flex)`
   flex-direction: column;
-  h2 {
-    font-size: 2.8rem;
-    font-weight: 500;
+
+  h3 {
+    font-size: 2rem;
+    font-weight: 600;
   }
 
   h4 {
     font-size: 1.125rem;
     margin: 1.5em 0;
     text-rendering: optimizeLegibility;
+  }
+
+  @media (max-width: 780px) {
+    text-align: center;
   }
 `;
 
@@ -229,7 +234,6 @@ ConPresenter.propTypes = {
   nowPlaying: PropTypes.array,
   popular: PropTypes.array,
   upcoming: PropTypes.array,
-  topRated: PropTypes.array,
   loading: PropTypes.bool.isRequired,
   error: PropTypes.string,
 };

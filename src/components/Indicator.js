@@ -19,7 +19,7 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   font-size: 28px;
-  margin-top: 50px;
+  margin-top: 500px;
 `;
 
 export default Indicator;

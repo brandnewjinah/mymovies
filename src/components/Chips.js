@@ -24,8 +24,8 @@ const Chips = ({ label, saved, url, saveKeyword }) => {
 const Container = styled.div`
   display: inline-block;
   border-radius: 2em;
-  background-color: rgba(0, 0, 0, 0.08);
-  padding: 0.15em 0.5em;
+  background-color: ${gray.lightergray};
+  padding: 0.2em 0.5em;
   margin: 0.35em 0.5em 0.35em 0;
 `;
 
@@ -38,8 +38,7 @@ const Flex = styled.div`
 const Check = styled(Flex)`
   padding: 0.15em;
   border-radius: 100%;
-  /* background-color: rgba(0, 0, 0, 0.2); */
-  background-color: ${({ saved }) => (saved ? primary.green : gray.gray)};
+  background-color: ${({ saved }) => (saved ? primary.cornflower : gray.gray)};
   opacity: 0.8;
   transition: opacity 0.1s linear;
   cursor: pointer;

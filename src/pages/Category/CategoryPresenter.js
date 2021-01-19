@@ -2,9 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import Helmet from "react-helmet";
 
-import Indicator from "../../components/Indicator";
+import Placeholder from "../../components/placeholders/List";
 import { Section } from "../../components/Section2";
-import PosterList from "../../components/PosterList";
+import Poster from "../../components/Poster";
 
 //import utils
 import { getGenre } from "../../util/GetGenres";
@@ -26,65 +26,74 @@ const CategoryPresenter = (props) => {
     }
   };
 
-  return props.loading ? (
-    <>
-      <Indicator />
-      <Helmet>
-        <title>Loading | Movie Rate</title>
-      </Helmet>
-    </>
-  ) : (
+  return (
     <Container>
-      <Helmet>
-        {/* <title>
-          {props.result.title ? props.result.title : props.result.original_name}
-          | Movie Rate
-        </title> */}
-      </Helmet>
-      <Header>
-        <h3>{props.genre && handleGenre()}</h3>
-        <h3>
-          {props.keyword && (
-            <>
-              <span>Movies with keyword </span>
-              <span className="underline">{props.keyword.name}</span>
-            </>
+      {props.loading ? (
+        <>
+          <Placeholder />
+          <Helmet>
+            <title>Loading | Movie Rate</title>
+          </Helmet>
+        </>
+      ) : (
+        <>
+          <Helmet>
+            <title>
+              {props.keyword
+                ? props.keyword.name
+                : props.director
+                ? props.director.name
+                : null}
+              | My Movies
+            </title>
+          </Helmet>
+          <Header>
+            <h3>{props.genre && handleGenre()}</h3>
+            <h3>
+              {props.keyword && (
+                <>
+                  <span>Movies with keyword </span>
+                  <span className="underline">{props.keyword.name}</span>
+                </>
+              )}
+            </h3>
+            <h3>
+              {props.director && (
+                <>
+                  <span>Movies by </span>
+                  <span className="underline">{props.director.name}</span>
+                </>
+              )}
+            </h3>
+          </Header>
+          {props.result && props.result.length > 0 && (
+            <Section>
+              {props.result.map((movie) => (
+                <Poster
+                  key={movie.id}
+                  id={movie.id}
+                  imageUrl={movie.poster_path}
+                  title={movie.title}
+                  rating={movie.vote_average}
+                  year={movie.release_date}
+                  genre={getGenre(props.genres, movie.genre_ids)}
+                  // genre={handleGenre(movie.genre_ids)}
+                  toDetail={true}
+                />
+              ))}
+            </Section>
           )}
-        </h3>
-        <h3>
-          {props.director && (
-            <>
-              <span>Movies directed by </span>
-              <span className="underline">{props.director.name}</span>
-            </>
-          )}
-        </h3>
-      </Header>
-      {props.result && props.result.length > 0 && (
-        <Section>
-          {props.result.map((movie) => (
-            <PosterList
-              key={movie.id}
-              id={movie.id}
-              imageUrl={movie.poster_path}
-              title={movie.title}
-              rating={movie.vote_average}
-              year={movie.release_date}
-              genre={getGenre(props.genres, movie.genre_ids)}
-              // genre={handleGenre(movie.genre_ids)}
-              toDetail={true}
-            />
-          ))}
-        </Section>
+          <Footer>
+            {props.page !== 1 ? (
+              <Button onClick={props.prevPage}>Prev</Button>
+            ) : (
+              <div></div>
+            )}
+            <Button onClick={props.nextPage}>Next</Button>
+          </Footer>
+        </>
       )}
-      <Footer>
-        {props.page !== 1 ? (
-          <Button onClick={props.prevPage}>Prev</Button>
-        ) : null}
-        <Button onClick={props.nextPage}>Next</Button>
-      </Footer>
     </Container>
-    // <Container>container</Container>
   );
 };
 
@@ -108,7 +117,7 @@ const Header = styled(Flex)`
 
   h3 {
     font-size: 1.5rem;
-    font-weight: 500;
+    font-weight: 600;
   }
 
   .underline {

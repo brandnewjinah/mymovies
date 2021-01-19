@@ -7,7 +7,7 @@ import styled from "styled-components";
 import { Heart, BrokenHeart, Film } from "../assets/Icons";
 import { primary, gray } from "./Colors";
 
-const Poster = ({
+const RatePoster = ({
   id,
   rate,
   imageUrl,
@@ -36,13 +36,13 @@ const Poster = ({
   const rateMovie = (
     <>
       <div
-        style={liked ? { backgroundColor: primary.green } : null}
+        style={liked ? { backgroundColor: primary.cornflower } : null}
         onClick={() => onClick1()}
       >
         <Heart width="26" height="26" fill="#fff" />
       </div>
       <div
-        style={disliked ? { backgroundColor: primary.orange } : null}
+        style={disliked ? { backgroundColor: primary.tangerine } : null}
         onClick={() => onClick2()}
       >
         <BrokenHeart width="26" height="26" fill="#fff" />
@@ -242,7 +242,7 @@ const Detail = styled(Flex)`
   }
 `;
 
-Poster.propTyes = {
+RatePoster.propTyes = {
   id: PropTypes.number.isRequired,
   imageUrl: PropTypes.string,
   title: PropTypes.string.isRequired,
@@ -250,4 +250,4 @@ Poster.propTyes = {
   year: PropTypes.string,
 };
 
-export default Poster;
+export default RatePoster;

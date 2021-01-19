@@ -28,20 +28,21 @@ export const dislikeItem = (movie) => {
 // Reducer
 const reducer = (state, action) => {
   if (action.type === LIKE_ITEM) {
-    let added = action.payload.movie;
-    let newLikes = [...state.liked];
-    let newDislikes = [...state.disliked];
+    // let added = action.payload.movie;
+    console.log("hi");
+    // let newLikes = [...state.liked];
+    // let newDislikes = [...state.disliked];
 
-    //look for duplicate first
-    let duplicate = newLikes.find((item) => item.id === added.id);
+    // //look for duplicate first
+    // let duplicate = newLikes.find((item) => item.id === added.id);
 
-    if (duplicate) {
-      newLikes = newLikes.filter((f) => f.id !== added.id);
-    } else {
-      newDislikes = newDislikes.filter((f) => f.id !== added.id);
-      newLikes = [...newLikes, added];
-    }
-    return { ...state, liked: newLikes, disliked: newDislikes };
+    // if (duplicate) {
+    //   newLikes = newLikes.filter((f) => f.id !== added.id);
+    // } else {
+    //   newDislikes = newDislikes.filter((f) => f.id !== added.id);
+    //   newLikes = [...newLikes, added];
+    // }
+    // return { ...state, liked: newLikes, disliked: newDislikes };
   }
 
   if (action.type === DISLIKE_ITEM) {

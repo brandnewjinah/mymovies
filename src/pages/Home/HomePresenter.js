@@ -1,4 +1,5 @@
 import React from "react";
+import Helmet from "react-helmet";
 import { useHistory } from "react-router-dom";
 
 //redux
@@ -17,6 +18,9 @@ const HomePresenter = () => {
 
   return (
     <Wrapper>
+      <Helmet>
+        <title>My Movies</title>
+      </Helmet>
       <Container>
         <div>
           <h1>

@@ -56,20 +56,22 @@ const Label = styled.div`
 
 const Selection = styled.ul`
   width: 100%;
-  min-width: 190px;
   position: relative;
   z-index: 10;
+
   ul {
     position: absolute;
     width: 100%;
-    background-color: white;
+    background-color: #fff;
     box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.1);
   }
+
   li {
     padding: 0.85em 1.2em;
     font-size: 0.875rem;
+
     &:hover {
-      background-color: #eee;
+      opacity: 0.5;
       cursor: pointer;
     }
   }

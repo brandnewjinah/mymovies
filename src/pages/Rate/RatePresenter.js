@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import Helmet from "react-helmet";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { movieApi } from "../../api";
@@ -8,8 +9,8 @@ import { getGenre } from "../../util/GetGenres";
 
 //import components
 import { Section } from "../../components/Section2";
-import PosterList from "../../components/PosterList";
-import Indicator from "../../components/Indicator";
+import RatePoster from "../../components/RatePoster";
+import Placeholder from "../../components/placeholders/List";
 
 //redux
 import { connect } from "react-redux";
@@ -67,78 +68,93 @@ const RatePresenter = (props) => {
     color: primary.green,
   };
 
-  return props.loading ? (
-    <Indicator />
-  ) : (
+  return (
     <Container>
-      <Header>
-        <h2>
-          <span
-            style={
-              total < 30
-                ? { color: primary.yellow }
-                : prevCount === 29
-                ? burst
-                : null
-            }
-          >
-            {total}
-          </span>
-          <span> / 30</span>
-        </h2>
-        {total >= 30 ? (
-          <div className="section">
-            <h5>You rated 30 movies! Keep rating or </h5>
-            <Link to="/profile">
-              <h5 className="link">See your profile</h5>
-            </Link>
-          </div>
-        ) : (
-          <div className="section">
-            <h5>Rate at least 30 movies to get your personalized profile</h5>
-          </div>
-        )}
-      </Header>
+      {props.loading ? (
+        <>
+          <Placeholder />
+          <Helmet>
+            <title>Loading | My Movies</title>
+          </Helmet>
+        </>
+      ) : (
+        <>
+          <Helmet>
+            <title>Rate | My Movies</title>
+          </Helmet>
+          <Header>
+            <h2>
+              <span
+                style={
+                  total < 30
+                    ? { color: primary.yellow }
+                    : prevCount === 29
+                    ? burst
+                    : null
+                }
+              >
+                {total}
+              </span>
+              <span> / 30</span>
+            </h2>
+            {total >= 30 ? (
+              <div className="section">
+                <h5>You rated 30 movies! Keep rating or </h5>
+                <Link to="/profile">
+                  <h5 className="link">See your profile</h5>
+                </Link>
+              </div>
+            ) : (
+              <div className="section">
+                <h5>
+                  Rate at least 30 movies to get your personalized profile
+                </h5>
+              </div>
+            )}
+          </Header>
 
-      {props.topRated && props.topRated.length > 0 && (
-        <Section>
-          {props.topRated.map((movie) => (
-            <PosterList
-              key={movie.id}
-              rate={true}
-              id={movie.id}
-              imageUrl={movie.poster_path}
-              title={movie.title}
-              rating={movie.vote_average}
-              year={movie.release_date}
-              genre={getGenre(props.genres, movie.genre_ids)}
-              liked={
-                props.liked && props.liked.find((item) => item.id === movie.id)
-              }
-              disliked={
-                props.disliked &&
-                props.disliked.find((item) => item.id === movie.id)
-              }
-              onClick1={() => handleLike(movie)}
-              onClick2={() => handleDislike(movie)}
-            />
-          ))}
-        </Section>
+          {props.topRated && props.topRated.length > 0 && (
+            <Section>
+              {props.topRated.map((movie) => (
+                <RatePoster
+                  key={movie.id}
+                  rate={true}
+                  id={movie.id}
+                  imageUrl={movie.poster_path}
+                  title={movie.title}
+                  rating={movie.vote_average}
+                  year={movie.release_date}
+                  genre={getGenre(props.genres, movie.genre_ids)}
+                  liked={
+                    props.liked &&
+                    props.liked.find((item) => item.id === movie.id)
+                  }
+                  disliked={
+                    props.disliked &&
+                    props.disliked.find((item) => item.id === movie.id)
+                  }
+                  onClick1={() => handleLike(movie)}
+                  onClick2={() => handleDislike(movie)}
+                />
+              ))}
+            </Section>
+          )}
+
+          <Footer>
+            <p>You rated {props.liked.length + props.disliked.length} / 30</p>
+            <div
+              style={{
+                display: "flex",
+              }}
+            >
+              {props.page !== 1 ? (
+                <Button onClick={props.prevPage}>Prev</Button>
+              ) : null}
+              <Button onClick={props.nextPage}>Next</Button>
+            </div>
+          </Footer>
+        </>
       )}
-
-      <Footer>
-        <p>You rated {props.liked.length + props.disliked.length} / 30</p>
-        <div
-          style={{
-            display: "flex",
-          }}
-        >
-          {props.page !== 1 ? (
-            <Button onClick={props.prevPage}>Prev</Button>
-          ) : null}
-          <Button onClick={props.nextPage}>Next</Button>
-        </div>
-      </Footer>
     </Container>
   );
 };
@@ -153,6 +169,10 @@ const Container = styled.div`
   max-width: 1140px;
   padding: 2em 0;
   margin: 5em auto 0;
+
+  @media (max-width: 1180px) {
+    padding: 0 2em;
+  }
 `;
 
 const Header = styled(Flex)`

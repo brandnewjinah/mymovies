@@ -4,7 +4,7 @@ import Helmet from "react-helmet";
 
 import Indicator from "../../components/Indicator";
 import { Section } from "../../components/Section2";
-import PosterList from "../../components/PosterList";
+import RatePoster from "../../components/RatePoster";
 
 //redux
 import { connect } from "react-redux";
@@ -46,7 +46,7 @@ const CollectionPresenter = (props) => {
       {unique && unique.length > 0 && (
         <Section>
           {unique.map((movie) => (
-            <PosterList
+            <RatePoster
               key={movie.id}
               id={movie.id}
               imageUrl={movie.poster_path}

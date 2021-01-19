@@ -38,13 +38,13 @@ const DetailContainer = ({ pathname }) => {
         credits.crew && credits.crew.find((c) => c.job === "Director");
 
       setDetail({
+        loading: false,
         result,
         resultError,
         recommend,
         recommendError,
         keyword,
         keywordError,
-        loading: false,
         credits: filtered,
         creditsError,
       });
@@ -53,7 +53,7 @@ const DetailContainer = ({ pathname }) => {
     };
 
     getData();
-  }, [id]);
+  }, [id, location.pathname]);
 
   return <DetailPresenter {...detail} />;
 };

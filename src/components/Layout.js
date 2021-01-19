@@ -4,7 +4,6 @@ import Header from "./Header";
 
 //import styles and assets
 import styled from "styled-components";
-import { primary } from "./Colors";
 
 const Layout = ({ children }) => {
   return (
@@ -17,7 +16,7 @@ const Layout = ({ children }) => {
 
 const Wrapper = styled.div`
   min-height: 100vh;
-  background: ${primary.beige};
+  /* background-color: #fff6f5; */
 `;
 
 export default Layout;

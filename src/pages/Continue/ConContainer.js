@@ -8,61 +8,45 @@ import { connect } from "react-redux";
 
 const ConContainer = (props) => {
   const [movies, setMovies] = useState({
+    loading: true,
     genres: [],
     genresError: null,
-    topRated: [],
-    topRatedError: null,
-    unRated: [],
-    loading: true,
+    results: [],
+    resultsError: null,
   });
 
-  let [page, setPage] = useState(1);
   let [selection, setSelection] = useState("popularity.desc");
   let [exclude, setExclude] = useState("");
+  let [page, setPage] = useState(1);
 
   useEffect(() => {
     const getData = async () => {
       const [genres, genresError] = await movieApi.genre();
-      const [topRated, topRatedError] = await movieApi.rate(
+
+      //get movies based on user selection
+      const [results, resultsError] = await movieApi.rate(
         selection,
         exclude,
         page
       );
 
-      const filtered = topRated.filter(
+      const filtered = results.filter(
         (d) =>
           !props.liked.find((id) => id.id === d.id) &&
           !props.disliked.find((id) => id.id === d.id)
       );
-      // filtered.map((m) => {
-      //   unrate = [...unrate, m];
-      // });
-
-      // if (unrate.length < 10) {
-      //   setPage(page + 1);
-      //   const [topRated, topRatedError] = await movieApi.topRated(page);
-      //   const filtered2 = topRated.filter(
-      //     (d) =>
-      //       !props.liked.find((id) => id.id === d.id) &&
-      //       !props.disliked.find((id) => id.id === d.id)
-      //   );
-      //   console.log(filtered2);
-      // }
-
-      // if moview.unRated.length < 10, add 1 to page, go back to filtered
 
       setMovies({
         loading: false,
         genres: genres.genres,
         genresError,
-        topRated,
-        topRatedError,
-        unRated: filtered,
+        results: filtered,
+        resultsError,
       });
       window.scrollTo(0, 0);
     };
     getData();
-  }, [selection, page, exclude]);
+  }, [selection, page, exclude, props.liked, props.disliked]);
 
   const nextPage = () => {
     setPage(page + 1);
@@ -71,9 +55,9 @@ const ConContainer = (props) => {
   return (
     <ConPresenter
       nextPage={nextPage}
-      fireSelection={(s) => setSelection(s)}
-      fireExclusion={(s) => setExclude(s)}
-      firePage={(s) => setPage(s)}
+      handleSort={(s) => setSelection(s)}
+      handleExclusion={(s) => setExclude(s)}
+      handlePage={(num) => setPage(num)}
       page={page}
       {...movies}
     />

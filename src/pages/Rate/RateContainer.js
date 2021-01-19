@@ -5,11 +5,11 @@ import RatePresenter from "./RatePresenter";
 
 const RateContainer = () => {
   const [movies, setMovies] = useState({
+    loading: true,
     genres: [],
     genresError: null,
     topRated: [],
     topRatedError: null,
-    loading: true,
   });
 
   const [page, setPage] = useState(1);
@@ -40,8 +40,6 @@ const RateContainer = () => {
       setPage(page - 1);
     }
   };
-
-  console.log(movies);
 
   return (
     <RatePresenter

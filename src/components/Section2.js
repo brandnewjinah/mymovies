@@ -42,7 +42,7 @@ const Container = styled.div`
   margin: 2em auto;
 
   @media (max-width: 1200px) {
-    margin: 2em;
+    /* margin: 2em; */
   }
 `;
 
@@ -79,6 +79,7 @@ const Grid2 = styled.div`
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   grid-gap: 2em;
+  padding: 0 2em;
 
   @media (max-width: 1024px) {
     grid-template-columns: repeat(4, 1fr);

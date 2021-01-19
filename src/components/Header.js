@@ -70,7 +70,7 @@ const Wrapper = styled.header`
   top: 0;
   left: 0;
   justify-content: space-between;
-  background: ${primary.beige};
+  background-color: #fff;
   z-index: 1;
   /* box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.05); */
   padding: 0 2em;
@@ -98,7 +98,7 @@ const Links = styled.div`
   display: flex;
   flex: 1 1 66.66%;
 
-  @media (max-width: 980px) {
+  @media (max-width: 780px) {
     height: 100vh;
     flex-direction: column;
     background-color: #fff;
@@ -124,7 +124,7 @@ const Links = styled.div`
 const Center = styled.div`
   display: flex;
 
-  @media (max-width: 980px) {
+  @media (max-width: 780px) {
     flex-direction: column;
   }
 `;
@@ -133,7 +133,7 @@ const Right = styled.div`
   display: flex;
   margin-left: auto;
 
-  @media (max-width: 980px) {
+  @media (max-width: 780px) {
     flex-direction: column;
     margin-left: 0;
     div {
@@ -162,7 +162,7 @@ const Mobile = styled.div`
   display: none;
   cursor: pointer;
 
-  @media (max-width: 980px) {
+  @media (max-width: 780px) {
     display: block;
   }
 `;

@@ -51,9 +51,10 @@ export const movieApi = {
       page: page,
       sort_by: "vote_count.desc",
     }),
-  discoverCrew: (id) =>
+  discoverCrew: (id, page) =>
     getAnything(`/discover/movie`, {
       with_crew: id,
+      page: page,
       sort_by: "vote_count.desc",
     }),
   foreign: (id) =>
@@ -63,10 +64,10 @@ export const movieApi = {
     }),
   rate: (selection, exclude, page) =>
     getAnything(`/discover/movie`, {
-      page: page,
       sort_by: selection,
-      "vote_count.gte": 10,
       without_genres: exclude,
+      page: page,
+      "vote_count.gte": 10,
     }),
   keyword: (id) => getAnything(`/movie/${id}/keywords`),
   keywordlist: (id) => getAnything(`/keyword/${id}`),

@@ -2,13 +2,10 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Helmet from "react-helmet";
 import { Link } from "react-router-dom";
-import ModalVideo from "react-modal-video";
-import "react-modal-video/scss/modal-video.scss";
 
 //import components
-import Indicator from "../../components/Indicator";
-import Poster from "../../components/Poster";
-import Section from "../../components/Section";
+import Placeholder from "../../components/placeholders/Detail";
+import ImageComponent from "./ImageComponent";
 import Awards from "../../components/Awards";
 import Chips from "../../components/Chips";
 
@@ -19,7 +16,9 @@ import { addKeyword } from "../../reducers/keywordReducer";
 
 //import styles
 import styled from "styled-components";
-import { Heart, BrokenHeart, Play } from "../../assets/Icons";
+import { Heart, BrokenHeart } from "../../assets/Icons";
+import { gray, primary } from "../../components/Colors";
+import Recommend from "../../components/Recommend";
 
 const DetailPresenter = (props) => {
   const [isOpen, setOpen] = useState(false);
@@ -52,7 +51,7 @@ const DetailPresenter = (props) => {
 
   return props.loading ? (
     <>
-      <Indicator />
+      <Placeholder />
       <Helmet>
         <title>Loading | Movie Rate</title>
       </Helmet>
@@ -61,146 +60,318 @@ const DetailPresenter = (props) => {
     <Container>
       <Helmet>
         <title>
-          {props.result.title ? props.result.title : props.result.original_name}
-          | Movie Rate
+          {props.result.title ? props.result.title : props.result.original_name}{" "}
+          | MyMovie
         </title>
       </Helmet>
-      {/* <Backdrop
-        bgImage={`https://image.tmdb.org/t/p/original${result.backdrop_path}`}
-      /> */}
       <Content>
-        <Header>
-          <ImageContainer>
-            <Image
-              src={
-                props.result.poster_path
-                  ? `https://image.tmdb.org/t/p/original${props.result.poster_path}`
-                  : "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty-300x240.jpg"
-              }
-            />
-            {props.result.videos.results &&
-              props.result.videos.results.length > 0 && (
-                <>
-                  <ModalVideo
-                    channel="youtube"
-                    autoplay
-                    isOpen={isOpen}
-                    videoId={props.result.videos.results[0].key}
-                    onClose={() => setOpen(false)}
-                  />
-                  <Video onClick={() => setOpen(true)}>
-                    <Play width="50" height="50" fill="#eee" />
-                  </Video>
-                </>
-              )}
-          </ImageContainer>
+        <Main>
           <Data>
-            <Title>
+            {/* if original title exists in other language<Subtitle>
+              {props.result.original_title && props.result.original_title}
+            </Subtitle> */}
+
+            <h3 className="title">
               {props.result.title
                 ? props.result.title
                 : props.result.original_name}
-            </Title>
-            <Subtitle>
-              {props.result.original_title && props.result.original_title}
-            </Subtitle>
-            <Subtitle>
-              <Link to={`/director/${props.credits.id}`}>
-                {props.credits.name}
-              </Link>
-            </Subtitle>
-            <ItemContainer>
-              <Item>
+            </h3>
+            <div className="sub">
+              <div>
                 {props.result.release_date
                   ? props.result.release_date.substring(0, 4)
                   : props.result.first_air_date.substring(0, 4)}
-              </Item>
-              <Divider>•</Divider>
-              <Item>
+              </div>
+              <div className="divider"></div>
+              <div>
                 {props.result.genres &&
                   props.result.genres.map((genre, index) => (
                     <Link to={`/category/${genre.id}`} key={index}>
                       <span>{genre.name}</span>
                     </Link>
                   ))}
-              </Item>
+              </div>
+              {/* <div>
+                <Link to={`/director/${props.credits.id}`}>
+                  <span>Directed by </span>
+                  <span>{props.credits.name}</span>
+                </Link>
+              </div> */}
+            </div>
 
-              <Rate>
-                <div
+            <div className="overview">{props.result.overview}</div>
+
+            <div>
+              <Awards movie={props.result.id} />
+            </div>
+            {/* {Oscars.filter((m) =>
+                m.winners.find((m) => m.id === props.result.id)
+              ).map((m) => m.winners.map((m) => <div>{m.award}</div>))} */}
+
+            <Rate>
+              <div
+                onClick={() => handleLike(props.result)}
+                style={
+                  props.liked &&
+                  props.liked.find((item) => item.id === props.result.id)
+                    ? { backgroundColor: primary.cornflower }
+                    : { border: `1px solid ${gray.gray}` }
+                }
+              >
+                <Heart
+                  width="20"
+                  height="20"
+                  fill={
+                    props.liked &&
+                    props.liked.find((item) => item.id === props.result.id)
+                      ? "#fff"
+                      : gray.gray
+                  }
+                />
+                <p
                   style={
                     props.liked &&
                     props.liked.find((item) => item.id === props.result.id)
-                      ? { backgroundColor: "#91b04f" }
+                      ? { color: "#fff" }
                       : null
                   }
-                  onClick={() => handleLike(props.result)}
                 >
-                  <Heart width="26" height="26" fill="#fff" />
-                </div>
-                <div
+                  Liked
+                </p>
+              </div>
+              <div
+                onClick={() => handleDislike(props.result)}
+                style={
+                  props.disliked &&
+                  props.disliked.find((item) => item.id === props.result.id)
+                    ? { backgroundColor: primary.tangerine }
+                    : { border: `1px solid ${gray.gray}` }
+                }
+              >
+                <BrokenHeart
+                  width="20"
+                  height="20"
+                  fill={
+                    props.disliked &&
+                    props.disliked.find((item) => item.id === props.result.id)
+                      ? "#fff"
+                      : gray.gray
+                  }
+                />
+                <p
                   style={
                     props.disliked &&
                     props.disliked.find((item) => item.id === props.result.id)
-                      ? { backgroundColor: "#de7747" }
+                      ? { color: "#fff" }
                       : null
                   }
-                  onClick={() => handleDislike(props.result)}
                 >
-                  <BrokenHeart width="26" height="26" fill="#fff" />
-                </div>
-              </Rate>
-            </ItemContainer>
-            <Overview>{props.result.overview}</Overview>
-            <Part>
-              <div>
-                <Awards movie={props.result.id} />
+                  Disliked
+                </p>
               </div>
-              {/* {Oscars.filter((m) =>
-                m.winners.find((m) => m.id === props.result.id)
-              ).map((m) => m.winners.map((m) => <div>{m.award}</div>))} */}
-            </Part>
+            </Rate>
+
+            <Section>
+              <h5>Keywords</h5>
+              <p className="caption">
+                If you liked this movie, please tell us why by highlighting the
+                appropriate keyword.
+              </p>
+              <div className="group">
+                {props.keyword.keywords.map((k, idx) => (
+                  <Chips
+                    key={idx}
+                    label={k.name}
+                    url={k.id}
+                    saved={
+                      filterKeywords().find((item) => item.id === k.id)
+                        ? true
+                        : false
+                    }
+                    saveKeyword={() => saveKeyword(k)}
+                  />
+                ))}
+              </div>
+            </Section>
           </Data>
-        </Header>
-        <Keywords>
-          <h6>Keywords</h6>
-          <p>
-            If you liked this movie, tell us why by checking the appropriate
-            keyword
-          </p>
-          <div>
-            {props.keyword.keywords.map((k, idx) => (
-              <Chips
-                key={idx}
-                label={k.name}
-                url={k.id}
-                saved={
-                  filterKeywords().find((item) => item.id === k.id)
-                    ? true
-                    : false
-                }
-                saveKeyword={() => saveKeyword(k)}
-              />
-            ))}
-          </div>
-        </Keywords>
+          <ImageContainer>
+            <ImageComponent
+              img={props.result.poster_path}
+              video={props.result.videos.results}
+              handleOpen={() => setOpen(true)}
+              handleClose={() => setOpen(false)}
+              isOpen={isOpen}
+            />
+          </ImageContainer>
+        </Main>
         {props.recommend && props.recommend.length > 0 && (
-          <Section title="Similar">
-            {props.recommend.slice(0, 5).map((movie) => (
-              <Poster
-                key={movie.id}
-                id={movie.id}
-                imageUrl={movie.poster_path}
-                title={movie.title}
-                rating={movie.vote_average}
-                year={movie.release_date}
-                isMovie={true}
-              />
-            ))}
-          </Section>
+          <RecommendContainer>
+            <Recommend
+              data={props.recommend && props.recommend}
+              title="You may also like"
+            />
+          </RecommendContainer>
         )}
       </Content>
     </Container>
   );
 };
+
+const Container = styled.div`
+  width: 100%;
+  max-width: 1140px;
+  margin: 7em auto;
+
+  h5 {
+    font-weight: 600;
+  }
+
+  @media (max-width: 1180px) {
+    padding: 0 2em;
+  }
+
+  @media (max-width: 780px) {
+    padding: 0;
+  }
+`;
+
+const Content = styled.div`
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  /* background-color: gainsboro; */
+`;
+
+const Main = styled.div`
+  display: flex;
+  justify-content: space-between;
+  /* align-items: center; */
+  /* background-color: #ebdfeb; */
+
+  @media (max-width: 780px) {
+    flex-direction: column;
+    padding: 0 1.5em;
+  }
+`;
+
+const ImageContainer = styled.div`
+  width: 41.5%;
+  position: relative;
+  padding-left: 5%;
+
+  @media (max-width: 780px) {
+    order: 1;
+    width: 100%;
+    padding-left: 0;
+  }
+`;
+
+const Data = styled.div`
+  width: 58.5%;
+  font-size: 0.875rem;
+  padding-right: 5%;
+
+  .title {
+    font-size: 2rem;
+    font-weight: 600;
+  }
+
+  .sub {
+    display: flex;
+    font-weight: 500;
+    color: ${primary.cornflower};
+    margin: 0.85em 0;
+
+    a {
+      &:not(:last-child):after {
+        content: " • ";
+        color: ${gray.gray};
+      }
+    }
+  }
+
+  .overview {
+    color: ${gray.darkergray};
+    line-height: 1.5rem;
+    margin: 1em 0;
+  }
+
+  .divider {
+    margin: 0 10px;
+  }
+
+  @media (max-width: 780px) {
+    width: 100%;
+    order: 2;
+    margin: 0;
+    padding: 1em 0;
+
+    .title {
+      font-size: 1.5rem;
+      line-height: 2rem;
+    }
+  }
+`;
+
+const Rate = styled.div`
+  display: flex;
+  margin: 1.75em 0;
+
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2em;
+    padding: 0.3em 2em;
+    margin-right: 1em;
+    cursor: pointer;
+  }
+
+  p {
+    font-size: 0.8rem;
+    color: ${gray.darkgray};
+    font-weight: 600;
+    margin-left: 0.5em;
+  }
+`;
+
+const Section = styled.div`
+  border-top: 1px solid ${gray.lightergray};
+  border-bottom: 1px solid ${gray.lightergray};
+  padding: 3em 0;
+  margin-top: 5em;
+
+  .caption {
+    font-size: 0.75rem;
+    color: ${gray.darkgray};
+  }
+
+  .group {
+    margin: 1em 0;
+  }
+
+  span {
+    display: inline-block;
+    background-color: #eee;
+    padding: 0.3em 0.75em 0.3em 0.75em;
+    border-radius: 1em;
+    margin: 0.5em;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+
+  @media (max-width: 780px) {
+    padding: 2em 0;
+  }
+`;
+
+const RecommendContainer = styled.div`
+  @media (max-width: 780px) {
+    padding: 0 2em;
+  }
+`;
 
 DetailPresenter.propTypes = {
   loading: PropTypes.bool.isRequired,
@@ -209,132 +380,6 @@ DetailPresenter.propTypes = {
   recommend: PropTypes.array,
   recommendError: PropTypes.string,
 };
-
-const Container = styled.div`
-  /* margin: 6em auto; */
-  height: 100%;
-  width: 100%;
-  position: relative;
-  padding: 50px;
-`;
-
-const Content = styled.div`
-  margin: 6em auto;
-  width: 100%;
-  max-width: 1260px;
-  position: relative;
-  z-index: 1;
-  height: 100%;
-`;
-
-const Header = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const Image = styled.img`
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  border-radius: 8px;
-  transition: opacity 0.1s linear;
-`;
-
-const Video = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  display: flex;
-  cursor: pointer;
-  opacity: 0.8;
-
-  &:hover {
-    opacity: 0.6;
-  }
-`;
-
-const ImageContainer = styled.div`
-  width: 25%;
-  position: relative;
-`;
-
-const Data = styled.div`
-  width: 70%;
-  margin-left: 4em;
-`;
-
-const Title = styled.h3`
-  font-size: 2rem;
-`;
-
-const Subtitle = styled.h3`
-  font-size: 1rem;
-  margin: 0.65em 0;
-`;
-
-const ItemContainer = styled.div`
-  margin: 20px 0;
-`;
-
-const Item = styled.span`
-  font-size: 16px;
-
-  a {
-    &:not(:last-child):after {
-      content: ", ";
-    }
-  }
-`;
-
-const Part = styled.div`
-  font-size: 16px;
-  margin: 1.5em 0;
-`;
-
-const Rate = styled.span`
-  display: flex;
-  margin: 2em 0;
-  div {
-    margin-right: 1em;
-    padding: 1em;
-    cursor: pointer;
-    background-color: #999999;
-    border-radius: 100%;
-    display: flex;
-  }
-`;
-
-const Divider = styled.span`
-  margin: 0 10px;
-`;
-
-const Overview = styled.p`
-  font-size: 15px;
-  opacity: 0.8;
-  line-height: 1.5;
-`;
-
-const Keywords = styled.div`
-  margin: 2em 0;
-
-  h6 {
-    font-size: 1.125rem;
-  }
-
-  span {
-    display: inline-block;
-    background-color: #eee;
-    padding: 0.3rem 0.75rem 0.3rem 0.75rem;
-    border-radius: 1em;
-    margin: 0.5em;
-
-    &:first-child {
-      margin-left: 0;
-    }
-  }
-`;
 
 const mapStateToProps = (state) => {
   return {

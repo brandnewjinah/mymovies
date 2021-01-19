@@ -55,7 +55,7 @@ const CategoryContainer = ({ pathname }) => {
     }
 
     if (location.pathname.includes("/director/")) {
-      const [result, resultError] = await movieApi.discoverCrew(id);
+      const [result, resultError] = await movieApi.discoverCrew(id, page);
       const [director, directorError] = await movieApi.person(id);
 
       setDetail({
@@ -68,24 +68,6 @@ const CategoryContainer = ({ pathname }) => {
         resultError,
       });
     }
-
-    // const [genres, genresError] = await movieApi.genre();
-    // const [keyword, keywordError] = await movieApi.keywordlist(id);
-
-    // const [result, resultError] = location.pathname.includes("/keyword/")
-    //   ? await movieApi.discoverKeyword(id)
-    //   : await movieApi.discover(id);
-
-    // setDetail({
-    //   result,
-    //   resultError,
-    //   keyword,
-    //   keywordError,
-    //   genres: genres.genres,
-    //   genresError,
-    //   genre: id,
-    //   loading: false,
-    // });
   };
 
   useEffect(() => {
@@ -96,8 +78,20 @@ const CategoryContainer = ({ pathname }) => {
     setPage(page + 1);
   };
 
-  console.log(detail);
-  return <CategoryPresenter nextPage={nextPage} page={page} {...detail} />;
+  const prevPage = () => {
+    if (page > 1) {
+      setPage(page - 1);
+    }
+  };
+
+  return (
+    <CategoryPresenter
+      nextPage={nextPage}
+      prevPage={prevPage}
+      page={page}
+      {...detail}
+    />
+  );
 };
 
 export default CategoryContainer;

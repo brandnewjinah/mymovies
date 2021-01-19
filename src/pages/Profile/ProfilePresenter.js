@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 // import PropTypes from "prop-types";
+import Helmet from "react-helmet";
 import _ from "lodash";
 
 //import utils
 import { CountGenres } from "../../util/LikeCounter";
 import { getGenre } from "../../util/GetGenres";
+import { countKeywords } from "../../util/CountKeywords";
 
 //import components
-import Indicator from "../../components/Indicator";
+import Placeholder from "../../components/placeholders/Profile";
 import { Section2 } from "../../components/Section2";
 import Poster from "../../components/Poster";
 import Analyser from "./ProfileAnalyser";
@@ -24,7 +26,6 @@ const ProfilePresenter = (props) => {
   const [topGenres, setTopGenres] = useState([]);
   const [language, setLanguage] = useState([]);
   const [crew, setCrew] = useState([]);
-  const [keywords, setKeywords] = useState([]);
   const liked = props.liked.length;
   const disliked = props.disliked.length;
   const total = liked + disliked;
@@ -106,33 +107,29 @@ const ProfilePresenter = (props) => {
     setCrew(sorted);
   };
 
-  const countKeywords = () => {
-    const sorted = _.orderBy(
-      props.keywords,
-      (key) => {
-        return key.movies.length;
-      },
-      ["desc"]
-    );
-    setKeywords(sorted);
-  };
-
   useEffect(() => {
     countLan();
     countGenre();
     countCrew();
-    countKeywords();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <Container>
       {props.loading ? (
-        <Indicator />
+        <>
+          <Placeholder />
+          <Helmet>
+            <title>Loading | My Movies</title>
+          </Helmet>
+        </>
       ) : (
         <>
+          <Helmet>
+            <title>Profile | My Movies</title>
+          </Helmet>
           <Header>
-            <h2>My Movie Profile</h2>
+            <h3>My Movie Profile</h3>
           </Header>
           <Analyser
             total={total}
@@ -153,7 +150,7 @@ const ProfilePresenter = (props) => {
             filterLanguage2={(code) => filterLanguage(code)}
             filterLanguage3={(code) => filterLanguage(code)}
             crew={crew}
-            keywords={keywords}
+            keywords={countKeywords(props.keywords)}
           />
           <MovieList>
             {movies && movies.length > 0 && (
@@ -199,9 +196,10 @@ const Header = styled(Flex)`
   justify-content: center;
   padding: 0 2em;
 
-  h2 {
-    font-size: 2.8rem;
-    font-weight: 500;
+  h3 {
+    font-size: 2rem;
+    font-weight: 600;
+    text-align: center;
   }
 
   @media (max-width: 640px) {
