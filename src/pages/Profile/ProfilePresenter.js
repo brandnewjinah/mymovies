@@ -130,10 +130,12 @@ const ProfilePresenter = (props) => {
             <title>Profile | My Movies</title>
           </Helmet>
           <Header>
-            <h4>My Movie Profile</h4>
-            <Link to="/demoprofile">
-              <p className="link">See demo profile</p>
-            </Link>
+            <div className="sub">
+              <h4>My Movie Profile</h4>
+              <Link to="/demoprofile">
+                <p className="link">See demo profile</p>
+              </Link>
+            </div>
           </Header>
           <Analyser
             total={total}
@@ -209,7 +211,11 @@ const Header = styled(Flex)`
 
   h4 {
     text-align: center;
-    margin-bottom: 0.25em;
+    margin-bottom: 0.5em;
+  }
+
+  .sub {
+    line-height: 1.25rem;
   }
 
   .link {

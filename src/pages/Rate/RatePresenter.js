@@ -121,7 +121,7 @@ const RatePresenter = (props) => {
           )}
 
           <Footer>
-            <p>You rated {props.liked.length + props.disliked.length} / 30</p>
+            <p>You rated {props.liked.length + props.disliked.length} / 10</p>
             <div
               style={{
                 display: "flex",

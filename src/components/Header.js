@@ -155,7 +155,6 @@ const Left = styled(Flex)`
 const Right = styled(Flex)`
   flex: 1 1 50%;
   justify-content: flex-end;
-  margin-left: auto;
 
   @media (max-width: 780px) {
     flex-direction: column;

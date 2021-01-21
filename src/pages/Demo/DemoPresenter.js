@@ -132,7 +132,7 @@ const DemoPresenter = (props) => {
           </Helmet>
           <Header>
             <h4>Demo Profile</h4>
-            <div>
+            <div className="sub">
               <span>To see your own profile, </span>
               <Link to="/rate">
                 <span className="link">rate at least 10 movies</span>
@@ -214,7 +214,11 @@ const Header = styled(Flex)`
 
   h4 {
     text-align: center;
-    margin-bottom: 0.25em;
+    margin-bottom: 0.5em;
+  }
+
+  .sub {
+    line-height: 1.25rem;
   }
 
   .link {

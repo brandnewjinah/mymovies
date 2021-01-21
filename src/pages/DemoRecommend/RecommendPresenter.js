@@ -20,7 +20,7 @@ const RecommendPresenter = (props) => {
         <>
           <Header>
             <h5>Demo Recommendations</h5>
-            <div>
+            <div className="sub">
               <span>To see recommendations for you, </span>
               <Link to="/rate">
                 <span className="link">rate at least 10 movies</span>
@@ -64,7 +64,7 @@ const Container = styled.div`
   margin: 7em auto 0;
 
   @media (max-width: 1180px) {
-    padding: 0 2em;
+    padding: 0 2em 1em;
   }
 `;
 
@@ -79,7 +79,11 @@ const Header = styled.div`
 
   h5 {
     text-align: center;
-    margin-bottom: 0.25em;
+    margin-bottom: 0.5em;
+  }
+
+  .sub {
+    line-height: 1.25rem;
   }
 
   .link {
