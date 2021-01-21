@@ -159,7 +159,6 @@ const Right = styled(Flex)`
   @media (max-width: 780px) {
     flex-direction: column;
     justify-content: flex-start;
-    flex: 0;
 
     div {
       margin-left: 0;
