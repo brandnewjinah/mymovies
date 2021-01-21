@@ -118,11 +118,12 @@ const Logo = styled.div`
 
 const Links = styled(Flex)`
   flex: 1 1 66.6666%;
+  background-color: antiquewhite;
 
   @media (max-width: 780px) {
     height: 100vh;
     flex-direction: column;
-    background-color: #fff;
+    background-color: antiquewhite;
     position: absolute;
     top: 3em;
     left: 0;
@@ -145,6 +146,7 @@ const Links = styled(Flex)`
 const Left = styled(Flex)`
   flex: 1 1 50%;
   justify-content: space-between;
+  background-color: aliceblue;
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -155,6 +157,7 @@ const Left = styled(Flex)`
 const Right = styled(Flex)`
   flex: 1 1 50%;
   justify-content: flex-end;
+  background-color: honeydew;
 
   @media (max-width: 780px) {
     flex-direction: column;
