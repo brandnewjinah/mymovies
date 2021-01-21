@@ -46,7 +46,7 @@ const ConContainer = (props) => {
       window.scrollTo(0, 0);
     };
     getData();
-  }, [selection, page, exclude, props.liked, props.disliked]);
+  }, [selection, page, exclude]);
 
   const nextPage = () => {
     setPage(page + 1);

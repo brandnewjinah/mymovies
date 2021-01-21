@@ -1,35 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, withRouter } from "react-router-dom";
 import styled from "styled-components";
 import { Film } from "../assets/Icons";
 import { primary } from "./Colors";
 
-const Header = ({ location: { pathname } }) => {
+//redux
+import { connect } from "react-redux";
+
+const Header = ({ location: { pathname }, liked, disliked }) => {
   const [open, setOpen] = useState(false);
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    const handleRated = () => {
+      const totalRated = liked.length + disliked.length;
+      setTotal(totalRated);
+    };
+
+    handleRated();
+  }, [liked, disliked]);
+
+  console.log(total);
+
   return (
     <Wrapper open={open}>
       <Container>
-        <Left>
+        <Logo>
           <Link to="/">
             <Film width="24" height="24" color="#000" stroke="2" />
           </Link>
-        </Left>
+        </Logo>
 
         <Links open={open}>
-          <Center>
+          <Left>
             <Item current={pathname === "/recommend"}>
-              <SLink to="/recommend" onClick={() => setOpen(false)}>
-                Recommend
-              </SLink>
+              {total > 9 ? (
+                <SLink to="/recommend" onClick={() => setOpen(false)}>
+                  Recommend
+                </SLink>
+              ) : (
+                <SLink to="/demorecommend" onClick={() => setOpen(false)}>
+                  Recommend
+                </SLink>
+              )}
             </Item>
-            <Item current={pathname === "/movies"}>
-              <SLink to="/" onClick={() => setOpen(false)}>
-                Movies
-              </SLink>
-            </Item>
-            <Item current={pathname === "/tv"}>
-              <SLink to="/tv" onClick={() => setOpen(false)}>
-                TV
+            <Item current={pathname === "/continue"}>
+              <SLink to="/continue" onClick={() => setOpen(false)}>
+                Rate
               </SLink>
             </Item>
             <Item current={pathname === "/search"}>
@@ -37,16 +54,17 @@ const Header = ({ location: { pathname } }) => {
                 Search
               </SLink>
             </Item>
-            <Item current={pathname === "/continue"}>
-              <SLink to="/continue" onClick={() => setOpen(false)}>
-                Rate
-              </SLink>
-            </Item>
-          </Center>
+          </Left>
           <Right>
-            <Link to="/profile" onClick={() => setOpen(false)}>
-              Profile
-            </Link>
+            {total > 9 ? (
+              <Link to="/profile" onClick={() => setOpen(false)}>
+                Profile
+              </Link>
+            ) : (
+              <Link to="/demoprofile" onClick={() => setOpen(false)}>
+                Profile
+              </Link>
+            )}
           </Right>
         </Links>
         <Mobile>
@@ -61,42 +79,45 @@ const Header = ({ location: { pathname } }) => {
   );
 };
 
-const Wrapper = styled.header`
+const Flex = styled.div`
+  display: flex;
+`;
+
+const Wrapper = styled(Flex)`
+  background-color: #fff;
   width: 100%;
   height: 5em;
-  display: flex;
   align-items: center;
   position: fixed;
   top: 0;
   left: 0;
-  justify-content: space-between;
-  background-color: #fff;
-  z-index: 1;
-  /* box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.05); */
-  padding: 0 2em;
+  z-index: 10;
+
+  @media (max-width: 1180px) {
+    padding: 0 2em;
+  }
 `;
 
-const Container = styled.div`
+const Container = styled(Flex)`
   width: 100%;
-  max-width: 1360px;
-  display: flex;
+  max-width: 1140px;
+  justify-content: space-between;
   align-items: center;
   color: ${primary.blue};
   margin: 0 auto;
 
   div {
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 600;
   }
 `;
 
-const Left = styled.div`
-  flex: 1 1 33.33%;
+const Logo = styled.div`
+  flex: 1 1 33.3333%;
 `;
 
-const Links = styled.div`
-  display: flex;
-  flex: 1 1 66.66%;
+const Links = styled(Flex)`
+  flex: 1 1 66.6666%;
 
   @media (max-width: 780px) {
     height: 100vh;
@@ -121,21 +142,26 @@ const Links = styled.div`
   }
 `;
 
-const Center = styled.div`
-  display: flex;
+const Left = styled(Flex)`
+  flex: 1 1 50%;
+  justify-content: space-between;
 
-  @media (max-width: 780px) {
+  @media (max-width: 768px) {
     flex-direction: column;
+    flex: 0;
   }
 `;
 
-const Right = styled.div`
-  display: flex;
+const Right = styled(Flex)`
+  flex: 1 1 50%;
+  justify-content: flex-end;
   margin-left: auto;
 
   @media (max-width: 780px) {
     flex-direction: column;
     margin-left: 0;
+    flex: 0;
+
     div {
       margin-left: 0;
     }
@@ -167,4 +193,11 @@ const Mobile = styled.div`
   }
 `;
 
-export default withRouter(Header);
+const mapStateToProps = (state) => {
+  return {
+    liked: state.rate.liked,
+    disliked: state.rate.disliked,
+  };
+};
+
+export default withRouter(connect(mapStateToProps)(Header));

@@ -8,15 +8,19 @@ import "swiper/components/navigation/navigation.scss";
 
 import Poster from "./Poster";
 
+//import utils
+import { getGenre } from "../util/GetGenres";
+
 //import styles
 import styled from "styled-components";
+import { primary } from "./Colors";
 
 SwiperCore.use(Navigation, Pagination);
 
-const Recommend = ({ data, title }) => {
+const Recommend = ({ data, title, genres }) => {
   return (
     <Container>
-      <h5>{title}</h5>
+      <h6>{title}</h6>
       <Swiper
         navigation
         breakpoints={{
@@ -45,7 +49,6 @@ const Recommend = ({ data, title }) => {
               title={movie.title}
               rating={movie.vote_average}
               year={movie.release_date}
-              // genre={getGenre(movie.genre_ids)}
               toDetail={true}
             />
           </SwiperSlide>
@@ -57,14 +60,17 @@ const Recommend = ({ data, title }) => {
 
 const Container = styled.div`
   width: 100%;
-  padding: 2em 0;
+  color: ${primary.blue};
 
-  h5 {
-    margin-bottom: 1em;
+  h6 {
+    font-size: 1.15rem;
+    margin-bottom: 1.5em;
   }
 
-  @media (max-width: 780px) {
-    padding: 0;
+  @media (max-width: 768px) {
+    h6 {
+      font-size: 1.125rem;
+    }
   }
 `;
 

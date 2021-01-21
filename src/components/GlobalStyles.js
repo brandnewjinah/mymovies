@@ -24,30 +24,33 @@ const GlobalStyle = createGlobalStyle`
     }
     h1 {
         font-weight: 600;
-        font-size: 4rem;
-        line-height: 3.75rem;
+        font-size: 5rem;
+        line-height: 5rem;
     }
     h2 {
         font-weight: 600;
-        font-size: 3rem;
-        line-height: 3.4rem;
+        font-size: 3.75rem;
+        line-height: 3.75rem;
     }
     h3 {
-        font-weight: 500;
-        font-size: 2rem;
-        line-height: 3.5rem;
+        font-weight: 600;
+        font-size: 2.875rem;
+        line-height: 2.875rem;
     }
     h4 {
-        font-weight: 500;
-        font-size: 1.35rem;
+        font-weight: 600;
+        font-size: 2rem;
+        line-height: 2rem;
     }
     h5 {
-        font-weight: 500;
-        font-size: 1.25rem;
+        font-weight: 600;
+        font-size: 1.5rem;
+        line-height: 1.5rem;
     }
     h6 {
         font-weight: 500;
-        font-size: 1rem;
+        font-size: 1.25rem;
+        line-height: 1.25rem;
     }
     ul {
         list-style-position: inside;
@@ -77,7 +80,7 @@ const GlobalStyle = createGlobalStyle`
         background-color: #edf2f7;
         padding: 0 .5rem;
     }
-  
+
 `;
 
 export default GlobalStyle;

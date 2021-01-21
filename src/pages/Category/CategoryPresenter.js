@@ -2,16 +2,14 @@ import React from "react";
 import PropTypes from "prop-types";
 import Helmet from "react-helmet";
 
+//import components
 import Placeholder from "../../components/placeholders/List";
-import { Section } from "../../components/Section2";
+import { Grid2 } from "../../components/Grid";
 import Poster from "../../components/Poster";
+import { Pagination } from "../../components/Pagination";
 
 //import utils
 import { getGenre } from "../../util/GetGenres";
-
-//redux
-import { connect } from "react-redux";
-import { likeItem, dislikeItem } from "../../store/movies";
 
 //import styles
 import styled from "styled-components";
@@ -43,31 +41,31 @@ const CategoryPresenter = (props) => {
                 ? props.keyword.name
                 : props.director
                 ? props.director.name
-                : null}
+                : handleGenre()}{" "}
               | My Movies
             </title>
           </Helmet>
           <Header>
-            <h3>{props.genre && handleGenre()}</h3>
-            <h3>
+            <h4>{props.genre && handleGenre()}</h4>
+            <h5>
               {props.keyword && (
                 <>
                   <span>Movies with keyword </span>
                   <span className="underline">{props.keyword.name}</span>
                 </>
               )}
-            </h3>
-            <h3>
+            </h5>
+            <h5>
               {props.director && (
                 <>
                   <span>Movies by </span>
                   <span className="underline">{props.director.name}</span>
                 </>
               )}
-            </h3>
+            </h5>
           </Header>
           {props.result && props.result.length > 0 && (
-            <Section>
+            <Grid2>
               {props.result.map((movie) => (
                 <Poster
                   key={movie.id}
@@ -77,20 +75,16 @@ const CategoryPresenter = (props) => {
                   rating={movie.vote_average}
                   year={movie.release_date}
                   genre={getGenre(props.genres, movie.genre_ids)}
-                  // genre={handleGenre(movie.genre_ids)}
                   toDetail={true}
                 />
               ))}
-            </Section>
+            </Grid2>
           )}
-          <Footer>
-            {props.page !== 1 ? (
-              <Button onClick={props.prevPage}>Prev</Button>
-            ) : (
-              <div></div>
-            )}
-            <Button onClick={props.nextPage}>Next</Button>
-          </Footer>
+          <Pagination
+            page={props.page}
+            handlePrev={props.prevPage}
+            handleNext={props.nextPage}
+          />
         </>
       )}
     </Container>
@@ -100,8 +94,19 @@ const CategoryPresenter = (props) => {
 const Container = styled.div`
   width: 100%;
   max-width: 1140px;
-  padding: 2em 0;
-  margin: 5em auto;
+  margin: 7em auto;
+
+  @media (max-width: 1200px) {
+    padding: 0 2em;
+  }
+
+  @media (max-width: 768px) {
+    margin: 5em auto;
+  }
+
+  @media (max-width: 425px) {
+    padding: 0 1em;
+  }
 `;
 
 const Flex = styled.div`
@@ -112,13 +117,8 @@ const Flex = styled.div`
 
 const Header = styled(Flex)`
   flex-direction: column;
-  padding: 0 2em 1.25em;
   color: ${primary.blue};
-
-  h3 {
-    font-size: 1.5rem;
-    font-weight: 600;
-  }
+  padding: 3em 0 2em;
 
   .underline {
     position: relative;
@@ -133,51 +133,22 @@ const Header = styled(Flex)`
       border-bottom: 3px solid #e89161;
     }
   }
-`;
 
-const Button = styled.button`
-  display: flex;
-  align-items: center;
-  background-color: transparent;
-  border: transparent;
-  font-family: "Poppins", sans-serif;
-  color: #172d6e;
-  font-size: 1.125rem;
-  font-weight: 400;
-  border-bottom: 3px solid #172d6e;
-  margin: 0 0.5em;
-  cursor: pointer;
-`;
+  @media (max-width: 768px) {
+    padding: 1em 0;
 
-const Footer = styled(Flex)`
-  justify-content: space-between;
-  padding: 0 1em;
-
-  @media (max-width: 640px) {
-    flex-direction: column;
-
-    p {
-      font-size: 0.875rem;
-      line-height: 3rem;
+    h4 {
+      font-size: 1.75rem;
     }
   }
 `;
 
 CategoryPresenter.propTypes = {
   loading: PropTypes.bool.isRequired,
-  result: PropTypes.object,
+  result: PropTypes.array,
   resultError: PropTypes.string,
   similar: PropTypes.array,
   similarError: PropTypes.string,
 };
 
-const mapStateToProps = (state) => {
-  return {
-    liked: state.liked,
-    disliked: state.disliked,
-  };
-};
-
-export default connect(mapStateToProps, { likeItem, dislikeItem })(
-  CategoryPresenter
-);
+export default CategoryPresenter;

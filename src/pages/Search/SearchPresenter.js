@@ -2,42 +2,39 @@ import React from "react";
 // import PropTypes from "prop-types";
 import Helmet from "react-helmet";
 
+//import utils
+import { getGenre } from "../../util/GetGenres";
+
 //import components
 import Indicator from "../../components/Indicator";
-import Section from "../../components/Section";
+import { Grid2 } from "../../components/Grid";
+
 import Poster from "../../components/Poster";
 
 //import styles and assets
 import styled from "styled-components";
 
-const SearchPresenter = ({
-  movies,
-  shows,
-  keyword,
-  onChange,
-  onSubmit,
-  loading,
-}) => {
+const SearchPresenter = (props) => {
   return (
     <>
       <Helmet>
         <title>Search | Movie Rate</title>
       </Helmet>
       <Container>
-        <Form onSubmit={onSubmit}>
+        <Form onSubmit={props.onSubmit}>
           <Input
-            placeholder="Search Movies or TV shows"
-            value={keyword}
-            onChange={onChange}
+            placeholder="Search Movies"
+            value={props.keyword}
+            onChange={props.onChange}
           />
         </Form>
-        {loading ? (
+        {props.loading ? (
           <Indicator />
         ) : (
           <>
-            {movies && movies.length > 0 && (
-              <Section title="Movie Results">
-                {movies.map((movie) => (
+            {props.movies && props.movies.length > 0 && (
+              <Grid2 title="Movie Results">
+                {props.movies.map((movie) => (
                   <Poster
                     key={movie.id}
                     id={movie.id}
@@ -45,24 +42,11 @@ const SearchPresenter = ({
                     title={movie.title}
                     rating={movie.vote_average}
                     year={movie.release_date}
+                    genre={getGenre(props.genres, movie.genre_ids)}
                     isMovie={true}
                   />
                 ))}
-              </Section>
-            )}
-            {shows && shows.length > 0 && (
-              <Section title="Shows Results">
-                {shows.map((show) => (
-                  <Poster
-                    key={show.id}
-                    id={show.id}
-                    imageUrl={show.poster_path}
-                    title={show.name}
-                    rating={show.vote_average}
-                    year={show.first_air_date}
-                  />
-                ))}
-              </Section>
+              </Grid2>
             )}
           </>
         )}
@@ -71,8 +55,23 @@ const SearchPresenter = ({
   );
 };
 
+const Flex = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 const Container = styled.div`
-  padding: 6em 20px;
+  width: 100%;
+  max-width: 1140px;
+  margin: 7em auto 0;
+
+  @media (max-width: 1200px) {
+    padding: 0 2em;
+  }
+
+  @media (max-width: 425px) {
+    padding: 0 1em;
+  }
 `;
 
 const Form = styled.form`

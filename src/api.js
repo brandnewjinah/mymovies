@@ -25,6 +25,7 @@ const getAnything = async (path, params = {}) => {
 };
 
 export const movieApi = {
+  genre: () => getAnything("/genre/movie/list"),
   topRated: (page) => getAnything("/movie/top_rated", { page }),
   discover: (genres, keyword, director) =>
     getAnything(`/discover/movie`, {
@@ -40,8 +41,6 @@ export const movieApi = {
   nowPlaying: () => getAnything("/movie/now_playing"),
   popular: () => getAnything("/movie/popular"),
   upcoming: () => getAnything("/movie/upcoming"),
-  genre: () => getAnything("/genre/movie/list"),
-
   movie: (id) => getAnything(`/movie/${id}`, { append_to_response: "videos" }),
   similar: (id) => getAnything(`/movie/${id}/similar`, { movie_id: id }),
 

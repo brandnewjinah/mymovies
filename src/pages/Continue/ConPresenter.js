@@ -2,15 +2,17 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Select from "react-select";
 import { movieApi } from "../../api";
+import Helmet from "react-helmet";
 
 //import utils
 import { getGenre } from "../../util/GetGenres";
 
 //import components
-import { Section } from "../../components/Section2";
+import { Grid } from "../../components/Grid";
 import RatePoster from "../../components/RatePoster";
-import Indicator from "../../components/Indicator";
+import Placeholder from "../../components/placeholders/List";
 import Dropdown from "../../components/Dropdown";
+import { RatePagination } from "../../components/Pagination";
 
 //redux
 import { connect } from "react-redux";
@@ -70,7 +72,7 @@ const ConPresenter = (props) => {
       ...styles,
       border: 0,
       borderRadius: 0,
-      borderBottom: `3px solid #172d6e`,
+      borderBottom: `2px solid #172d6e`,
       boxShadow: "none",
       paddingTop: `2px`,
       minWidth: `auto`,
@@ -89,86 +91,97 @@ const ConPresenter = (props) => {
     multiValueLabel: (styles) => ({
       ...styles,
       color: `#de576d`,
-      fontSize: `1.05rem`,
+      fontSize: `1rem`,
     }),
   };
-  return props.loading ? (
-    <Indicator />
-  ) : (
+  return (
     <Container>
-      <Header>
-        <h3>Rate more movies</h3>
-        <div style={{ display: `flex`, marginTop: `1em` }}>
-          <Dropdown
-            selected={selected}
-            data={dropdown}
-            handleSelection={(d) => handleSelection(d)}
-          />
-        </div>
-        <Multi>
-          <h4>Exclude</h4>
-          <div>
-            <Select
-              isMulti
-              menuPlacement="auto"
-              menuPosition="fixed"
-              placeholder="Select genres"
-              styles={customStyles}
-              defaultValue={[]}
-              options={props.genres.map((item) => ({
-                label: item.name,
-                value: item.name,
-                id: item.id,
-              }))}
-              onChange={handleChange}
-              components={{
-                DropdownIndicator: () => null,
-                IndicatorSeparator: () => null,
-                ClearIndicator: () => null,
+      {props.loading ? (
+        <>
+          <Placeholder />
+          <Helmet>
+            <title>Loading | Movie Rate</title>
+          </Helmet>
+        </>
+      ) : (
+        <>
+          <Helmet>
+            <title>Rate | My Movies</title>
+          </Helmet>
+          <Header>
+            <h4>Rate more movies</h4>
+            <div style={{ display: `flex`, marginTop: `.25em` }}>
+              <Dropdown
+                selected={selected}
+                data={dropdown}
+                handleSelection={(d) => handleSelection(d)}
+              />
+            </div>
+            <Multi>
+              <p>Exclude</p>
+              <div>
+                <Select
+                  isMulti
+                  menuPlacement="auto"
+                  menuPosition="fixed"
+                  placeholder="Select genres"
+                  styles={customStyles}
+                  defaultValue={[]}
+                  options={props.genres.map((item) => ({
+                    label: item.name,
+                    value: item.name,
+                    id: item.id,
+                  }))}
+                  onChange={handleChange}
+                  components={{
+                    DropdownIndicator: () => null,
+                    IndicatorSeparator: () => null,
+                    ClearIndicator: () => null,
+                  }}
+                />
+              </div>
+            </Multi>
+            <div
+              style={{
+                display: "flex",
               }}
-            />
-          </div>
-        </Multi>
-        <div
-          style={{
-            display: "flex",
-          }}
-        >
-          {/* <Button onClick={props.nextPage}>More</Button> */}
-        </div>
-      </Header>
+            ></div>
+          </Header>
 
-      {props.results && props.results.length > 0 && (
-        <Section>
-          {props.results.map((movie) => (
-            <RatePoster
-              key={movie.id}
-              rate={true}
-              id={movie.id}
-              imageUrl={movie.poster_path}
-              title={movie.title}
-              rating={movie.vote_average}
-              year={movie.release_date}
-              genre={getGenre(props.genres, movie.genre_ids)}
-              liked={
-                props.liked && props.liked.find((item) => item.id === movie.id)
-              }
-              disliked={
-                props.disliked &&
-                props.disliked.find((item) => item.id === movie.id)
-              }
-              onClick1={() => handleLike(movie)}
-              onClick2={() => handleDislike(movie)}
-              isRate={true}
-            />
-          ))}
-        </Section>
+          {props.results && props.results.length > 0 && (
+            <Grid>
+              {props.results.map((movie) => (
+                <RatePoster
+                  key={movie.id}
+                  rate={true}
+                  id={movie.id}
+                  imageUrl={movie.poster_path}
+                  title={movie.title}
+                  rating={movie.vote_average}
+                  year={movie.release_date}
+                  genre={getGenre(props.genres, movie.genre_ids)}
+                  liked={
+                    props.liked &&
+                    props.liked.find((item) => item.id === movie.id)
+                  }
+                  disliked={
+                    props.disliked &&
+                    props.disliked.find((item) => item.id === movie.id)
+                  }
+                  onClick1={() => handleLike(movie)}
+                  onClick2={() => handleDislike(movie)}
+                  isRate={true}
+                />
+              ))}
+            </Grid>
+          )}
+          <RatePagination
+            handleNext={props.nextPage}
+            liked={props.liked.length}
+            disliked={props.disliked.length}
+          />
+        </>
       )}
-
-      <Footer>
-        <div>You rated {props.liked.length + props.disliked.length}</div>
-        <Button onClick={props.nextPage}>More</Button>
-      </Footer>
     </Container>
   );
 };
@@ -178,6 +191,14 @@ const Container = styled.div`
   max-width: 1140px;
   margin: 7em auto;
   color: ${primary.blue};
+
+  @media (max-width: 1200px) {
+    padding: 0 2em;
+  }
+
+  @media (max-width: 425px) {
+    padding: 0 1em;
+  }
 `;
 
 const Flex = styled.div`
@@ -188,46 +209,20 @@ const Flex = styled.div`
 
 const Header = styled(Flex)`
   flex-direction: column;
+  color: ${primary.blue};
+  padding: 3em 0 2em;
 
-  h3 {
-    font-size: 2rem;
-    font-weight: 600;
-  }
+  @media (max-width: 768px) {
+    padding: 1em 0;
 
-  h4 {
-    font-size: 1.125rem;
-    margin: 1.5em 0;
-    text-rendering: optimizeLegibility;
-  }
-
-  @media (max-width: 780px) {
-    text-align: center;
+    h4 {
+      font-size: 1.75rem;
+    }
   }
 `;
 
 const Multi = styled(Flex)`
   width: 100%;
-`;
-
-const Button = styled.button`
-  display: flex;
-  align-items: center;
-  background-color: transparent;
-  border: transparent;
-  font-family: "Poppins", sans-serif;
-  color: #172d6e;
-  font-size: 1.125rem;
-  font-weight: 400;
-  border-bottom: 3px solid #172d6e;
-  margin: 0 0.5em;
-  cursor: pointer;
-`;
-
-const Footer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 1em;
 `;
 
 ConPresenter.propTypes = {

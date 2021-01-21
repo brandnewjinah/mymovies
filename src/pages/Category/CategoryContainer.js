@@ -10,69 +10,69 @@ const CategoryContainer = ({ pathname }) => {
 
   const [detail, setDetail] = useState({
     loading: true,
-    result: [],
     genre: id,
     genres: [],
+    genresError: null,
+    result: [],
+    resultError: null,
     keyword: {},
     keywordError: null,
     director: {},
     directorError: null,
-    genresError: null,
-    resultError: null,
   });
 
   const [page, setPage] = useState(1);
 
-  const getData = async () => {
-    const [genres, genresError] = await movieApi.genre();
-
-    if (location.pathname.includes("/keyword/")) {
-      const [result, resultError] = await movieApi.discoverKeyword(id, page);
-      const [keyword, keywordError] = await movieApi.keywordlist(id);
-
-      setDetail({
-        loading: false,
-        genres: genres.genres,
-        genresError,
-        result,
-        resultError,
-        keyword,
-        keywordError,
-      });
-    }
-
-    if (location.pathname.includes("/category/")) {
-      const [result, resultError] = await movieApi.discover(id, null, null);
-
-      setDetail({
-        loading: false,
-        result,
-        resultError,
-        genres: genres.genres,
-        genresError,
-        genre: id,
-      });
-    }
-
-    if (location.pathname.includes("/director/")) {
-      const [result, resultError] = await movieApi.discoverCrew(id, page);
-      const [director, directorError] = await movieApi.person(id);
-
-      setDetail({
-        loading: false,
-        genres: genres.genres,
-        genresError,
-        director,
-        directorError,
-        result,
-        resultError,
-      });
-    }
-  };
-
   useEffect(() => {
+    const getData = async () => {
+      const [genres, genresError] = await movieApi.genre();
+
+      if (location.pathname.includes("/keyword/")) {
+        const [result, resultError] = await movieApi.discoverKeyword(id, page);
+        const [keyword, keywordError] = await movieApi.keywordlist(id);
+
+        setDetail({
+          loading: false,
+          genres: genres.genres,
+          genresError,
+          result,
+          resultError,
+          keyword,
+          keywordError,
+        });
+      }
+
+      if (location.pathname.includes("/category/")) {
+        const [result, resultError] = await movieApi.discover(id, null, null);
+
+        setDetail({
+          loading: false,
+          result,
+          resultError,
+          genres: genres.genres,
+          genresError,
+          genre: id,
+        });
+      }
+
+      if (location.pathname.includes("/director/")) {
+        const [result, resultError] = await movieApi.discoverCrew(id, page);
+        const [director, directorError] = await movieApi.person(id);
+
+        setDetail({
+          loading: false,
+          genres: genres.genres,
+          genresError,
+          director,
+          directorError,
+          result,
+          resultError,
+        });
+      }
+    };
+
     getData();
-  }, [id, page]);
+  }, [id, location.pathname, page]);
 
   const nextPage = () => {
     setPage(page + 1);

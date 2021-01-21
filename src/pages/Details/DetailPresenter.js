@@ -70,12 +70,11 @@ const DetailPresenter = (props) => {
             {/* if original title exists in other language<Subtitle>
               {props.result.original_title && props.result.original_title}
             </Subtitle> */}
-
-            <h3 className="title">
+            <h4>
               {props.result.title
                 ? props.result.title
                 : props.result.original_name}
-            </h3>
+            </h4>
             <div className="sub">
               <div>
                 {props.result.release_date
@@ -98,15 +97,7 @@ const DetailPresenter = (props) => {
                 </Link>
               </div> */}
             </div>
-
             <div className="overview">{props.result.overview}</div>
-
-            <div>
-              <Awards movie={props.result.id} />
-            </div>
-            {/* {Oscars.filter((m) =>
-                m.winners.find((m) => m.id === props.result.id)
-              ).map((m) => m.winners.map((m) => <div>{m.award}</div>))} */}
 
             <Rate>
               <div
@@ -171,8 +162,10 @@ const DetailPresenter = (props) => {
               </div>
             </Rate>
 
+            <Awards movie={props.result.id} />
+
             <Section>
-              <h5>Keywords</h5>
+              <p className="header">Keywords</p>
               <p className="caption">
                 If you liked this movie, please tell us why by highlighting the
                 appropriate keyword.
@@ -221,48 +214,28 @@ const Container = styled.div`
   width: 100%;
   max-width: 1140px;
   margin: 7em auto;
+  padding-bottom: 3em;
 
   h5 {
     font-weight: 600;
   }
 
   @media (max-width: 1180px) {
-    padding: 0 2em;
-  }
-
-  @media (max-width: 780px) {
-    padding: 0;
+    padding: 0 2em 3em;
   }
 `;
 
 const Content = styled.div`
   width: 100%;
   height: 100%;
-  z-index: 1;
-  /* background-color: gainsboro; */
 `;
 
 const Main = styled.div`
   display: flex;
   justify-content: space-between;
-  /* align-items: center; */
-  /* background-color: #ebdfeb; */
 
-  @media (max-width: 780px) {
+  @media (max-width: 768px) {
     flex-direction: column;
-    padding: 0 1.5em;
-  }
-`;
-
-const ImageContainer = styled.div`
-  width: 41.5%;
-  position: relative;
-  padding-left: 5%;
-
-  @media (max-width: 780px) {
-    order: 1;
-    width: 100%;
-    padding-left: 0;
   }
 `;
 
@@ -271,16 +244,11 @@ const Data = styled.div`
   font-size: 0.875rem;
   padding-right: 5%;
 
-  .title {
-    font-size: 2rem;
-    font-weight: 600;
-  }
-
   .sub {
     display: flex;
     font-weight: 500;
     color: ${primary.cornflower};
-    margin: 0.85em 0;
+    margin: 1em 0;
 
     a {
       &:not(:last-child):after {
@@ -290,32 +258,26 @@ const Data = styled.div`
     }
   }
 
-  .overview {
-    color: ${gray.darkergray};
-    line-height: 1.5rem;
-    margin: 1em 0;
-  }
-
   .divider {
     margin: 0 10px;
   }
 
-  @media (max-width: 780px) {
+  .overview {
+    color: ${gray.darkergray};
+    line-height: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
     width: 100%;
     order: 2;
     margin: 0;
     padding: 1em 0;
-
-    .title {
-      font-size: 1.5rem;
-      line-height: 2rem;
-    }
   }
 `;
 
 const Rate = styled.div`
   display: flex;
-  margin: 1.75em 0;
+  margin-top: 1.875em;
 
   div {
     display: flex;
@@ -329,17 +291,22 @@ const Rate = styled.div`
 
   p {
     font-size: 0.8rem;
-    color: ${gray.darkgray};
     font-weight: 600;
+    color: ${gray.darkgray};
     margin-left: 0.5em;
   }
 `;
 
 const Section = styled.div`
   border-top: 1px solid ${gray.lightergray};
-  border-bottom: 1px solid ${gray.lightergray};
-  padding: 3em 0;
-  margin-top: 5em;
+  padding: 2em 0;
+  margin-top: 2em;
+  /* background-color: lightcyan; */
+
+  .header {
+    font-weight: 600;
+    text-transform: uppercase;
+  }
 
   .caption {
     font-size: 0.75rem;
@@ -362,15 +329,29 @@ const Section = styled.div`
     }
   }
 
-  @media (max-width: 780px) {
-    padding: 2em 0;
+  h6 {
+    font-weight: 600;
+  }
+
+  @media (max-width: 768px) {
+    padding: 2em 0 0;
+  }
+`;
+
+const ImageContainer = styled.div`
+  width: 41.5%;
+  position: relative;
+  padding-left: 5%;
+
+  @media (max-width: 768px) {
+    order: 1;
+    width: 100%;
+    padding-left: 0;
   }
 `;
 
 const RecommendContainer = styled.div`
-  @media (max-width: 780px) {
-    padding: 0 2em;
-  }
+  padding-top: 2em;
 `;
 
 DetailPresenter.propTypes = {

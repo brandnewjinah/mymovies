@@ -7,11 +7,12 @@ import RecommendPresenter from "./RecommendPresenter";
 import { countGenres2 } from "../../util/CountGenres2";
 import { countKeywords } from "../../util/CountKeywords";
 
-//redux
-import { connect } from "react-redux";
+//data
+import { likedKeywords } from "../../data/demo/keywords";
+import { dislikedMovies, likedMovies } from "../../data/demo/rate";
 
 const RecommendContainer = (props) => {
-  const liked = props.liked;
+  const liked = likedMovies;
 
   const [keywords, setKeywords] = useState({
     topKeyword: {},
@@ -67,14 +68,14 @@ const RecommendContainer = (props) => {
       //2. take out movies you rated already
       const filteredGenres = discoveredGenres.filter(
         (d) =>
-          !props.liked.find((id) => id.id === d.id) &&
-          !props.disliked.find((id) => id.id === d.id)
+          !likedMovies.find((id) => id.id === d.id) &&
+          !dislikedMovies.find((id) => id.id === d.id)
       );
 
       //3. your favorite keyword
 
-      if (props.keywords.length > 0) {
-        let topKeyword = countKeywords(props.keywords);
+      if (likedKeywords.length > 0) {
+        let topKeyword = countKeywords(likedKeywords);
         let randomKeyword = Math.floor(Math.random() * topKeyword.length);
         topKeyword = topKeyword[randomKeyword];
 
@@ -87,8 +88,8 @@ const RecommendContainer = (props) => {
         //3. take out movies you rated already
         const filteredKeyword = discoveredKeyword.filter(
           (d) =>
-            !props.liked.find((id) => id.id === d.id) &&
-            !props.disliked.find((id) => id.id === d.id)
+            !likedMovies.find((id) => id.id === d.id) &&
+            !dislikedMovies.find((id) => id.id === d.id)
         );
 
         setKeywords({
@@ -112,17 +113,9 @@ const RecommendContainer = (props) => {
     };
 
     getData();
-  }, [liked, props.disliked, props.keywords, props.liked]);
+  }, [liked]);
 
   return <RecommendPresenter {...movies} {...keywords} />;
 };
 
-const mapStateToProps = (state) => {
-  return {
-    liked: state.rate.liked,
-    disliked: state.rate.disliked,
-    keywords: state.keywords.myKeywords,
-  };
-};
-
-export default connect(mapStateToProps, null)(RecommendContainer);
+export default RecommendContainer;

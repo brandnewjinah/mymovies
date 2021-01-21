@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 //import styles and assets
 import styled from "styled-components";
@@ -18,19 +18,13 @@ const RatePoster = ({
   genre,
   onClick1,
   onClick2,
-  toDetail,
 }) => {
-  const history = useHistory();
   const [emptyImg, setEmptyImg] = useState(false);
 
   const handleNoImg = (e) => {
     if (e.type === "error") {
       setEmptyImg(true);
     }
-  };
-
-  const pushTo = () => {
-    history.push(`/movie/${id}`);
   };
 
   const rateMovie = (
@@ -51,10 +45,7 @@ const RatePoster = ({
   );
 
   return (
-    <Container
-      onClick={toDetail && pushTo}
-      style={toDetail && { cursor: `pointer` }}
-    >
+    <Container>
       <ImageContainer>
         {emptyImg ? (
           <EmptyImg>
@@ -74,18 +65,17 @@ const RatePoster = ({
       </ImageContainer>
 
       <Detail>
-        <div onClick={pushTo} className="content">
-          <h6 className="title">
-            {title.length > 17 ? `${title.substring(0, 19)}...` : title}
-          </h6>
-          <h6 className="titleMobile">{title}</h6>
+        <Link to={`/movie/${id}`}>
+          <p className="title">{title}</p>
+          <p className="titleMobile">{title}</p>
           <p>{year.substring(0, 4)}</p>
           <p>
             {genre && genre.join(" \u00B7 ").length > 20
               ? `${genre && genre.join(" \u00B7 ").substring(0, 20)}...`
               : genre && genre.join(" \u00B7 ")}
           </p>
-        </div>
+        </Link>
+
         {rate && <div className="ratingmobile">{rateMovie}</div>}
       </Detail>
     </Container>
@@ -96,15 +86,31 @@ const Flex = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 `;
 
 const Container = styled(Flex)`
   width: 100%;
   height: 100%;
-  flex-direction: column;
 
-  @media (max-width: 540px) {
+  @media (max-width: 768px) {
     flex-direction: row;
+  }
+`;
+
+const EmptyImg = styled(Flex)`
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-top: 150%;
+  border-radius: 8px;
+  background-color: rgba(0, 0, 0, 0.1);
+
+  svg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 `;
 
@@ -116,15 +122,8 @@ const Image = styled.img`
   transition: opacity 0.1s linear;
 `;
 
-const EmptyImg = styled(Flex)`
-  justify-content: center;
-  width: 202px;
-  height: 304px;
-  border-radius: 8px;
-  background-color: rgba(0, 0, 0, 0.1);
-`;
-
 const Rating = styled(Flex)`
+  flex-direction: row;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -140,18 +139,19 @@ const Rating = styled(Flex)`
     cursor: pointer;
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 768px) {
     display: none;
   }
 `;
 
 const ImageContainer = styled(Flex)`
+  width: 100%;
+  height: 80%;
   position: relative;
-  height: 79%;
 
   &:hover {
     ${Image} {
-      opacity: 0.3;
+      opacity: 0.5;
     }
 
     ${Rating} {
@@ -159,9 +159,9 @@ const ImageContainer = styled(Flex)`
     }
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 768px) {
+    flex: 0 1 30%;
     height: 100%;
-    flex: 0 1 40%;
 
     &:hover {
       ${Image} {
@@ -173,29 +173,19 @@ const ImageContainer = styled(Flex)`
 
 const Detail = styled(Flex)`
   width: 100%;
-  height: 21%;
-  flex-direction: column;
-  justify-content: start;
   text-align: center;
-
-  h6 {
-    margin: 0.5em 0 0.25em;
-    display: inline-block;
-    width: 100%;
-  }
-
-  p {
-    font-size: 0.75rem;
-    line-height: 1.25rem;
-  }
-
-  .content {
-    width: 100%;
-    cursor: pointer;
-  }
+  font-size: 0.75rem;
+  line-height: 1.25rem;
 
   .title {
+    width: 180px;
     display: inline-block;
+    font-size: 0.95rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0.65em 0 0.25em;
   }
 
   .titleMobile {
@@ -206,17 +196,11 @@ const Detail = styled(Flex)`
     display: none;
   }
 
-  @media (max-width: 540px) {
-    height: 100%;
-    flex: 0 1 60%;
-    justify-content: center;
+  @media (max-width: 768px) {
+    flex: 0 1 70%;
     align-items: start;
     text-align: left;
-    padding-left: 1em;
-
-    h6 {
-      font-size: 0.875rem;
-    }
+    padding-left: 1.5em;
 
     .title {
       display: none;
@@ -224,7 +208,9 @@ const Detail = styled(Flex)`
 
     .titleMobile {
       display: block;
-      line-height: 1.25rem;
+      font-size: 1.125rem;
+      font-weight: 500;
+      line-height: 1.75rem;
     }
 
     .ratingmobile {
@@ -233,11 +219,18 @@ const Detail = styled(Flex)`
       div {
         display: flex;
         background-color: ${gray.darkgray};
-        padding: 0.5em;
+        padding: 0.65em;
         border-radius: 100%;
         margin: 1em 1em 0 0;
         cursor: pointer;
       }
+    }
+  }
+
+  @media (max-width: 425px) {
+    .titleMobile {
+      font-size: 0.875rem;
+      line-height: 1.25rem;
     }
   }
 `;

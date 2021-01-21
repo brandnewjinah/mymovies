@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import Helmet from "react-helmet";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
@@ -8,7 +8,7 @@ import { movieApi } from "../../api";
 import { getGenre } from "../../util/GetGenres";
 
 //import components
-import { Section } from "../../components/Section2";
+import { Grid } from "../../components/Grid";
 import RatePoster from "../../components/RatePoster";
 import Placeholder from "../../components/placeholders/List";
 
@@ -51,23 +51,6 @@ const RatePresenter = (props) => {
     handleRated();
   }, [props.liked, props.disliked]);
 
-  // Find out previous count
-  // if total rated count reaches 30 from 29, create a burst animation
-
-  const usePrevious = (value) => {
-    const ref = useRef();
-    useEffect(() => {
-      ref.current = value;
-    });
-    return ref.current;
-  };
-
-  const prevCount = usePrevious(total);
-
-  const burst = {
-    color: primary.green,
-  };
-
   return (
     <Container>
       {props.loading ? (
@@ -83,38 +66,35 @@ const RatePresenter = (props) => {
             <title>Rate | My Movies</title>
           </Helmet>
           <Header>
-            <h2>
+            <h3>
               <span
                 style={
-                  total < 30
-                    ? { color: primary.yellow }
-                    : prevCount === 29
-                    ? burst
-                    : null
+                  total < 10
+                    ? { color: primary.warning }
+                    : { color: primary.green }
                 }
               >
                 {total}
               </span>
-              <span> / 30</span>
-            </h2>
-            {total >= 30 ? (
-              <div className="section">
-                <h5>You rated 30 movies! Keep rating or </h5>
+              <span> / 10</span>
+            </h3>
+            {total > 9 ? (
+              <div className="sub">
+                <h6>You rated 10 movies! Keep rating or </h6>
                 <Link to="/profile">
-                  <h5 className="link">See your profile</h5>
+                  <h6 className="link">See your profile</h6>
                 </Link>
               </div>
             ) : (
-              <div className="section">
-                <h5>
-                  Rate at least 30 movies to get your personalized profile
-                </h5>
+              <div className="sub">
+                <h6>
+                  Rate at least 10 movies to get your personalized profile
+                </h6>
               </div>
             )}
           </Header>
-
           {props.topRated && props.topRated.length > 0 && (
-            <Section>
+            <Grid>
               {props.topRated.map((movie) => (
                 <RatePoster
                   key={movie.id}
@@ -137,7 +117,7 @@ const RatePresenter = (props) => {
                   onClick2={() => handleDislike(movie)}
                 />
               ))}
-            </Section>
+            </Grid>
           )}
 
           <Footer>
@@ -167,11 +147,14 @@ const Flex = styled.div`
 const Container = styled.div`
   width: 100%;
   max-width: 1140px;
-  padding: 2em 0;
-  margin: 5em auto 0;
+  margin: 7em auto 0;
 
-  @media (max-width: 1180px) {
+  @media (max-width: 1200px) {
     padding: 0 2em;
+  }
+
+  @media (max-width: 425px) {
+    padding: 0 1em;
   }
 `;
 
@@ -180,12 +163,13 @@ const Header = styled(Flex)`
   flex-direction: column;
   color: ${primary.blue};
   padding: 0 2em;
+  margin-bottom: 4em;
 
-  .section {
+  .sub {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1.25em 0;
+    margin-top: 1.25em;
   }
 
   .link {
@@ -193,16 +177,20 @@ const Header = styled(Flex)`
     margin-left: 6px;
   }
 
-  @media (max-width: 640px) {
-    h5 {
-      font-size: 1.125rem;
-      line-height: 1.75rem;
-      text-align: center;
+  @media (max-width: 780px) {
+    .sub {
+      flex-direction: column;
     }
 
-    .section {
-      flex-direction: column;
-      padding: 1.25em 1em;
+    h3 {
+      font-size: 2rem;
+      line-height: 2rem;
+    }
+
+    h6 {
+      font-size: 1.125rem;
+      line-height: 1.5rem;
+      text-align: center;
     }
   }
 `;
@@ -223,7 +211,7 @@ const Button = styled.button`
 
 const Footer = styled(Flex)`
   justify-content: space-between;
-  padding: 1em;
+  padding: 1em 1em 4em;
 
   @media (max-width: 640px) {
     flex-direction: column;

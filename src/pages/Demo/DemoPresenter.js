@@ -13,28 +13,29 @@ import { countKeywords } from "../../util/CountKeywords";
 import Placeholder from "../../components/placeholders/Profile";
 import { Grid2 } from "../../components/Grid";
 import Poster from "../../components/Poster";
-import Analyser from "./ProfileAnalyser";
+import Analyser from "./DemoAnalyser";
 
-//redux
-import { connect } from "react-redux";
+//data
+import { likedKeywords } from "../../data/demo/keywords";
+import { dislikedMovies, likedMovies } from "../../data/demo/rate";
 
 //import styles and assets
 import styled from "styled-components";
 import { primary } from "../../components/Colors";
 
-const ProfilePresenter = (props) => {
-  const [movies, setMovies] = useState([...props.liked, ...props.disliked]);
+const DemoPresenter = (props) => {
+  const [movies, setMovies] = useState([...likedMovies, ...dislikedMovies]);
   const [topGenres, setTopGenres] = useState([]);
   const [language, setLanguage] = useState([]);
   const [crew, setCrew] = useState([]);
-  const liked = props.liked.length;
-  const disliked = props.disliked.length;
+  const liked = likedMovies.length;
+  const disliked = dislikedMovies.length;
   const total = liked + disliked;
 
   //get top genres from liked movies
   const countGenre = () => {
     //get liked genres
-    const sorted = CountGenres(props.liked);
+    const sorted = CountGenres(likedMovies);
 
     setTopGenres(sorted);
   };
@@ -46,11 +47,11 @@ const ProfilePresenter = (props) => {
 
   //to load movies under each genre
   const filterGenre = (id) => {
-    const result = props.liked.filter(
+    const result = likedMovies.filter(
       (m) => m.genre_ids && m.genre_ids.includes(id)
     );
 
-    const result2 = props.liked.filter(
+    const result2 = likedMovies.filter(
       (m) => m.genres && m.genres.find((g) => g.id === id)
     );
 
@@ -60,7 +61,7 @@ const ProfilePresenter = (props) => {
 
   const countLan = () => {
     let count = {};
-    props.liked.forEach((el) => {
+    likedMovies.forEach((el) => {
       count[el.original_language] = (count[el.original_language] || 0) + 1;
     });
     let result = Object.keys(count).map((e) => {
@@ -71,7 +72,7 @@ const ProfilePresenter = (props) => {
   };
 
   const filterLanguage = (code) => {
-    const result = props.liked.filter(
+    const result = likedMovies.filter(
       (m) => m.original_language && m.original_language === code
     );
     setMovies(result);
@@ -80,7 +81,7 @@ const ProfilePresenter = (props) => {
   const countCrew = () => {
     let list = [];
 
-    props.liked.forEach((item) => {
+    likedMovies.forEach((item) => {
       let newItem = {
         id: item.director.id,
         name: item.director.name,
@@ -115,6 +116,8 @@ const ProfilePresenter = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  console.log(likedKeywords);
+
   return (
     <Container>
       {props.loading ? (
@@ -127,23 +130,26 @@ const ProfilePresenter = (props) => {
       ) : (
         <>
           <Helmet>
-            <title>Profile | My Movies</title>
+            <title>Demo | My Movies</title>
           </Helmet>
           <Header>
-            <h4>My Movie Profile</h4>
-            <Link to="/demoprofile">
-              <p className="link">See demo profile</p>
-            </Link>
+            <h4>Demo Profile</h4>
+            <div>
+              <span>To see your own profile, </span>
+              <Link to="/rate">
+                <span className="link">rate at least 10 movies</span>
+              </Link>
+            </div>
           </Header>
           <Analyser
             total={total}
             liked={liked}
             disliked={disliked}
             filterAllMovies={() =>
-              filterMovies([...props.liked, ...props.disliked])
+              filterMovies([...likedMovies, ...dislikedMovies])
             }
-            filterLikedMovies={() => filterMovies(props.liked)}
-            filterDislikedMovies={() => filterMovies(props.disliked)}
+            filterLikedMovies={() => filterMovies(likedMovies)}
+            filterDislikedMovies={() => filterMovies(dislikedMovies)}
             topGenres={topGenres}
             availGenres={props.genres}
             filterGenre1={(id) => filterGenre(id)}
@@ -154,7 +160,7 @@ const ProfilePresenter = (props) => {
             filterLanguage2={(code) => filterLanguage(code)}
             filterLanguage3={(code) => filterLanguage(code)}
             crew={crew}
-            keywords={countKeywords(props.keywords)}
+            keywords={countKeywords(likedKeywords)}
           />
 
           {movies && movies.length > 0 && (
@@ -222,13 +228,4 @@ const Header = styled(Flex)`
   }
 `;
 
-const mapStateToProps = (state) => {
-  return {
-    rate: state.rate,
-    liked: state.rate.liked,
-    disliked: state.rate.disliked,
-    keywords: state.keywords.myKeywords,
-  };
-};
-
-export default connect(mapStateToProps, null)(ProfilePresenter);
+export default DemoPresenter;

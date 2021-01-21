@@ -7,7 +7,7 @@ import styled from "styled-components";
 import { Film } from "../assets/Icons";
 import { gray } from "./Colors";
 
-const Poster = ({ id, imageUrl, title, year }) => {
+const Poster = ({ id, imageUrl, title, year, genre }) => {
   const [emptyImg, setEmptyImg] = useState(false);
 
   const handleNoImg = (e) => {
@@ -37,13 +37,13 @@ const Poster = ({ id, imageUrl, title, year }) => {
         </ImageContainer>
 
         <Detail>
-          <div className="content">
-            <h6 className="title">
-              {title.length > 15 ? `${title.substring(0, 17)}...` : title}
-            </h6>
-            <h6 className="titleMobile">{title}</h6>
-            <p>{year.substring(0, 4)}</p>
-          </div>
+          <p className="title">{title}</p>
+          <p>{year.substring(0, 4)}</p>
+          <p>
+            {genre && genre.join(" \u00B7 ").length > 20
+              ? `${genre && genre.join(" \u00B7 ").substring(0, 20)}...`
+              : genre && genre.join(" \u00B7 ")}
+          </p>
         </Detail>
       </Container>
     </Link>
@@ -72,98 +72,60 @@ const Image = styled.img`
 `;
 
 const EmptyImg = styled(Flex)`
-  justify-content: center;
-  width: 202px;
-  height: 304px;
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-top: 150%;
   border-radius: 8px;
   background-color: rgba(0, 0, 0, 0.1);
+
+  svg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 `;
 
 const ImageContainer = styled(Flex)`
+  width: 100%;
+  height: 80%;
   position: relative;
-  height: auto;
 
   &:hover {
     ${Image} {
-      opacity: 0.3;
-    }
-  }
-
-  @media (max-width: 540px) {
-    height: 100%;
-    flex: 0 1 40%;
-
-    &:hover {
-      ${Image} {
-        opacity: 1;
-      }
+      opacity: 0.5;
     }
   }
 `;
 
 const Detail = styled(Flex)`
   width: 100%;
-  height: 21%;
   flex-direction: column;
-  justify-content: start;
   text-align: center;
-
-  h6 {
-    margin: 0.5em 0 0.25em;
-    display: inline-block;
-    width: 100%;
-  }
-
-  p {
-    font-size: 0.75rem;
-    line-height: 1rem;
-  }
-
-  .content {
-    width: 100%;
-    cursor: pointer;
-  }
+  font-size: 0.75rem;
+  line-height: 1.25rem;
 
   .title {
+    width: 180px;
     display: inline-block;
+    font-size: 0.95rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0.65em 0 0.25em;
   }
 
-  .titleMobile {
-    display: none;
-  }
-
-  .ratingmobile {
-    display: none;
-  }
-
-  @media (max-width: 540px) {
-    height: 100%;
-    justify-content: center;
-
-    h6 {
-      font-size: 0.875rem;
-    }
-
+  @media (max-width: 1090px) {
     .title {
-      display: none;
+      width: 160px;
     }
+  }
 
-    .titleMobile {
-      display: block;
-      line-height: 1.25rem;
-    }
-
-    .ratingmobile {
-      display: flex;
-
-      div {
-        display: flex;
-        background-color: ${gray.darkgray};
-        padding: 0.5em;
-        border-radius: 100%;
-        margin: 1em 1em 0 0;
-        cursor: pointer;
-      }
+  @media (max-width: 800px) {
+    .title {
+      width: 130px;
     }
   }
 `;

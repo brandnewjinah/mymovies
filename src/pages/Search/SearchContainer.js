@@ -7,10 +7,9 @@ const SearchContainer = () => {
   const [loading, setLoading] = useState(false);
   const [keyword, setKeyword] = useState("");
   const [results, setResults] = useState({
+    genres: [],
     movies: [],
-    shows: [],
     movieError: null,
-    showsError: null,
   });
 
   const onChange = (event) => setKeyword(event.target.value);
@@ -24,14 +23,14 @@ const SearchContainer = () => {
 
     setLoading(true);
 
+    const [genres, genresError] = await movieApi.genre();
     const [movies, movieError] = await movieApi.search(keyword);
-    const [shows, showsError] = await tvApi.search(keyword);
 
     setResults({
+      genres: genres.genres,
+      genresError,
       movies,
-      shows,
       movieError,
-      showsError,
     });
     setLoading(false);
   };

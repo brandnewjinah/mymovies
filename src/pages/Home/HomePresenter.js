@@ -1,35 +1,30 @@
 import React from "react";
 import Helmet from "react-helmet";
-import { useHistory } from "react-router-dom";
-
-//redux
-import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 //import styles and assets
 import styled from "styled-components";
 import { primary } from "../../components/Colors";
 
 const HomePresenter = () => {
-  const history = useHistory();
-
-  const handleNext = () => {
-    history.push("/rate");
-  };
-
   return (
     <Wrapper>
       <Helmet>
         <title>My Movies</title>
       </Helmet>
       <Container>
-        <div>
-          <h1>
-            Rate movies you've watched. Get a personalized movie profile. Get
-            recommendations based on your watch history.
-          </h1>
-          <div className="start" onClick={handleNext}>
-            <h2>Start rating</h2>
-          </div>
+        <h1>
+          Rate movies you've watched. Get a personalized movie profile. Get
+          recommendations based on your watch history.
+        </h1>
+
+        <div className="start">
+          <Link to="/rate">
+            <h3>Start rating</h3>
+          </Link>
+          <Link to="/demoprofile">
+            <h6>See a demo profile</h6>
+          </Link>
         </div>
       </Container>
     </Wrapper>
@@ -52,47 +47,35 @@ const Container = styled.div`
   width: 100%;
   max-width: 1140px;
   color: ${primary.blue};
-  padding: 2em 6em;
+  padding: 0 4em;
   margin: 0 auto;
 
   h1 {
-    font-size: 5rem;
-    line-height: 1em;
     hyphens: auto;
-  }
-
-  h2 {
-    font-size: 2.8rem;
-    line-height: 1em;
   }
 
   .start {
     margin: 2em 0;
     text-decoration: underline;
     cursor: pointer;
+
+    h6 {
+      margin: 1em 0;
+    }
   }
 
-  @media (max-width: 940px) {
-    padding: 2em 4em;
-  }
-
-  @media (max-width: 680px) {
+  @media (max-width: 780px) {
     padding: 2em;
 
     h1 {
-      font-size: 2.6rem;
-      line-height: 1.2em;
+      font-size: 2.15rem;
+      line-height: 2.35rem;
     }
 
-    h2 {
-      font-size: 1.6rem;
-      line-height: 1em;
+    h3 {
+      font-size: 1.65rem;
     }
   }
 `;
 
-const mapStateToProps = (state) => {
-  return {};
-};
-
-export default connect(mapStateToProps, null)(HomePresenter);
+export default HomePresenter;

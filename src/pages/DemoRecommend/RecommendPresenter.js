@@ -1,5 +1,6 @@
 import React from "react";
 import Helmet from "react-helmet";
+import { Link } from "react-router-dom";
 // import PropTypes from "prop-types";
 
 //import components
@@ -18,7 +19,13 @@ const RecommendPresenter = (props) => {
       ) : (
         <>
           <Header>
-            <h5>Recommended for you</h5>
+            <h5>Demo Recommendations</h5>
+            <div>
+              <span>To see recommendations for you, </span>
+              <Link to="/rate">
+                <span className="link">rate at least 10 movies</span>
+              </Link>
+            </div>
           </Header>
           <Section>
             {props.basedonLiked && props.basedonLiked.length > 0 && (
@@ -63,6 +70,7 @@ const Container = styled.div`
 
 const Header = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   color: ${primary.blue};
@@ -70,6 +78,11 @@ const Header = styled.div`
 
   h5 {
     text-align: center;
+    margin-bottom: 0.25em;
+  }
+
+  .link {
+    text-decoration: underline;
   }
 
   @media (max-width: 768px) {

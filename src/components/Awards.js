@@ -6,19 +6,20 @@ import { Oscars } from "../data/awards";
 
 //styles and assets
 import styled from "styled-components";
+import { gray } from "./Colors";
 
 const Awards = ({ movie }) => {
   const [award, setAward] = useState({});
 
-  const checkAwards = () => {
-    const collection = Oscars.find((c) =>
-      c.winners.find((m) => m.id === movie)
-    );
-    setAward(collection);
-    // setAward(Oscars);
-  };
-
   useEffect(() => {
+    const checkAwards = () => {
+      const collection = Oscars.find((c) =>
+        c.winners.find((m) => m.id === movie)
+      );
+      setAward(collection);
+      // setAward(Oscars);
+    };
+
     checkAwards();
   }, [movie]);
 
@@ -26,23 +27,26 @@ const Awards = ({ movie }) => {
     <>
       {award && (
         <Container>
-          <Link to={`/collection/${award.year}`}>
-            <div>
-              <span>{award && award.year} </span>
-              <span>{award && award.name}</span>
+          <p className="title">Awards</p>
+          <Section>
+            <Link to={`/collection/${award.year}`}>
+              <div className="award">
+                <span>{award && award.year} </span>
+                <span>{award && award.name}</span>
+              </div>
+            </Link>
+            <div className="winner">
+              {award &&
+                award.winners &&
+                award.winners
+                  .filter((m) => m.id === movie)
+                  .map((m, idx) => (
+                    <Link to={`/collection/${m.award_id}`}>
+                      <span key={idx}>{m.award}</span>
+                    </Link>
+                  ))}
             </div>
-          </Link>
-          <Winner>
-            {award &&
-              award.winners &&
-              award.winners
-                .filter((m) => m.id === movie)
-                .map((m, idx) => (
-                  <Link to={`/collection/${m.award_id}`}>
-                    <span key={idx}>{m.award}</span>
-                  </Link>
-                ))}
-          </Winner>
+          </Section>
         </Container>
       )}
     </>
@@ -50,14 +54,33 @@ const Awards = ({ movie }) => {
 };
 
 const Container = styled.div`
-  font-size: 0.875rem;
-  line-height: 1.125rem;
+  border-top: 1px solid ${gray.lightergray};
+  padding-top: 2em;
+  margin-top: 2em;
+  /* background-color: lightgoldenrodyellow; */
+
+  .title {
+    font-weight: 600;
+    text-transform: uppercase;
+    margin: 0.5em 0;
+  }
 `;
 
-const Winner = styled.div`
-  a {
-    &:not(:last-child):after {
-      content: ", ";
+const Section = styled.div`
+  color: ${gray.darkergray};
+  line-height: 1.5rem;
+
+  .award {
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .winner {
+    a {
+      &:not(:last-child):after {
+        content: " • ";
+        color: ${gray.gray};
+      }
     }
   }
 `;
