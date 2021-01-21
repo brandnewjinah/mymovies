@@ -116,8 +116,6 @@ const DemoPresenter = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log(likedKeywords);
-
   return (
     <Container>
       {props.loading ? (
@@ -211,6 +209,8 @@ const Container = styled.div`
 const Header = styled(Flex)`
   justify-content: center;
   flex-direction: column;
+  text-align: center;
+  padding: 0 2em;
 
   h4 {
     text-align: center;

@@ -163,29 +163,30 @@ const DetailPresenter = (props) => {
             </Rate>
 
             <Awards movie={props.result.id} />
-
-            <Section>
-              <p className="header">Keywords</p>
-              <p className="caption">
-                If you liked this movie, please tell us why by highlighting the
-                appropriate keyword.
-              </p>
-              <div className="group">
-                {props.keyword.keywords.map((k, idx) => (
-                  <Chips
-                    key={idx}
-                    label={k.name}
-                    url={k.id}
-                    saved={
-                      filterKeywords().find((item) => item.id === k.id)
-                        ? true
-                        : false
-                    }
-                    saveKeyword={() => saveKeyword(k)}
-                  />
-                ))}
-              </div>
-            </Section>
+            {props.keyword.keywords && props.keyword.keywords.length > 0 && (
+              <Section>
+                <p className="header">Keywords</p>
+                <p className="caption">
+                  If you liked this movie, please tell us why by highlighting
+                  the appropriate keyword.
+                </p>
+                <div className="group">
+                  {props.keyword.keywords.map((k, idx) => (
+                    <Chips
+                      key={idx}
+                      label={k.name}
+                      url={k.id}
+                      saved={
+                        filterKeywords().find((item) => item.id === k.id)
+                          ? true
+                          : false
+                      }
+                      saveKeyword={() => saveKeyword(k)}
+                    />
+                  ))}
+                </div>
+              </Section>
+            )}
           </Data>
           <ImageContainer>
             <ImageComponent

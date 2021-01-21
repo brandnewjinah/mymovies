@@ -73,6 +73,7 @@ const Header = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: center;
   color: ${primary.blue};
   padding: 0.5em 0;
 

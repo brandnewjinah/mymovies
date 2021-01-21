@@ -171,11 +171,15 @@ const Right = styled(Flex)`
 const Item = styled.div`
   margin: 0 0.75em;
   text-align: center;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 600;
   border-bottom: 5px solid
     ${(props) => (props.current ? "#3498db" : "transparent")};
   transition: border-bottom 0.5s ease-in-out;
+
+  @media (max-width: 780px) {
+    border-bottom: 0;
+  }
 `;
 
 const SLink = styled(Link)`

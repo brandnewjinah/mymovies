@@ -40,6 +40,7 @@ const CategoryContainer = ({ pathname }) => {
           keyword,
           keywordError,
         });
+        window.scrollTo(0, 0);
       }
 
       if (location.pathname.includes("/category/")) {
@@ -53,6 +54,7 @@ const CategoryContainer = ({ pathname }) => {
           genresError,
           genre: id,
         });
+        window.scrollTo(0, 0);
       }
 
       if (location.pathname.includes("/director/")) {
@@ -68,6 +70,7 @@ const CategoryContainer = ({ pathname }) => {
           result,
           resultError,
         });
+        window.scrollTo(0, 0);
       }
     };
 

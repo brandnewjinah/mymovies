@@ -205,6 +205,7 @@ const Container = styled.div`
 const Header = styled(Flex)`
   justify-content: center;
   flex-direction: column;
+  text-align: center;
 
   h4 {
     text-align: center;
