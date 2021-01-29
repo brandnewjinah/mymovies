@@ -113,11 +113,13 @@ const Container = styled(Flex)`
 `;
 
 const Logo = styled.div`
-  flex: 1 1 33.3333%;
+  flex: 0 1 33.3333%;
+
 `;
 
 const Links = styled(Flex)`
-  flex: 1 1 66.6666%;
+  flex: 0 1 66.6666%;
+
 
   @media (max-width: 780px) {
     height: 100vh;
@@ -132,7 +134,7 @@ const Links = styled(Flex)`
     text-align: center;
     font-size: 1.75rem;
     font-weight: 500;
-    z-index: 2;
+    z-index: 1;
     transform: ${({ open }) => (open ? "scale(1)" : "scale(0)")};
     /* transition: all 300ms; */
 
@@ -143,22 +145,27 @@ const Links = styled(Flex)`
 `;
 
 const Left = styled(Flex)`
-  flex: 1 1 50%;
+  flex: 0 1 50%;
   justify-content: space-between;
+  z-index: 2;
 
-  @media (max-width: 768px) {
+  @media (max-width: 780px) {
     flex-direction: column;
-    flex: 0;
+    flex: 0 1 auto;
+    justify-content: flex-start;
   }
 `;
 
 const Right = styled(Flex)`
-  flex: 1 1 50%;
+  flex: 0 1 50%;
   justify-content: flex-end;
+  z-index: 2;
+  /* background-color: beige; */
 
-  @media (max-width: 768px) {
+  @media (max-width: 780px) {
     flex-direction: column;
-    flex: 1;
+    flex: 0 1 auto;
+    justify-content: flex-start;
 
     div {
       margin-left: 0;
