@@ -109,7 +109,7 @@ const ConPresenter = (props) => {
             <title>Rate | My Movies</title>
           </Helmet>
           <Header>
-            <h4>Rate more movies</h4>
+            <h4>Rate movies</h4>
             <div style={{ display: `flex`, marginTop: `.25em` }}>
               <Dropdown
                 selected={selected}

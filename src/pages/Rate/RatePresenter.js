@@ -17,11 +17,13 @@ import { connect } from "react-redux";
 import { likeItem, dislikeItem } from "../../reducers/rateReducer";
 
 //import styles and assets
-import styled from "styled-components";
-import { primary } from "../../components/Colors";
+import styled, { css } from "styled-components";
+import { primaryColors, breakpoint } from "../../components/Token";
 
 const RatePresenter = (props) => {
   const [total, setTotal] = useState(0);
+
+  const ratedTen = total > 9 ? true : false;
 
   const handleLike = async (movie) => {
     const credits = await movieApi.credits(movie.id);
@@ -66,31 +68,29 @@ const RatePresenter = (props) => {
             <title>Rate | My Movies</title>
           </Helmet>
           <Header>
-            <h3>
+            <h2>
               <span
                 style={
-                  total < 10
-                    ? { color: primary.warning }
-                    : { color: primary.green }
+                  ratedTen
+                    ? { color: primaryColors.green }
+                    : { color: primaryColors.warning }
                 }
               >
                 {total}
               </span>
               <span> / 10</span>
-            </h3>
-            {total > 9 ? (
-              <div className="sub">
-                <h6>You rated 10 movies! Keep rating or </h6>
+            </h2>
+            {ratedTen ? (
+              <Subheader>
+                You rated 10 movies! Keep rating or
                 <Link to="/profile">
-                  <h6 className="link">See your profile</h6>
+                  <span className="link">See your profile</span>
                 </Link>
-              </div>
+              </Subheader>
             ) : (
-              <div className="sub">
-                <h6>
-                  Rate at least 10 movies to get your personalized profile
-                </h6>
-              </div>
+              <Subheader>
+                Rate at least 10 movies to get your personalized profile
+              </Subheader>
             )}
           </Header>
           {props.topRated && props.topRated.length > 0 && (
@@ -121,7 +121,7 @@ const RatePresenter = (props) => {
           )}
 
           <Footer>
-            <p>You rated {props.liked.length + props.disliked.length} / 10</p>
+            You rated {props.liked.length + props.disliked.length} / 10
             <div
               style={{
                 display: "flex",
@@ -139,7 +139,7 @@ const RatePresenter = (props) => {
   );
 };
 
-const Flex = styled.div`
+const Flex = css`
   display: flex;
   align-items: center;
 `;
@@ -158,19 +158,20 @@ const Container = styled.div`
   }
 `;
 
-const Header = styled(Flex)`
+const Header = styled.header`
+  ${Flex}
   justify-content: center;
   flex-direction: column;
-  color: ${primary.blue};
+  color: ${primaryColors.blue};
   padding: 0 2em;
   margin-bottom: 4em;
+`;
 
-  .sub {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 1.25em;
-  }
+const Subheader = styled.h6`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.25em;
 
   .link {
     border-bottom: 3px solid #172d6e;
@@ -178,20 +179,12 @@ const Header = styled(Flex)`
   }
 
   @media (max-width: 780px) {
-    .sub {
-      flex-direction: column;
-    }
+    line-height: 1.5rem;
+    text-align: center;
+    flex-direction: column;
+  }
 
-    h3 {
-      font-size: 2rem;
-      line-height: 2rem;
-    }
-
-    h6 {
-      font-size: 1.125rem;
-      line-height: 1.5rem;
-      text-align: center;
-    }
+  @media ${breakpoint.m} {
   }
 `;
 
@@ -209,17 +202,14 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
-const Footer = styled(Flex)`
+const Footer = styled.footer`
+  ${Flex}
   justify-content: space-between;
+  flex-direction: column;
   padding: 1em 1em 4em;
 
-  @media (max-width: 640px) {
-    flex-direction: column;
-
-    p {
-      font-size: 0.875rem;
-      line-height: 3rem;
-    }
+  @media ${breakpoint.m} {
+    flex-direction: row;
   }
 `;
 
