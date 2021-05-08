@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 //import styles and assets
 import styled from "styled-components";
 import { Heart, BrokenHeart, Film } from "../assets/Icons";
-import { primary, gray } from "./Colors";
+import { primaryColors, neutral, breakpoint, typeScale } from "./Token";
 
 const RatePoster = ({
   id,
@@ -30,13 +30,13 @@ const RatePoster = ({
   const rateMovie = (
     <>
       <div
-        style={liked ? { backgroundColor: primary.cornflower } : null}
+        style={liked ? { backgroundColor: primaryColors.cornflower } : null}
         onClick={() => onClick1()}
       >
         <Heart width="26" height="26" fill="#fff" />
       </div>
       <div
-        style={disliked ? { backgroundColor: primary.tangerine } : null}
+        style={disliked ? { backgroundColor: primaryColors.tangerine } : null}
         onClick={() => onClick2()}
       >
         <BrokenHeart width="26" height="26" fill="#fff" />
@@ -67,7 +67,6 @@ const RatePoster = ({
       <Detail>
         <Link to={`/movie/${id}`}>
           <p className="title">{title}</p>
-          <p className="titleMobile">{title}</p>
           <p>{year.substring(0, 4)}</p>
           <p>
             {genre && genre.join(" \u00B7 ").length > 20
@@ -93,7 +92,7 @@ const Container = styled(Flex)`
   width: 100%;
   height: 100%;
 
-  @media (max-width: 768px) {
+  @media ${breakpoint.m} {
     flex-direction: row;
   }
 `;
@@ -133,13 +132,13 @@ const Rating = styled(Flex)`
   div {
     display: flex;
     border-radius: 100%;
-    background-color: ${gray.darkgray};
+    background-color: ${neutral[400]};
     padding: 1em;
     margin: 0 1em;
     cursor: pointer;
   }
 
-  @media (max-width: 768px) {
+  @media ${breakpoint.m} {
     display: none;
   }
 `;
@@ -159,7 +158,7 @@ const ImageContainer = styled(Flex)`
     }
   }
 
-  @media (max-width: 768px) {
+  @media ${breakpoint.m} {
     flex: 0 1 30%;
     height: 100%;
 
@@ -174,13 +173,13 @@ const ImageContainer = styled(Flex)`
 const Detail = styled(Flex)`
   width: 100%;
   text-align: center;
-  font-size: 0.75rem;
+  font-size: ${typeScale.helper};
   line-height: 1.25rem;
 
   .title {
     width: 180px;
     display: inline-block;
-    font-size: 0.95rem;
+    font-size: ${typeScale.body};
     font-weight: 500;
     white-space: nowrap;
     overflow: hidden;
@@ -188,29 +187,21 @@ const Detail = styled(Flex)`
     margin: 0.65em 0 0.25em;
   }
 
-  .titleMobile {
-    display: none;
-  }
-
   .ratingmobile {
     display: none;
   }
 
-  @media (max-width: 768px) {
+  @media ${breakpoint.m} {
     flex: 0 1 70%;
     align-items: start;
     text-align: left;
     padding-left: 1.5em;
 
     .title {
-      display: none;
-    }
-
-    .titleMobile {
+      width: auto;
+      white-space: normal;
       display: block;
-      font-size: 1.125rem;
-      font-weight: 500;
-      line-height: 1.75rem;
+      line-height: 1.5rem;
     }
 
     .ratingmobile {
@@ -218,19 +209,12 @@ const Detail = styled(Flex)`
 
       div {
         display: flex;
-        background-color: ${gray.darkgray};
-        padding: 0.65em;
+        background-color: ${neutral[400]};
+        padding: 0.875em;
         border-radius: 100%;
         margin: 1em 1em 0 0;
         cursor: pointer;
       }
-    }
-  }
-
-  @media (max-width: 425px) {
-    .titleMobile {
-      font-size: 0.875rem;
-      line-height: 1.25rem;
     }
   }
 `;

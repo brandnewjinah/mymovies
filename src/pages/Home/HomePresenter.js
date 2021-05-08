@@ -4,7 +4,12 @@ import { Link } from "react-router-dom";
 
 //import styles and assets
 import styled, { css } from "styled-components";
-import { breakpoint, size, primaryColors } from "../../components/Token";
+import {
+  breakpoint,
+  size,
+  primaryColors,
+  spacing,
+} from "../../components/Token";
 
 const HomePresenter = () => {
   return (
@@ -47,7 +52,7 @@ const Container = styled.main`
   width: 100%;
   max-width: ${size.xlg};
   color: ${primaryColors.blue};
-  padding: 0 2em;
+  padding: 0 ${spacing.xxxl};
   margin: 0 auto;
 
   h1 {
@@ -55,18 +60,18 @@ const Container = styled.main`
   }
 
   @media ${breakpoint.m} {
-    padding: 0 4em;
+    padding: 0 ${spacing.xxl};
   }
 `;
 
 const Links = styled.div`
   text-decoration: underline;
-  margin: 2em 0;
+  margin: ${spacing.xxl} 0;
   cursor: pointer;
 
   a {
     display: block;
-    margin: 1em 0;
+    margin: ${spacing.m} 0;
   }
 `;
 

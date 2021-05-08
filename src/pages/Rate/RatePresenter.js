@@ -11,6 +11,7 @@ import { getGenre } from "../../util/GetGenres";
 import { Grid } from "../../components/Grid";
 import RatePoster from "../../components/RatePoster";
 import Placeholder from "../../components/placeholders/List";
+import { TextButton } from "../../components/Buttons";
 
 //redux
 import { connect } from "react-redux";
@@ -18,7 +19,12 @@ import { likeItem, dislikeItem } from "../../reducers/rateReducer";
 
 //import styles and assets
 import styled, { css } from "styled-components";
-import { primaryColors, breakpoint } from "../../components/Token";
+import {
+  primaryColors,
+  breakpoint,
+  size,
+  spacing,
+} from "../../components/Token";
 
 const RatePresenter = (props) => {
   const [total, setTotal] = useState(0);
@@ -128,9 +134,17 @@ const RatePresenter = (props) => {
               }}
             >
               {props.page !== 1 ? (
-                <Button onClick={props.prevPage}>Prev</Button>
+                <TextButton
+                  label="Prev"
+                  color={primaryColors.blue}
+                  handleClick={props.prevPage}
+                />
               ) : null}
-              <Button onClick={props.nextPage}>Next</Button>
+              <TextButton
+                label="Next"
+                color={primaryColors.blue}
+                handleClick={props.nextPage}
+              />
             </div>
           </Footer>
         </>
@@ -146,15 +160,11 @@ const Flex = css`
 
 const Container = styled.div`
   width: 100%;
-  max-width: 1140px;
+  max-width: ${size.xlg};
   margin: 7em auto 0;
 
-  @media (max-width: 1200px) {
-    padding: 0 2em;
-  }
-
-  @media (max-width: 425px) {
-    padding: 0 1em;
+  @media ${breakpoint.m} {
+    padding: 0 ${spacing.m};
   }
 `;
 
@@ -163,53 +173,36 @@ const Header = styled.header`
   justify-content: center;
   flex-direction: column;
   color: ${primaryColors.blue};
-  padding: 0 2em;
-  margin-bottom: 4em;
+  padding: 0 ${spacing.xxl};
+  margin-bottom: ${spacing.xxxl};
 `;
 
 const Subheader = styled.h6`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 1.25em;
+  margin-top: ${spacing.l};
 
   .link {
     border-bottom: 3px solid #172d6e;
     margin-left: 6px;
   }
 
-  @media (max-width: 780px) {
+  @media ${breakpoint.m} {
     line-height: 1.5rem;
     text-align: center;
     flex-direction: column;
   }
-
-  @media ${breakpoint.m} {
-  }
-`;
-
-const Button = styled.button`
-  display: flex;
-  align-items: center;
-  background-color: transparent;
-  border: transparent;
-  font-family: "Poppins", sans-serif;
-  color: #172d6e;
-  font-size: 1.125rem;
-  font-weight: 400;
-  border-bottom: 3px solid #172d6e;
-  margin: 0 0.5em;
-  cursor: pointer;
 `;
 
 const Footer = styled.footer`
   ${Flex}
   justify-content: space-between;
-  flex-direction: column;
-  padding: 1em 1em 4em;
+  flex-direction: row;
+  padding: ${spacing.m} ${spacing.m} ${spacing.xxxl};
 
   @media ${breakpoint.m} {
-    flex-direction: row;
+    flex-direction: column;
   }
 `;
 

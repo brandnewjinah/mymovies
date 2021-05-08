@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Link, withRouter, useLocation } from "react-router-dom";
 
 //styles and assets
-import { Film } from "../assets/Icons";
 import styled, { css } from "styled-components";
-import { primaryColors, breakpoint, size } from "./Token";
+import { Film } from "../assets/Icons";
+import { primaryColors, breakpoint, size, spacing } from "./Token";
 
 //redux
 import { connect } from "react-redux";
@@ -112,15 +112,15 @@ const Wrapper = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  padding: 0 2em;
+  padding: 0;
   z-index: 10;
 
   @media ${breakpoint.m} {
-    padding: 0;
+    padding: 0 ${spacing.xxl};
   }
 `;
 
-const Container = styled.div`
+const Container = styled.nav`
   width: 100%;
   max-width: ${size.xlg};
   ${Flex}
@@ -129,7 +129,6 @@ const Container = styled.div`
   margin: 0 auto;
 
   div {
-    font-size: 1rem;
     font-weight: 600;
   }
 `;
@@ -142,7 +141,7 @@ const Links = styled.div`
   ${Flex}
   flex: 0 1 66.6666%;
 
-  @media ${breakpoint.mobile} {
+  @media ${breakpoint.m} {
     background-color: #fff;
     height: 100vh;
     flex-direction: column;
@@ -152,12 +151,12 @@ const Links = styled.div`
     right: 0;
     text-align: center;
     overflow: hidden;
-    padding: 1em;
+    padding: ${spacing.m};
     z-index: 1;
     transform: ${({ open }) => (open ? "scale(1)" : "scale(0)")};
 
     a {
-      margin: 0.5em;
+      margin: ${spacing.xxs};
     }
   }
 `;
@@ -168,7 +167,7 @@ const Left = styled.div`
   justify-content: space-between;
   z-index: 2;
 
-  @media ${breakpoint.mobile} {
+  @media ${breakpoint.m} {
     flex-direction: column;
     flex: 0 1 auto;
     justify-content: flex-start;
@@ -181,7 +180,7 @@ const Right = styled.div`
   justify-content: flex-end;
   z-index: 2;
 
-  @media ${breakpoint.mobile} {
+  @media ${breakpoint.m} {
     flex-direction: column;
     flex: 0 1 auto;
     justify-content: flex-start;
@@ -193,15 +192,13 @@ const Right = styled.div`
 `;
 
 const Item = styled.div`
-  margin: 0 0.75em;
+  margin: 0 ${spacing.xs};
   text-align: center;
-  font-size: 1rem;
-  font-weight: 600;
   border-bottom: 5px solid
     ${(props) => (props.current ? "#3498db" : "transparent")};
   transition: border-bottom 0.5s ease-in-out;
 
-  @media ${breakpoint.mobile} {
+  @media ${breakpoint.m} {
     border-bottom: 0;
   }
 `;
@@ -216,7 +213,7 @@ const Mobile = styled.div`
   display: none;
   cursor: pointer;
 
-  @media ${breakpoint.mobile} {
+  @media ${breakpoint.m} {
     display: block;
   }
 `;

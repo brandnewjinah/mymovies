@@ -5,8 +5,10 @@ export const size = {
 };
 
 export const breakpoint = {
-  m: `(min-width: ${size.m})`,
+  m: `(max-width: ${size.m})`,
   lg: `(min-width: ${size.lg})`,
   xlg: `(min-width: ${size.xlg})`,
   mobile: `(max-width: ${size.m})`,
+  mlg: `(max-width: ${size.lg})`,
+  mxlg: `(max-width: ${size.xlg})`,
 };
