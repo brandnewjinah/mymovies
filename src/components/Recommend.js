@@ -74,9 +74,12 @@ const Container = styled.div`
     background-color: rgba(0, 0, 0, 0.5);
     border-radius: 100%;
     color: #ed798c;
-    font-size: 22px;
     transform: translate(0, -50%);
     padding: 5px;
+
+    &:after {
+      font-size: 22px;
+    }
   }
 
   @media (max-width: 768px) {
