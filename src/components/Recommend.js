@@ -67,6 +67,18 @@ const Container = styled.div`
     margin-bottom: 1.5em;
   }
 
+  .swiper-button-prev,
+  .swiper-button-next {
+    width: 44px;
+    height: 44px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 100%;
+    color: #ed798c;
+    font-size: 22px;
+    transform: translate(0, -50%);
+    padding: 5px;
+  }
+
   @media (max-width: 768px) {
     h6 {
       font-size: 1.125rem;
