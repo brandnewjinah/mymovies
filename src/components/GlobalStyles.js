@@ -40,13 +40,13 @@ const GlobalStyle = createGlobalStyle`
     }
     h4 {
         font-weight: 600;
-        font-size: 2rem;
-        line-height: 2rem;
+        font-size: ${typeScale.header4};
+        line-height: ${typeScale.header4};
     }
     h5 {
-        font-weight: 600;
-        font-size: 1.5rem;
-        line-height: 1.5rem;
+        font-weight: 500;
+        font-size: ${typeScale.header5};
+        line-height: ${typeScale.header5};
     }
     h6 {
         font-weight: 500;
@@ -123,6 +123,16 @@ const GlobalStyle = createGlobalStyle`
         font-weight: 600;
         font-size: ${typeScaleMobile.header3};
         line-height: ${typeScaleMobile.header3};
+    }
+    h4 {
+        font-weight: 600;
+        font-size: ${typeScaleMobile.header4};
+        line-height: ${typeScaleMobile.header4};
+    }
+    h5 {
+        font-weight: 500;
+        font-size: ${typeScaleMobile.header5};
+        line-height: ${typeScaleMobile.header5};
     }
     h6 {
         font-weight: 500;

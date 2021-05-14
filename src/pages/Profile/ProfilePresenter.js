@@ -19,8 +19,8 @@ import Analyser from "./ProfileAnalyser";
 import { connect } from "react-redux";
 
 //import styles and assets
-import styled from "styled-components";
-import { primary } from "../../components/Colors";
+import styled, { css } from "styled-components";
+import { primaryColors, breakpoint, spacing } from "../../components/Token";
 
 const ProfilePresenter = (props) => {
   const [movies, setMovies] = useState([...props.liked, ...props.disliked]);
@@ -130,12 +130,8 @@ const ProfilePresenter = (props) => {
             <title>Profile | My Movies</title>
           </Helmet>
           <Header>
-            <div className="sub">
-              <h4>My Movie Profile</h4>
-              <Link to="/demoprofile">
-                <p className="link">See demo profile</p>
-              </Link>
-            </div>
+            <h4>My Movie Profile</h4>
+            <Link to="/demoprofile">See demo profile</Link>
           </Header>
           <Analyser
             total={total}
@@ -184,7 +180,7 @@ const ProfilePresenter = (props) => {
   );
 };
 
-const Flex = styled.div`
+const Flex = css`
   display: flex;
   align-items: center;
 `;
@@ -193,39 +189,30 @@ const Container = styled.div`
   width: 100%;
   max-width: 1140px;
   margin: 7em auto;
-  color: ${primary.blue};
+  color: ${primaryColors.blue};
 
-  @media (max-width: 1200px) {
-    padding: 0 2em;
+  @media ${breakpoint.lg} {
+    padding: 0 ${spacing.xxl};
   }
 
-  @media (max-width: 425px) {
-    padding: 0 1em;
+  @media ${breakpoint.m} {
+    padding: 0 ${spacing.m};
   }
 `;
 
-const Header = styled(Flex)`
+const Header = styled.header`
+  ${Flex}
   justify-content: center;
   flex-direction: column;
   text-align: center;
 
   h4 {
     text-align: center;
-    margin-bottom: 0.5em;
+    margin-bottom: ${spacing.xxxs};
   }
 
-  .sub {
-    line-height: 1.25rem;
-  }
-
-  .link {
+  a {
     text-decoration: underline;
-  }
-
-  @media (max-width: 768px) {
-    h4 {
-      font-size: 1.8rem;
-    }
   }
 `;
 

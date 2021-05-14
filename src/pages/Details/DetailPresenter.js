@@ -6,22 +6,37 @@ import { Link } from "react-router-dom";
 //import components
 import Placeholder from "../../components/placeholders/Detail";
 import ImageComponent from "./ImageComponent";
+import Rate from "../../components/Rate";
 import Awards from "../../components/Awards";
 import Chips from "../../components/Chips";
+import Recommend from "../../components/Recommend";
+
+//import styles
+import styled from "styled-components";
+import {
+  neutral,
+  primaryColors,
+  size,
+  breakpoint,
+} from "../../components/Token";
 
 //redux
 import { connect } from "react-redux";
 import { likeItem, dislikeItem } from "../../store/movies";
 import { addKeyword } from "../../reducers/keywordReducer";
 
-//import styles
-import styled from "styled-components";
-import { Heart, BrokenHeart } from "../../assets/Icons";
-import { gray, primary } from "../../components/Colors";
-import Recommend from "../../components/Recommend";
-
 const DetailPresenter = (props) => {
   const [isOpen, setOpen] = useState(false);
+
+  const liked =
+    props.liked && props.liked.find((item) => item.id === props.result.id)
+      ? true
+      : false;
+
+  const disliked =
+    props.disliked && props.disliked.find((item) => item.id === props.result.id)
+      ? true
+      : false;
 
   const handleLike = (movie) => {
     const thisMovie = {
@@ -57,7 +72,7 @@ const DetailPresenter = (props) => {
       </Helmet>
     </>
   ) : (
-    <Container>
+    <Wrapper>
       <Helmet>
         <title>
           {props.result.title ? props.result.title : props.result.original_name}{" "}
@@ -67,115 +82,62 @@ const DetailPresenter = (props) => {
       <Content>
         <Main>
           <Data>
-            {/* if original title exists in other language<Subtitle>
+            <Header>
+              {/* if original title exists in other language<Subtitle>
               {props.result.original_title && props.result.original_title}
             </Subtitle> */}
-            <h4>
-              {props.result.title
-                ? props.result.title
-                : props.result.original_name}
-            </h4>
-            <div className="sub">
-              <div>
-                {props.result.release_date
-                  ? props.result.release_date.substring(0, 4)
-                  : props.result.first_air_date.substring(0, 4)}
+              <h4>
+                {props.result.title
+                  ? props.result.title
+                  : props.result.original_name}
+              </h4>
+              <div className="info">
+                <div>
+                  {props.result.release_date
+                    ? props.result.release_date.substring(0, 4)
+                    : props.result.first_air_date.substring(0, 4)}
+                </div>
+                <div>
+                  {props.result.genres &&
+                    props.result.genres.map((genre, index) => (
+                      <Link to={`/category/${genre.id}`} key={index}>
+                        <span>{genre.name}</span>
+                      </Link>
+                    ))}
+                </div>
+                {/* <div>
+                  <Link to={`/director/${props.credits.id}`}>
+                    <span>Directed by </span>
+                    <span>{props.credits.name}</span>
+                  </Link>
+                </div> */}
               </div>
-              <div className="divider"></div>
-              <div>
-                {props.result.genres &&
-                  props.result.genres.map((genre, index) => (
-                    <Link to={`/category/${genre.id}`} key={index}>
-                      <span>{genre.name}</span>
-                    </Link>
-                  ))}
-              </div>
-              {/* <div>
-                <Link to={`/director/${props.credits.id}`}>
-                  <span>Directed by </span>
-                  <span>{props.credits.name}</span>
-                </Link>
-              </div> */}
-            </div>
-            <div className="overview">{props.result.overview}</div>
-
-            <Rate>
-              <div
-                onClick={() => handleLike(props.result)}
-                style={
-                  props.liked &&
-                  props.liked.find((item) => item.id === props.result.id)
-                    ? { backgroundColor: primary.cornflower }
-                    : { border: `1px solid ${gray.gray}` }
-                }
-              >
-                <Heart
-                  width="20"
-                  height="20"
-                  fill={
-                    props.liked &&
-                    props.liked.find((item) => item.id === props.result.id)
-                      ? "#fff"
-                      : gray.gray
-                  }
-                />
-                <p
-                  style={
-                    props.liked &&
-                    props.liked.find((item) => item.id === props.result.id)
-                      ? { color: "#fff" }
-                      : null
-                  }
-                >
-                  Liked
-                </p>
-              </div>
-              <div
-                onClick={() => handleDislike(props.result)}
-                style={
-                  props.disliked &&
-                  props.disliked.find((item) => item.id === props.result.id)
-                    ? { backgroundColor: primary.tangerine }
-                    : { border: `1px solid ${gray.gray}` }
-                }
-              >
-                <BrokenHeart
-                  width="20"
-                  height="20"
-                  fill={
-                    props.disliked &&
-                    props.disliked.find((item) => item.id === props.result.id)
-                      ? "#fff"
-                      : gray.gray
-                  }
-                />
-                <p
-                  style={
-                    props.disliked &&
-                    props.disliked.find((item) => item.id === props.result.id)
-                      ? { color: "#fff" }
-                      : null
-                  }
-                >
-                  Disliked
-                </p>
-              </div>
-            </Rate>
-
+            </Header>
+            <Plot>{props.result.overview}</Plot>
+            <Rate
+              liked={liked}
+              disliked={disliked}
+              handleLike={() => handleLike(props.result)}
+              handleDislike={() => handleDislike(props.result)}
+            />
             <Awards movie={props.result.id} />
             {props.keyword.keywords && props.keyword.keywords.length > 0 && (
               <Section>
                 <p className="header">Keywords</p>
-                <p className="caption">
-                  If you liked this movie, please tell us why by highlighting
-                  the appropriate keyword.
-                </p>
+                {liked && (
+                  <p className="caption">
+                    Please tell us why you liked this movie by highlighting the
+                    check mark next to applicable keyword.
+                  </p>
+                )}
+
                 <div className="group">
                   {props.keyword.keywords.map((k, idx) => (
                     <Chips
                       key={idx}
                       label={k.name}
                       url={k.id}
+                      liked={liked}
                       saved={
                         filterKeywords().find((item) => item.id === k.id)
                           ? true
@@ -207,13 +169,13 @@ const DetailPresenter = (props) => {
           </RecommendContainer>
         )}
       </Content>
-    </Container>
+    </Wrapper>
   );
 };
 
-const Container = styled.div`
+const Wrapper = styled.div`
   width: 100%;
-  max-width: 1140px;
+  max-width: ${size.xlg};
   margin: 7em auto;
   padding-bottom: 3em;
 
@@ -227,11 +189,11 @@ const Container = styled.div`
 `;
 
 const Content = styled.div`
-  width: 100%;
-  height: 100%;
+  /* width: 100%;
+  height: 100%; */
 `;
 
-const Main = styled.div`
+const Main = styled.main`
   display: flex;
   justify-content: space-between;
 
@@ -245,29 +207,6 @@ const Data = styled.div`
   font-size: 0.875rem;
   padding-right: 5%;
 
-  .sub {
-    display: flex;
-    font-weight: 500;
-    color: ${primary.cornflower};
-    margin: 1em 0;
-
-    a {
-      &:not(:last-child):after {
-        content: " • ";
-        color: ${gray.gray};
-      }
-    }
-  }
-
-  .divider {
-    margin: 0 10px;
-  }
-
-  .overview {
-    color: ${gray.darkergray};
-    line-height: 1.5rem;
-  }
-
   @media (max-width: 768px) {
     width: 100%;
     order: 2;
@@ -276,30 +215,40 @@ const Data = styled.div`
   }
 `;
 
-const Rate = styled.div`
-  display: flex;
-  margin-top: 1.875em;
-
-  div {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 2em;
-    padding: 0.3em 2em;
-    margin-right: 1em;
-    cursor: pointer;
+const Header = styled.header`
+  a {
+    &:not(:last-child):after {
+      content: ", ";
+      color: ${neutral[200]};
+    }
   }
 
-  p {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: ${gray.darkgray};
-    margin-left: 0.5em;
+  .info {
+    display: flex;
+    font-weight: 500;
+    color: ${primaryColors.cornflower};
+    margin: 1em 0;
+
+    div {
+      &:not(:last-child):after {
+        content: " • ";
+        color: ${neutral[200]};
+        margin: 0 10px;
+      }
+    }
+  }
+
+  @media ${breakpoint.m} {
   }
 `;
 
+const Plot = styled.div`
+  color: ${neutral[500]};
+  line-height: 1.5rem;
+`;
+
 const Section = styled.div`
-  border-top: 1px solid ${gray.lightergray};
+  border-top: 1px solid ${neutral[100]};
   padding: 2em 0;
   margin-top: 2em;
   /* background-color: lightcyan; */
@@ -311,7 +260,7 @@ const Section = styled.div`
 
   .caption {
     font-size: 0.75rem;
-    color: ${gray.darkgray};
+    color: ${neutral[400]};
   }
 
   .group {

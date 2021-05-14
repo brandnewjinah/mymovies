@@ -1,6 +1,6 @@
 export const neutral = {
   10: "#ffffff",
-  100: "#e6e6df",
+  100: "#f3f3f1",
   200: "#ccccc6",
   300: "#b3b3ad",
   400: "#94928e",
@@ -34,6 +34,7 @@ export const peach = {
 export const primaryColors = {
   beige: "#f2ecdf",
   blue: "#0e3354",
+  lightblue: "#e9ecf0",
   grayblue: "#E6EBF1",
   cornflower: "#719cf1",
   tangerine: "#fb927c",

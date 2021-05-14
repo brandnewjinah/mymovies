@@ -112,12 +112,8 @@ const Wrapper = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  padding: 0;
+  padding: 0 ${spacing.xxl};
   z-index: 10;
-
-  @media ${breakpoint.m} {
-    padding: 0 ${spacing.xxl};
-  }
 `;
 
 const Container = styled.nav`

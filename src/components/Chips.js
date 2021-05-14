@@ -4,15 +4,17 @@ import { Link } from "react-router-dom";
 //import styles and assets
 import styled from "styled-components";
 import { Checkmark } from "../assets/Icons";
-import { primary, gray } from "./Colors";
+import { primaryColors, neutral } from "./Token";
 
-const Chips = ({ label, saved, url, saveKeyword }) => {
+const Chips = ({ label, saved, url, saveKeyword, liked }) => {
   return (
     <Container>
       <Flex>
-        <Check onClick={saveKeyword} saved={saved}>
-          <Checkmark width="16" height="16" color="#fff" stroke="3" />
-        </Check>
+        {liked && (
+          <Check onClick={saveKeyword} saved={saved}>
+            <Checkmark width="16" height="16" color="#fff" stroke="3" />
+          </Check>
+        )}
         <Content>
           <Link to={`/keyword/${url}`}>{label}</Link>
         </Content>
@@ -24,7 +26,7 @@ const Chips = ({ label, saved, url, saveKeyword }) => {
 const Container = styled.div`
   display: inline-block;
   border-radius: 2em;
-  background-color: ${gray.lightergray};
+  background-color: ${neutral[100]};
   padding: 0.2em 0.5em;
   margin: 0.35em 0.5em 0.35em 0;
 `;
@@ -38,7 +40,8 @@ const Flex = styled.div`
 const Check = styled(Flex)`
   padding: 0.15em;
   border-radius: 100%;
-  background-color: ${({ saved }) => (saved ? primary.cornflower : gray.gray)};
+  background-color: ${({ saved }) =>
+    saved ? primaryColors.cornflower : neutral[200]};
   opacity: 0.8;
   transition: opacity 0.1s linear;
   cursor: pointer;

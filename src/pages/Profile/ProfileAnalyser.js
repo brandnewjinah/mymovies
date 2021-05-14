@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 //import styles and assets
 import styled from "styled-components";
+import { breakpoint, spacing } from "../../components/Token";
 
 //data
 import { lanList } from "../../data/language";
@@ -193,34 +194,29 @@ const Container = styled.div`
   margin: 0 auto;
   width: 100%;
   max-width: 960px;
-  padding: 0 2em 2em;
+  padding: 0 ${spacing.xxl} ${spacing.xxl};
 
   h5 {
-    font-size: 1.35rem;
-    font-weight: 500;
     line-height: 2.5rem;
     margin: 1.75em 0;
   }
 
   h6 {
-    font-size: 1.125rem;
     line-height: 1.875rem;
   }
 
-  @media (max-width: 768px) {
+  @media ${breakpoint.m} {
     h5 {
-      font-size: 1.25rem;
       line-height: 2rem;
     }
 
     h6 {
-      font-size: 1.125rem;
       line-height: 1.75rem;
     }
   }
 `;
 
-const Section = styled.div``;
+const Section = styled.section``;
 
 const Underline = styled.span`
   position: relative;
