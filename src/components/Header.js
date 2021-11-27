@@ -46,7 +46,7 @@ const Header = ({ location: { pathname }, liked, disliked }) => {
               <Item current={pathname === "/recommend"}>
                 {total > 9 ? (
                   <SLink to="/recommend" onClick={() => setOpen(false)}>
-                    Recommend
+                    Recommendation
                   </SLink>
                 ) : (
                   <SLink to="/demorecommend" onClick={() => setOpen(false)}>

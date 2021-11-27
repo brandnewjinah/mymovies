@@ -11,7 +11,7 @@ const SearchContainer = () => {
     movies: [],
     movieError: null,
   });
-
+  console.log(keyword);
   const onChange = (event) => setKeyword(event.target.value);
 
   const search = async (e) => {

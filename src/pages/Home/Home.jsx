@@ -13,11 +13,11 @@ import {
 
 const HomePresenter = () => {
   return (
-    <Wrapper>
+    <Container>
       <Helmet>
         <title>My Movies</title>
       </Helmet>
-      <Container>
+      <Wrapper>
         <h1>
           Rate movies you've watched. Get a personalized movie profile. Get
           recommendations based on your watch history.
@@ -30,8 +30,8 @@ const HomePresenter = () => {
             <h6>See a demo profile</h6>
           </Link>
         </Links>
-      </Container>
-    </Wrapper>
+      </Wrapper>
+    </Container>
   );
 };
 
@@ -41,14 +41,14 @@ const Flex = css`
   justify-content: center;
 `;
 
-const Wrapper = styled.div`
+const Container = styled.div`
   ${Flex}
   width: 100vw;
   min-height: 100vh;
   background: ${primaryColors.beige};
 `;
 
-const Container = styled.main`
+const Wrapper = styled.main`
   width: 100%;
   max-width: ${size.xlg};
   color: ${primaryColors.blue};

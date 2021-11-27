@@ -10,7 +10,7 @@ import {
 import Layout from "./components/Layout";
 
 //import pages
-import Home from "./pages/Home";
+import Home from "./pages/Home/Home";
 import Test from "./pages/boiler";
 import Rate from "./pages/Rate";
 import Movies from "./pages/Movies";

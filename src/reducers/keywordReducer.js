@@ -33,6 +33,7 @@ const initialState = {
 // Reducer
 const reducer = (state = initialState, action) => {
   if (action.type === ADD_KEYWORD) {
+    console.log(action.payload);
     let thisMovie = action.payload.keyword.movieId;
     let added = {
       id: action.payload.keyword.id,

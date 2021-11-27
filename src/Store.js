@@ -18,7 +18,13 @@ export default () => {
   const store = createStore(
     persistedReducer,
     initialState,
-    compose(applyMiddleware(...middleware))
+    compose(
+      applyMiddleware(...middleware),
+      window.navigator.userAgent.includes("Chrome")
+        ? window.__REDUX_DEVTOOLS_EXTENSION__ &&
+            window.__REDUX_DEVTOOLS_EXTENSION__()
+        : compose
+    )
   );
   let persistor = persistStore(store);
   return { store, persistor };

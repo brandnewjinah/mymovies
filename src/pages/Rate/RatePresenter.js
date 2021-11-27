@@ -128,11 +128,7 @@ const RatePresenter = (props) => {
 
           <Footer>
             You rated {props.liked.length + props.disliked.length} / 10
-            <div
-              style={{
-                display: "flex",
-              }}
-            >
+            <Pagination>
               {props.page !== 1 ? (
                 <TextButton
                   label="Prev"
@@ -145,7 +141,7 @@ const RatePresenter = (props) => {
                 color={primaryColors.blue}
                 handleClick={props.nextPage}
               />
-            </div>
+            </Pagination>
           </Footer>
         </>
       )}
@@ -195,7 +191,7 @@ const Subheader = styled.h6`
   }
 `;
 
-const Footer = styled.footer`
+const Footer = styled.section`
   ${Flex}
   justify-content: space-between;
   flex-direction: row;
@@ -204,6 +200,11 @@ const Footer = styled.footer`
   @media ${breakpoint.m} {
     flex-direction: column;
   }
+`;
+
+const Pagination = styled.div`
+  display: flex;
+  gap: 1rem;
 `;
 
 RatePresenter.propTypes = {

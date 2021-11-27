@@ -151,6 +151,7 @@ const DetailPresenter = (props) => {
             )}
           </Data>
           <ImageContainer>
+            {console.log(props.result)}
             <ImageComponent
               img={props.result.poster_path}
               video={props.result.videos.results}

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
+
 import { movieApi } from "../../api";
+import { newApi } from "../../api";
 
 import RatePresenter from "./RatePresenter";
 
@@ -16,7 +18,10 @@ const RateContainer = () => {
 
   useEffect(() => {
     const getData = async () => {
+      // const { genres, genresError } = await newApi.genre();
+
       const [genres, genresError] = await movieApi.genre();
+
       const [topRated, topRatedError] = await movieApi.topRated(page);
 
       setMovies({
