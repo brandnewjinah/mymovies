@@ -1,4 +1,4 @@
-export const likedMovies = [
+export const liked = [
   {
     adult: false,
     backdrop_path: "/mHz65gYQ3SmkQH3GKWSKWUkK5zW.jpg",
@@ -943,8 +943,7 @@ export const likedMovies = [
           iso_639_1: "en",
           iso_3166_1: "US",
           key: "VfBSbgaqPr8",
-          name:
-            "Marriage Story | Teaser Trailer (What I Love About Nicole) | Netflix",
+          name: "Marriage Story | Teaser Trailer (What I Love About Nicole) | Netflix",
           site: "YouTube",
           size: 1080,
           type: "Teaser",
@@ -954,8 +953,7 @@ export const likedMovies = [
           iso_639_1: "en",
           iso_3166_1: "US",
           key: "n59tgVPvhW4",
-          name:
-            "Marriage Story | Teaser Trailer (What I Love About Charlie) | Netflix",
+          name: "Marriage Story | Teaser Trailer (What I Love About Charlie) | Netflix",
           site: "YouTube",
           size: 1080,
           type: "Teaser",
@@ -1244,8 +1242,7 @@ export const likedMovies = [
           iso_639_1: "en",
           iso_3166_1: "US",
           key: "ZTs37z_FYZw",
-          name:
-            "Train to Busan Official Teaser Trailer 1 (2016) - Yoo Gong Movie",
+          name: "Train to Busan Official Teaser Trailer 1 (2016) - Yoo Gong Movie",
           site: "YouTube",
           size: 1080,
           type: "Teaser",
@@ -1340,8 +1337,7 @@ export const likedMovies = [
           iso_639_1: "en",
           iso_3166_1: "US",
           key: "prhKPR4j4js",
-          name:
-            "광해, 왕이 된 남자 Gwanghae: the Man Who Became the King - trailer",
+          name: "광해, 왕이 된 남자 Gwanghae: the Man Who Became the King - trailer",
           site: "YouTube",
           size: 360,
           type: "Trailer",
@@ -1766,8 +1762,7 @@ export const likedMovies = [
           iso_639_1: "en",
           iso_3166_1: "US",
           key: "DBUXcNTjviI",
-          name:
-            "La La Land (2016 Movie) Official Teaser Trailer – 'Audition (The Fools Who Dream)'",
+          name: "La La Land (2016 Movie) Official Teaser Trailer – 'Audition (The Fools Who Dream)'",
           site: "YouTube",
           size: 1080,
           type: "Teaser",
@@ -1777,8 +1772,7 @@ export const likedMovies = [
           iso_639_1: "en",
           iso_3166_1: "US",
           key: "je0aAf2f8XQ",
-          name:
-            "La La Land (2016 Movie) Official Teaser Trailer – 'City Of Stars'",
+          name: "La La Land (2016 Movie) Official Teaser Trailer – 'City Of Stars'",
           site: "YouTube",
           size: 1080,
           type: "Teaser",
@@ -2209,8 +2203,7 @@ export const likedMovies = [
           iso_639_1: "en",
           iso_3166_1: "US",
           key: "AynW_2b1CZY",
-          name:
-            "Assassination Official Trailer 1 (2015) - Gianna Jun Thriller HD",
+          name: "Assassination Official Trailer 1 (2015) - Gianna Jun Thriller HD",
           site: "YouTube",
           size: 1080,
           type: "Trailer",
@@ -2298,7 +2291,20 @@ export const likedMovies = [
   {
     adult: false,
     backdrop_path: "/loRmRzQXZeqG78TqZuyvSlEQfZb.jpg",
-    genre_ids: [18, 36, 10752],
+    genres: [
+      {
+        id: 18,
+        name: "Drama",
+      },
+      {
+        id: 36,
+        name: "History",
+      },
+      {
+        id: 10752,
+        name: "War",
+      },
+    ],
     id: 424,
     original_language: "en",
     original_title: "Schindler's List",
@@ -2319,7 +2325,20 @@ export const likedMovies = [
   {
     adult: false,
     backdrop_path: "/oPcxdm2rNv5xg2sZlzjwKtAiPXl.jpg",
-    genre_ids: [80, 18, 28],
+    genres: [
+      {
+        id: 80,
+        name: "Crime",
+      },
+      {
+        id: 18,
+        name: "Drama",
+      },
+      {
+        id: 28,
+        name: "Action",
+      },
+    ],
     id: 101,
     original_language: "en",
     original_title: "Léon: The Professional",
@@ -2340,7 +2359,20 @@ export const likedMovies = [
   {
     adult: false,
     backdrop_path: "/xJHokMbljvjADYdit5fK5VQsXEG.jpg",
-    genre_ids: [12, 18, 878],
+    genres: [
+      {
+        id: 12,
+        name: "Adventure",
+      },
+      {
+        id: 18,
+        name: "Drama",
+      },
+      {
+        id: 878,
+        name: "Science Fiction",
+      },
+    ],
     id: 157336,
     original_language: "en",
     original_title: "Interstellar",
@@ -2361,7 +2393,20 @@ export const likedMovies = [
   {
     adult: false,
     backdrop_path: "/eUKJrORgXWAMFoBwTqJgwqSFprs.jpg",
-    genre_ids: [53, 18, 10749],
+    genres: [
+      {
+        id: 53,
+        name: "Thriller",
+      },
+      {
+        id: 18,
+        name: "Drama",
+      },
+      {
+        id: 10749,
+        name: "Romance",
+      },
+    ],
     id: 290098,
     original_language: "ko",
     original_title: "아가씨",
@@ -2779,8 +2824,7 @@ export const likedMovies = [
           iso_639_1: "en",
           iso_3166_1: "US",
           key: "H9Z3_ifFheQ",
-          name:
-            "Love Actually (2003) Official Trailer - Colin Firth, Emma Thompson Movie HD",
+          name: "Love Actually (2003) Official Trailer - Colin Firth, Emma Thompson Movie HD",
           site: "YouTube",
           size: 480,
           type: "Trailer",
@@ -3020,8 +3064,7 @@ export const likedMovies = [
           iso_639_1: "en",
           iso_3166_1: "US",
           key: "dpAoVOU-q60",
-          name:
-            "Eternal Sunshine of the Spotless Mind (7/11) Movie CLIP - The Day We Met (2004) HD",
+          name: "Eternal Sunshine of the Spotless Mind (7/11) Movie CLIP - The Day We Met (2004) HD",
           site: "YouTube",
           size: 720,
           type: "Clip",
@@ -3031,8 +3074,7 @@ export const likedMovies = [
           iso_639_1: "en",
           iso_3166_1: "US",
           key: "hZdl2FFp0eA",
-          name:
-            "Eternal Sunshine of the Spotless Mind (1/11) Movie CLIP - Train Ride (2004) HD",
+          name: "Eternal Sunshine of the Spotless Mind (1/11) Movie CLIP - Train Ride (2004) HD",
           site: "YouTube",
           size: 720,
           type: "Clip",
@@ -3052,8 +3094,7 @@ export const likedMovies = [
           iso_639_1: "en",
           iso_3166_1: "US",
           key: "quuMv7cGUn0",
-          name:
-            "Eternal Sunshine of the Spotless Mind - Official Movie Trailer",
+          name: "Eternal Sunshine of the Spotless Mind - Official Movie Trailer",
           site: "YouTube",
           size: 720,
           type: "Trailer",
@@ -3063,8 +3104,7 @@ export const likedMovies = [
           iso_639_1: "en",
           iso_3166_1: "US",
           key: "Wz6Adofmjyc",
-          name:
-            "Eternal Sunshine Of The Spotless Mind Deleted Scene - First Date (2004) - Movie HD",
+          name: "Eternal Sunshine Of The Spotless Mind Deleted Scene - First Date (2004) - Movie HD",
           site: "YouTube",
           size: 720,
           type: "Featurette",
@@ -3074,8 +3114,7 @@ export const likedMovies = [
           iso_639_1: "en",
           iso_3166_1: "US",
           key: "xziZKDefKRI",
-          name:
-            "Eternal Sunshine Of The Spotless Mind Deleted Scene - Naomi (2004) - Movie HD",
+          name: "Eternal Sunshine Of The Spotless Mind Deleted Scene - Naomi (2004) - Movie HD",
           site: "YouTube",
           size: 720,
           type: "Featurette",
@@ -3163,8 +3202,7 @@ export const likedMovies = [
           iso_639_1: "en",
           iso_3166_1: "US",
           key: "6t7PQqQjYEs",
-          name:
-            "The Theory of Everything Featurette - Eddie Redmayne's Transformation (2014) - Movie HD",
+          name: "The Theory of Everything Featurette - Eddie Redmayne's Transformation (2014) - Movie HD",
           site: "YouTube",
           size: 720,
           type: "Featurette",
@@ -3174,8 +3212,7 @@ export const likedMovies = [
           iso_639_1: "en",
           iso_3166_1: "US",
           key: "8RHU0X5CYpU",
-          name:
-            "The Theory of Everything - Official Trailer #2 (Universal Pictures) HD",
+          name: "The Theory of Everything - Official Trailer #2 (Universal Pictures) HD",
           site: "YouTube",
           size: 1080,
           type: "Trailer",
@@ -3195,8 +3232,7 @@ export const likedMovies = [
           iso_639_1: "en",
           iso_3166_1: "US",
           key: "Salz7uGp72c",
-          name:
-            "The Theory of Everything - Official Trailer (Universal Pictures) HD",
+          name: "The Theory of Everything - Official Trailer (Universal Pictures) HD",
           site: "YouTube",
           size: 1080,
           type: "Trailer",
@@ -3206,8 +3242,7 @@ export const likedMovies = [
           iso_639_1: "en",
           iso_3166_1: "US",
           key: "hpHwdcKDRfI",
-          name:
-            "THE THEORY OF EVERYTHING - Official Trailer - In Theaters November 7th",
+          name: "THE THEORY OF EVERYTHING - Official Trailer - In Theaters November 7th",
           site: "YouTube",
           size: 1080,
           type: "Trailer",
@@ -3436,7 +3471,16 @@ export const likedMovies = [
   {
     adult: false,
     backdrop_path: "/fRGxZuo7jJUWQsVg9PREb98Aclp.jpg",
-    genre_ids: [18, 10402],
+    genres: [
+      {
+        id: 18,
+        name: "Drama",
+      },
+      {
+        id: 10402,
+        name: "Music",
+      },
+    ],
     id: 244786,
     original_language: "en",
     original_title: "Whiplash",
@@ -3457,7 +3501,16 @@ export const likedMovies = [
   {
     adult: false,
     backdrop_path: "/6aNKD81RHR1DqUUa8kOZ1TBY1Lp.jpg",
-    genre_ids: [35, 18],
+    genres: [
+      {
+        id: 35,
+        name: "Comedy",
+      },
+      {
+        id: 18,
+        name: "Drama",
+      },
+    ],
     id: 637,
     original_language: "it",
     original_title: "La vita è bella",
@@ -3478,7 +3531,20 @@ export const likedMovies = [
   {
     adult: false,
     backdrop_path: "/mSDsSDwaP3E7dEfUPWy4J0djt4O.jpg",
-    genre_ids: [16, 10751, 14],
+    genres: [
+      {
+        id: 16,
+        name: "Animation",
+      },
+      {
+        id: 10751,
+        name: "Family",
+      },
+      {
+        id: 14,
+        name: "Fantasy",
+      },
+    ],
     id: 129,
     original_language: "ja",
     original_title: "千と千尋の神隠し",
@@ -3499,7 +3565,20 @@ export const likedMovies = [
   {
     adult: false,
     backdrop_path: "/tlEFuIlaxRPXIYVHXbOSAMCfWqk.jpg",
-    genre_ids: [35, 18, 10749],
+    genres: [
+      {
+        id: 35,
+        name: "Comedy",
+      },
+      {
+        id: 18,
+        name: "Drama",
+      },
+      {
+        id: 10749,
+        name: "Romance",
+      },
+    ],
     id: 13,
     original_language: "en",
     original_title: "Forrest Gump",
@@ -3643,11 +3722,20 @@ export const likedMovies = [
   },
 ];
 
-export const dislikedMovies = [
+export const disliked = [
   {
     adult: false,
     backdrop_path: "/w7RDIgQM6bLT7JXtH4iUQd3Iwxm.jpg",
-    genre_ids: [53, 80],
+    genres: [
+      {
+        id: 53,
+        name: "Thriller",
+      },
+      {
+        id: 80,
+        name: "Crime",
+      },
+    ],
     id: 680,
     original_language: "en",
     original_title: "Pulp Fiction",
@@ -3664,7 +3752,20 @@ export const dislikedMovies = [
   {
     adult: false,
     backdrop_path: "/vRQnzOn4HjIMX4LBq9nHhFXbsSu.jpg",
-    genre_ids: [12, 14, 28],
+    genres: [
+      {
+        id: 12,
+        name: "Adventure",
+      },
+      {
+        id: 14,
+        name: "Fantasy",
+      },
+      {
+        id: 28,
+        name: "Action",
+      },
+    ],
     id: 120,
     original_language: "en",
     original_title: "The Lord of the Rings: The Fellowship of the Ring",
@@ -3681,7 +3782,20 @@ export const dislikedMovies = [
   {
     adult: false,
     backdrop_path: "/dIWwZW7dJJtqC6CgWzYkNVKIUm8.jpg",
-    genre_ids: [10749, 16, 18],
+    genres: [
+      {
+        id: 10749,
+        name: "Romance",
+      },
+      {
+        id: 16,
+        name: "Animation",
+      },
+      {
+        id: 18,
+        name: "Drama",
+      },
+    ],
     id: 372058,
     original_language: "ja",
     original_title: "君の名は。",

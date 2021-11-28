@@ -1,4 +1,4 @@
-export const likedKeywords = [
+export const myKeywords = [
   {
     id: 90,
     name: "paris, france",

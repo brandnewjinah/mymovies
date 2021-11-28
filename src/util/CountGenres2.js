@@ -3,12 +3,13 @@ import _ from "lodash";
 export const countGenres2 = (liked) => {
   let count = {};
 
-  //count genre id occurrenc
+  //count genre id occurrence
   liked.map((m) => {
     m.genre_ids &&
       m.genre_ids.forEach((item) => {
         count[item] = (count[item] || 0) + 1;
       });
+    return count;
   });
 
   liked.map((m) => {
@@ -16,6 +17,7 @@ export const countGenres2 = (liked) => {
       m.genres.forEach((item) => {
         count[item.id] = (count[item.id] || 0) + 1;
       });
+    return count;
   });
 
   //convert into object and sort by highest

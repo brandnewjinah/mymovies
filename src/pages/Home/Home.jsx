@@ -1,32 +1,24 @@
 import React from "react";
-import Helmet from "react-helmet";
 import { Link } from "react-router-dom";
-
-//import styles and assets
 import styled, { css } from "styled-components";
-import {
-  breakpoint,
-  size,
-  primaryColors,
-  spacing,
-} from "../../components/Token";
 
-const HomePresenter = () => {
+//token
+import { primaryColors, size, breakpoint } from "../../components/token";
+
+const Home = () => {
   return (
     <Container>
-      <Helmet>
-        <title>My Movies</title>
-      </Helmet>
       <Wrapper>
         <h1>
           Rate movies you've watched. Get a personalized movie profile. Get
           recommendations based on your watch history.
         </h1>
+
         <Links>
-          <Link to="/rate">
+          <Link to="/movies/rate">
             <h3>Start rating</h3>
           </Link>
-          <Link to="/demoprofile">
+          <Link to="/movies/demoprofile">
             <h6>See a demo profile</h6>
           </Link>
         </Links>
@@ -52,7 +44,7 @@ const Wrapper = styled.main`
   width: 100%;
   max-width: ${size.xlg};
   color: ${primaryColors.blue};
-  padding: 0 ${spacing.xxxl};
+  padding: 0 4rem;
   margin: 0 auto;
 
   h1 {
@@ -60,19 +52,19 @@ const Wrapper = styled.main`
   }
 
   @media ${breakpoint.m} {
-    padding: 0 ${spacing.xxl};
+    padding: 0 2rem;
   }
 `;
 
 const Links = styled.div`
   text-decoration: underline;
-  margin: ${spacing.xxl} 0;
+  margin: 2rem 0;
   cursor: pointer;
 
   a {
     display: block;
-    margin: ${spacing.m} 0;
+    margin: 1rem 0;
   }
 `;
 
-export default HomePresenter;
+export default Home;

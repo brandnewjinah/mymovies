@@ -1,34 +1,41 @@
 import _ from "lodash";
 
 export const countGenres = (liked) => {
+  const arr = [
+    { id: 18, name: "Drama" },
+    { id: 80, name: "Crime" },
+    { id: 18, name: "Drama" },
+  ];
+  const counts = {};
+  arr.forEach((x) => {
+    counts[x] = (counts[x] || 0) + 1;
+  });
+  console.log(counts);
+
   let count = {};
 
-  //count genre id occurrenc
-  liked.map((m) => {
-    m.genre_ids &&
-      m.genre_ids.forEach((item) => {
+  //for movies that have genre_ids as key
+  liked.map((movie) => {
+    movie.genre_ids &&
+      movie.genre_ids.forEach((item) => {
         count[item] = (count[item] || 0) + 1;
       });
+    return count;
   });
 
-  liked.map((m) => {
-    m.genres &&
-      m.genres.forEach((item) => {
+  //for movies that have genres as key
+  liked.map((movie) => {
+    movie.genres &&
+      movie.genres.forEach((item) => {
         count[item.id] = (count[item.id] || 0) + 1;
       });
+    return count;
   });
 
-  //convert into object and sort by highest
   let result = Object.keys(count).map((e) => {
     return { key: e, count: count[e] };
   });
 
   const sorted = _.orderBy(result, "count", "desc");
-
-  //get top 3
-  const names = sorted.slice(0, 3).map((item) => {
-    return parseInt(item["key"]);
-  });
-
-  return names.toString();
+  return sorted;
 };
