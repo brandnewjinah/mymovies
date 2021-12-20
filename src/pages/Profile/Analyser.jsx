@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { breakpoint } from "../../components/token";
+import { breakpoint, fontSize } from "../../components/token";
 
 //data
 import { lanList } from "../../data/language";
@@ -10,27 +10,26 @@ const Analyser = ({
   total,
   liked,
   disliked,
-  filterAllMovies,
-  filterLikedMovies,
-  filterDislikedMovies,
+  showAllMovies,
+  showLikedMovies,
+  showDislikedMovies,
   topGenres,
   availGenres,
-  filterGenre,
+  showGenre,
   language,
-  filterLanguage,
+  showLanguage,
   crews,
   keywords,
 }) => {
   return (
     <Container>
       <Section>
-        <h5>
-          Out of <Underline onClick={filterAllMovies}>{total}</Underline> movies
+        <p>
+          Out of <Underline onClick={showAllMovies}>{total}</Underline> movies
           watched, I liked{" "}
-          <Underline onClick={filterLikedMovies}>{liked}</Underline> and
-          disliked{" "}
-          <Underline onClick={filterDislikedMovies}>{disliked}</Underline>{" "}
-          movies. My favorite genres are{" "}
+          <Underline onClick={showLikedMovies}>{liked}</Underline> and disliked{" "}
+          <Underline onClick={showDislikedMovies}>{disliked}</Underline> movies.
+          My favorite genres are{" "}
           {topGenres.map((genre, idx, arr) => {
             const likedGenres = availGenres.find(
               (item) => item.id === parseInt(genre.key)
@@ -38,7 +37,7 @@ const Analyser = ({
             if (arr.length === 1) {
               return (
                 <span key={idx}>
-                  <Underline onClick={() => filterGenre(likedGenres.id)}>
+                  <Underline onClick={() => showGenre(likedGenres.id)}>
                     {likedGenres.name}
                   </Underline>
                   .
@@ -48,7 +47,7 @@ const Analyser = ({
               return (
                 <span key={idx}>
                   and{" "}
-                  <Underline onClick={() => filterGenre(likedGenres.id)}>
+                  <Underline onClick={() => showGenre(likedGenres.id)}>
                     {likedGenres.name}
                   </Underline>
                   .{" "}
@@ -57,7 +56,7 @@ const Analyser = ({
             } else {
               return (
                 <span key={idx}>
-                  <Underline onClick={() => filterGenre(likedGenres.id)}>
+                  <Underline onClick={() => showGenre(likedGenres.id)}>
                     {likedGenres.name}
                   </Underline>
                   ,{" "}
@@ -71,7 +70,7 @@ const Analyser = ({
             if (arr.length === 1) {
               return (
                 <span key={idx}>
-                  <Underline onClick={() => filterLanguage(likedLanguage.code)}>
+                  <Underline onClick={() => showLanguage(likedLanguage.code)}>
                     {likedLanguage.english}
                   </Underline>
                   .
@@ -81,7 +80,7 @@ const Analyser = ({
               return (
                 <span key={idx}>
                   and{" "}
-                  <Underline onClick={() => filterLanguage(likedLanguage.code)}>
+                  <Underline onClick={() => showLanguage(likedLanguage.code)}>
                     {likedLanguage.english}
                   </Underline>
                   .{" "}
@@ -90,7 +89,7 @@ const Analyser = ({
             } else {
               return (
                 <span key={idx}>
-                  <Underline onClick={() => filterLanguage(likedLanguage.code)}>
+                  <Underline onClick={() => showLanguage(likedLanguage.code)}>
                     {likedLanguage.english}
                   </Underline>
                   ,{" "}
@@ -98,10 +97,10 @@ const Analyser = ({
               );
             }
           })}
-        </h5>
+        </p>
       </Section>
       <Section>
-        <h5>
+        <p>
           The directors I like are{" "}
           {crews.map((crew, idx, arr) => {
             if (arr.length === 1) {
@@ -134,13 +133,13 @@ const Analyser = ({
               );
             }
           })}
-        </h5>
+        </p>
       </Section>
       <Section>
         {keywords && keywords.length > 0 && (
-          <h6>
+          <p>
             Some of the topics I enjoy the most are{" "}
-            {keywords.slice(0, 3).map((k, idx, arr) => {
+            {keywords.slice(0, 5).map((k, idx, arr) => {
               if (arr.length === 1) {
                 return (
                   <span key={idx}>
@@ -171,38 +170,30 @@ const Analyser = ({
                 );
               }
             })}
-          </h6>
+          </p>
         )}
       </Section>
     </Container>
   );
 };
 
-const Container = styled.div`
-  margin: 0 auto;
+const Container = styled.section`
   width: 100%;
   max-width: 960px;
-  padding: 0 2rem 2rem;
+  padding: 0 2rem;
+  margin: 2rem auto;
 `;
 
 const Section = styled.section`
-  h5 {
-    line-height: 2.5rem;
+  p {
+    font-size: ${fontSize.lg1};
+    font-weight: 500;
+    line-height: 2rem;
     margin: 1.75em 0;
   }
 
-  h6 {
-    line-height: 1.875rem;
-  }
-
   @media ${breakpoint.m} {
-    h5 {
-      line-height: 2rem;
-    }
-
-    h6 {
-      line-height: 1.75rem;
-    }
+    padding: 0 1rem;
   }
 `;
 

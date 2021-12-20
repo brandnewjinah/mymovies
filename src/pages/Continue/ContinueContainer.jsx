@@ -17,7 +17,7 @@ const ContinueContainer = (props) => {
     dispatch(getGenres());
     dispatch(getMovies({ selection: selection, exclude: exclude, page: page }));
     window.scrollTo(0, 0);
-  }, [selection, page, exclude]);
+  }, [dispatch, selection, page, exclude]);
 
   const handlePage = (par) => {
     par === "next" && setPage(page + 1);

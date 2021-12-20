@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 //components
 import Placeholder from "../../components/placeholder/List";
-import { HeaderH5 } from "../../components/Header";
+import { Header } from "../../components/Header";
 import { Grid } from "../../components/Grid";
 import Poster from "../../components/Poster";
 import { breakpoint } from "../../components/token";
@@ -71,7 +71,7 @@ const Category = () => {
         <Placeholder />
       ) : (
         <>
-          <HeaderH5
+          <Header
             title={
               <>
                 <span>

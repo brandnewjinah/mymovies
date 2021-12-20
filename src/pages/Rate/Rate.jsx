@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import styled from "styled-components";
 
 //import utils
@@ -7,11 +8,15 @@ import { getGenre } from "../../util/getGenres";
 
 //components
 import Placeholder from "../../components/placeholder/List";
-import { HeaderH2 } from "../../components/Header";
 import { Grid } from "../../components/Grid";
 import Poster from "../../components/RatePoster";
 import Pagination from "../../components/Pagination";
-import { breakpoint, size } from "../../components/token";
+import {
+  breakpoint,
+  fontSize,
+  lineHeight,
+  primaryColors,
+} from "../../components/token";
 
 //redux
 import { useDispatch, useSelector } from "react-redux";
@@ -29,19 +34,20 @@ const Rate = (props) => {
 
   return (
     <>
+      <Helmet>
+        <title>Rate Movies</title>
+      </Helmet>
       {props.loading ? (
         <Placeholder />
       ) : (
-        <Container>
-          <HeaderH2
-            title={
-              <>
-                <span className="secondary">{total}</span>
-                <span> / 10</span>
-              </>
-            }
-            subtitle={
-              total > 9 ? (
+        <>
+          <Header>
+            <h1>
+              <span className="secondary">{total}</span>
+              <span> / 10</span>
+            </h1>
+            <p className="subheader">
+              {total > 9 ? (
                 <>
                   You rated 10 movies! Keep rating or
                   <Link to="/movies/profile">
@@ -49,10 +55,10 @@ const Rate = (props) => {
                   </Link>
                 </>
               ) : (
-                "Rate at least 10 movies to get your personalized profile"
-              )
-            }
-          />
+                <>Rate at least 10 movies to get your personalized profile </>
+              )}
+            </p>
+          </Header>
           {props.results && props.results.length > 0 && (
             <Grid>
               {props.results.map((movie) => (
@@ -83,19 +89,44 @@ const Rate = (props) => {
               handlePrevPage={() => props.handlePage("prev")}
             />
           </Bottom>
-        </Container>
+        </>
       )}
     </>
   );
 };
 
-const Container = styled.div`
-  width: 100%;
-  max-width: ${size.xlg};
-  margin: 7em auto 0;
+const Header = styled.header`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: center;
+  padding: 0 1rem;
 
-  @media ${breakpoint.m} {
-    padding: 0 1rem;
+  h1 {
+    font-size: 2.488rem;
+  }
+
+  .secondary {
+    color: ${primaryColors.warning};
+  }
+
+  .subheader {
+    font-size: ${fontSize.lg1};
+    line-height: ${lineHeight.lg1};
+    font-weight: 500;
+  }
+
+  .link {
+    border-bottom: 3px solid #172d6e;
+    margin-left: 6px;
+  }
+
+  @media ${breakpoint.xlg} {
+    h1 {
+      font-size: ${fontSize.lg3};
+    }
   }
 `;
 

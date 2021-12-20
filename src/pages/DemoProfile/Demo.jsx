@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import styled from "styled-components";
 
 //components
 import Placeholder from "../../components/placeholder/Profile";
-import { HeaderH4 } from "../../components/Header";
+import { Header } from "../../components/Header";
 import Analyser from "./Analyser";
 import { Grid2 } from "../../components/Grid";
 import Poster from "../../components/Poster";
@@ -19,7 +18,6 @@ import { countKeywords } from "../../util/countKeywords";
 import { useSelector, useDispatch } from "react-redux";
 import { getGenres } from "../../redux/genreRedux";
 import { countCrew } from "../../util/countCrew";
-import { breakpoint } from "../../components/token";
 
 import { liked, disliked } from "../../data/demo/rate";
 import { myKeywords } from "../../data/demo/keywords";
@@ -58,22 +56,23 @@ const DemoProfile = () => {
   };
 
   return (
-    <Container>
+    <>
       {loading ? (
         <Placeholder />
       ) : (
         <>
-          <HeaderH4
+          <Header
             title="Demo Profile"
             subtitle={
               <>
                 To see your own profile,
-                <Link to="/rate">
+                <Link to="/movies/rate">
                   <span className="link">rate at least 10 movies</span>
                 </Link>
               </>
             }
           />
+
           <Analyser
             total={total}
             liked={liked.length}
@@ -107,21 +106,8 @@ const DemoProfile = () => {
           )}
         </>
       )}
-    </Container>
+    </>
   );
 };
-
-const Container = styled.div`
-  max-width: 1140px;
-  margin: 7rem auto;
-
-  @media ${breakpoint.xlg} {
-    padding: 0 2rem;
-  }
-
-  @media ${breakpoint.m} {
-    padding: 0 1rem;
-  }
-`;
 
 export default DemoProfile;

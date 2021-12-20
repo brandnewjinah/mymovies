@@ -13,6 +13,18 @@ export const basedOnLikedMovie = createAsyncThunk(
   }
 );
 
+export const basedOnLikedMovie2 = createAsyncThunk(
+  "recommend/basedOnLikedMovie2",
+  async (id) => {
+    try {
+      const response = await movieApi.recommended(id);
+      return response;
+    } catch (error) {
+      return error;
+    }
+  }
+);
+
 export const basedOnLikedGenre = createAsyncThunk(
   "recommend/basedOnLikedGenre",
   async (topGenre) => {
@@ -66,6 +78,7 @@ const recommendSlice = createSlice({
   initialState: {
     page: 1,
     basedOnLiked: [],
+    basedOnLiked2: [],
     basedOnGenre: [],
     basedOnKeyword: [],
     basedOnKeyword2: [],
@@ -82,6 +95,18 @@ const recommendSlice = createSlice({
       state.basedOnLiked = action.payload.results;
     },
     [basedOnLikedMovie.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [basedOnLikedMovie2.pending]: (state) => {
+      state.loading = true;
+    },
+    [basedOnLikedMovie2.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.page = action.payload.page;
+      state.basedOnLiked2 = action.payload.results;
+    },
+    [basedOnLikedMovie2.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },

@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
+import React, { useState } from "react";
 
 //components
 import Placeholder from "../../components/placeholder/Profile";
-import { HeaderH4 } from "../../components/Header";
+import { Header } from "../../components/Header";
 import Analyser from "./Analyser";
 import { Grid2 } from "../../components/Grid";
 import Poster from "../../components/Poster";
@@ -15,32 +14,21 @@ import { countLanguage } from "../../util/countLanguage";
 import { countKeywords } from "../../util/countKeywords";
 
 //redux
-import { useSelector, useDispatch } from "react-redux";
-import { getGenres } from "../../redux/genreRedux";
 import { countCrew } from "../../util/countCrew";
-import { breakpoint } from "../../components/token";
 
-const Profile = () => {
-  const dispatch = useDispatch();
+const Profile = (props) => {
+  const [movies, setMovies] = useState([...props.liked, ...props.disliked]);
 
-  useEffect(() => {
-    dispatch(getGenres());
-  }, [dispatch]);
-
-  const { genres, loading } = useSelector((state) => state.genres);
-  const { liked, disliked } = useSelector((state) => state.rate);
-  const [movies, setMovies] = useState([...liked, ...disliked]);
-  const { myKeywords } = useSelector((state) => state.keyword);
-  const total = liked.length + disliked.length;
-
-  const filterMovies = (arr) => {
-    setMovies(arr);
+  const filterMovies = (movies) => {
+    setMovies(movies);
   };
 
   const filterGenre = (id) => {
-    const result = liked.filter((m) => m.genre_ids && m.genre_ids.includes(id));
+    const result = props.liked.filter(
+      (m) => m.genre_ids && m.genre_ids.includes(id)
+    );
 
-    const result2 = liked.filter(
+    const result2 = props.liked.filter(
       (m) => m.genres && m.genres.find((g) => g.id === id)
     );
 
@@ -49,33 +37,35 @@ const Profile = () => {
   };
 
   const filterLanguage = (code) => {
-    const result = liked.filter(
+    const result = props.liked.filter(
       (m) => m.original_language && m.original_language === code
     );
     setMovies(result);
   };
 
   return (
-    <Container>
-      {loading ? (
+    <>
+      {props.loading ? (
         <Placeholder />
       ) : (
         <>
-          <HeaderH4 title="My Movie Profile" />
+          <Header title="My Movie Profile" />
           <Analyser
-            total={total}
-            liked={liked.length}
-            disliked={disliked.length}
-            filterAllMovies={() => filterMovies([...liked, ...disliked])}
-            filterLikedMovies={() => filterMovies(liked)}
-            filterDislikedMovies={() => filterMovies(disliked)}
-            topGenres={countGenres(liked).slice(0, 3)}
-            availGenres={genres}
-            filterGenre={(id) => filterGenre(id)}
-            language={countLanguage(liked).slice(0, 3)}
-            filterLanguage={(code) => filterLanguage(code)}
-            crews={countCrew(liked).slice(0, 3)}
-            keywords={countKeywords(myKeywords)}
+            total={props.total}
+            liked={props.liked.length}
+            disliked={props.disliked.length}
+            showAllMovies={() =>
+              filterMovies([...props.liked, ...props.disliked])
+            }
+            showLikedMovies={() => filterMovies(props.liked)}
+            showDislikedMovies={() => filterMovies(props.disliked)}
+            topGenres={countGenres(props.liked).slice(0, 3)}
+            availGenres={props.genres}
+            showGenre={(id) => filterGenre(id)}
+            language={countLanguage(props.liked).slice(0, 3)}
+            showLanguage={(code) => filterLanguage(code)}
+            crews={countCrew(props.liked).slice(0, 3)}
+            keywords={countKeywords(props.myKeywords)}
           />
           {movies && movies.length > 0 && (
             <Grid2>
@@ -87,7 +77,7 @@ const Profile = () => {
                   title={movie.title}
                   rating={movie.vote_average}
                   year={movie.release_date}
-                  genre={getGenre(genres, movie.genres)}
+                  genre={getGenre(props.genres, movie.genres)}
                   toDetail={true}
                 />
               ))}
@@ -95,21 +85,8 @@ const Profile = () => {
           )}
         </>
       )}
-    </Container>
+    </>
   );
 };
-
-const Container = styled.div`
-  max-width: 1140px;
-  margin: 7rem auto;
-
-  @media ${breakpoint.xlg} {
-    padding: 0 2rem;
-  }
-
-  @media ${breakpoint.m} {
-    padding: 0 1rem;
-  }
-`;
 
 export default Profile;

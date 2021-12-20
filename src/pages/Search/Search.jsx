@@ -63,7 +63,7 @@ const Flex = styled.div`
 const Container = styled.div`
   width: 100%;
   max-width: 1140px;
-  margin: 7em auto 0;
+  margin: 2rem auto 0;
 
   @media (max-width: 1200px) {
     padding: 0 2em;

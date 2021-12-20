@@ -79,7 +79,7 @@ const Continue = (props) => {
   }, [liked, disliked]);
 
   return (
-    <Container>
+    <>
       {props.loading ? (
         <>
           <Placeholder />
@@ -87,7 +87,7 @@ const Continue = (props) => {
       ) : (
         <>
           <Header>
-            <h4>Rate movies</h4>
+            <h1>Rate movies</h1>
             <DropdownWrapper>
               <Dropdown
                 selected={selected}
@@ -120,27 +120,29 @@ const Continue = (props) => {
           </Header>
 
           {props.results && props.results.length > 0 && (
-            <Grid>
-              {props.results.map((movie) => (
-                <RatePoster
-                  key={movie.id}
-                  rate={true}
-                  id={movie.id}
-                  imageUrl={movie.poster_path}
-                  title={movie.title}
-                  rating={movie.vote_average}
-                  year={movie.release_date}
-                  genre={getGenre(props.genres, movie.genre_ids)}
-                  liked={liked && liked.find((item) => item.id === movie.id)}
-                  disliked={
-                    disliked && disliked.find((item) => item.id === movie.id)
-                  }
-                  handleLike={() => dispatch(likeMovie(movie.id))}
-                  handleDislike={() => dispatch(dislikeMovie(movie.id))}
-                  isRate={true}
-                />
-              ))}
-            </Grid>
+            <section>
+              <Grid>
+                {props.results.map((movie) => (
+                  <RatePoster
+                    key={movie.id}
+                    rate={true}
+                    id={movie.id}
+                    imageUrl={movie.poster_path}
+                    title={movie.title}
+                    rating={movie.vote_average}
+                    year={movie.release_date}
+                    genre={getGenre(props.genres, movie.genre_ids)}
+                    liked={liked && liked.find((item) => item.id === movie.id)}
+                    disliked={
+                      disliked && disliked.find((item) => item.id === movie.id)
+                    }
+                    handleLike={() => dispatch(likeMovie(movie.id))}
+                    handleDislike={() => dispatch(dislikeMovie(movie.id))}
+                    isRate={true}
+                  />
+                ))}
+              </Grid>
+            </section>
           )}
           <Bottom>
             <span>You rated {total} / 10</span>
@@ -152,24 +154,9 @@ const Continue = (props) => {
           </Bottom>
         </>
       )}
-    </Container>
+    </>
   );
 };
-
-const Container = styled.div`
-  width: 100%;
-  max-width: 1140px;
-  margin: 7em auto;
-  color: ${primaryColors.blue};
-
-  @media (max-width: 1200px) {
-    padding: 0 2em;
-  }
-
-  @media (max-width: 425px) {
-    padding: 0 1em;
-  }
-`;
 
 const Flex = styled.div`
   display: flex;
@@ -183,7 +170,11 @@ const Header = styled.header`
   justify-content: center;
   flex-direction: column;
   color: ${primaryColors.blue};
-  padding: 3rem 0 2rem;
+  padding: 2rem 0;
+
+  ul {
+    list-style: none;
+  }
 
   @media ${breakpoint.m} {
     padding: 1em 0;

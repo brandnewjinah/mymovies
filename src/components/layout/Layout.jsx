@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Header from "./Header";
 import Footer from "./Footer";
+import { size } from "../token";
 
 const Layout = ({ children }) => {
   return (
@@ -20,7 +21,10 @@ const Container = styled.div`
 
 const Main = styled.main`
   width: 100%;
+  max-width: ${size.xlg};
+  padding-top: calc(4rem + 2rem);
   padding-bottom: 62px;
+  margin: 0 auto;
 `;
 
 export default Layout;

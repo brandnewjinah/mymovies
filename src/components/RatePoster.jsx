@@ -60,18 +60,18 @@ const Poster = ({
             }
           />
         )}
-        {rate && <Rating>{rateMovie}</Rating>}
+        {rate && (
+          <Rating liked={liked} disliked={disliked}>
+            {rateMovie}
+          </Rating>
+        )}
       </ImageContainer>
 
       <Detail>
         <Link to={`/movies/movie/${id}`}>
           <p className="title">{title}</p>
           <p>{year.substring(0, 4)}</p>
-          <p>
-            {genre && genre.join(" \u00B7 ").length > 20
-              ? `${genre && genre.join(" \u00B7 ").substring(0, 20)}...`
-              : genre && genre.join(" \u00B7 ")}
-          </p>
+          <p>{genre && genre.join(" \u00B7 ")}</p>
         </Link>
 
         {rate && <div className="ratingmobile">{rateMovie}</div>}
@@ -87,10 +87,9 @@ const Flex = css`
   flex-direction: column;
 `;
 
-const Container = styled.div`
-  ${Flex}
-  width: 100%;
-  height: 100%;
+const Container = styled.li`
+  display: flex;
+  flex-direction: column;
 
   @media ${breakpoint.m} {
     flex-direction: row;
@@ -115,10 +114,12 @@ const EmptyImg = styled.div`
 `;
 
 const Image = styled.img`
+  position: absolute;
   width: 100%;
-  height: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   object-fit: cover;
-  border-radius: 8px;
   transition: opacity 0.1s linear;
 `;
 
@@ -129,7 +130,7 @@ const Rating = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  opacity: 0;
+  opacity: ${(props) => (props.liked ? 1 : props.disliked ? 1 : 0)};
 
   div {
     display: flex;
@@ -138,6 +139,10 @@ const Rating = styled.div`
     padding: 1em;
     margin: 0 1em;
     cursor: pointer;
+
+    :hover {
+      background-color: ${neutral[500]};
+    }
   }
 
   @media ${breakpoint.m} {
@@ -146,10 +151,11 @@ const Rating = styled.div`
 `;
 
 const ImageContainer = styled.div`
-  ${Flex}
-  width: 100%;
-  height: 80%;
   position: relative;
+  width: 100%;
+  padding-bottom: 150%;
+  border-radius: 8px;
+  overflow: hidden;
 
   &:hover {
     ${Image} {
@@ -163,7 +169,7 @@ const ImageContainer = styled.div`
 
   @media ${breakpoint.m} {
     flex: 0 1 30%;
-    height: 100%;
+    padding-bottom: 45%;
 
     &:hover {
       ${Image} {

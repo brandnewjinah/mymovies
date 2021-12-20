@@ -1,29 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { breakpoint, primaryColors } from "./token";
+import { breakpoint, fontSize, primaryColors } from "./token";
 
-export const HeaderH2 = ({ title, subtitle }) => {
+export const Header = ({ title, subtitle }) => {
   return (
     <Container>
-      <h2>{title}</h2>
+      <h1>{title}</h1>
       {subtitle && <Sub>{subtitle}</Sub>}
-    </Container>
-  );
-};
-
-export const HeaderH4 = ({ title, subtitle }) => {
-  return (
-    <Container>
-      <h4>{title}</h4>
-      {subtitle && <Sub>{subtitle}</Sub>}
-    </Container>
-  );
-};
-
-export const HeaderH5 = ({ title }) => {
-  return (
-    <Container>
-      <h5>{title}</h5>
     </Container>
   );
 };
@@ -33,9 +16,12 @@ const Container = styled.header`
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  text-align: center;
+  color: ${primaryColors.blue};
+  padding: 2rem 0;
 
-  .secondary {
-    color: ${primaryColors.warning};
+  h1 {
+    font-weight: 600;
   }
 
   .underline {
@@ -51,9 +37,25 @@ const Container = styled.header`
       border-bottom: 3px solid #e89161;
     }
   }
+
+  .highlight {
+    display: inline-block;
+    background-color: #f7d0ba;
+    line-height: 0.75rem;
+    padding: 0 0.25rem;
+  }
+
+  @media ${breakpoint.m} {
+    padding: 0;
+
+    h1 {
+      font-size: 1.5rem;
+      line-height: 1.75rem;
+    }
+  }
 `;
 
-const Sub = styled.h6`
+const Sub = styled.p`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -65,7 +67,9 @@ const Sub = styled.h6`
   }
 
   @media ${breakpoint.m} {
+    font-size: ${fontSize.lg1};
     line-height: 1.5rem;
+    font-weight: 400;
     text-align: center;
     flex-direction: column;
   }

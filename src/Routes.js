@@ -5,22 +5,20 @@ import {
   Switch,
   Redirect,
 } from "react-router-dom";
-
-//import components
-import Layout from "./components/main/Layout";
+import Layout from "./components/layout/Layout";
 
 //import pages
-import Home from "./pages/Home/Home";
-import Test from "./pages/boiler";
+import Home from "./pages/Home";
 import Rate from "./pages/Rate";
+import Profile from "./pages/Profile";
 import Movies from "./pages/Movies";
 import Search from "./pages/Search";
 import Continue from "./pages/Continue";
-import Profile from "./pages/Profile/Profile";
-import Recommendation from "./pages/Recommendation/Recommendation";
+import Recommendation from "./pages/Recommendation";
 import Details from "./pages/Details/Details";
 import Category from "./pages/Category/Category";
-import Demo from "./pages/Demo/Demo";
+import Demo from "./pages/DemoProfile/Demo";
+import DemoRecommend from "./pages/DemoRecommend";
 
 const Routes = () => {
   return (
@@ -38,6 +36,7 @@ const Routes = () => {
           <Route exact path="/movies/continue" component={Continue} />
           <Route exact path="/movies/search" component={Search} />
           <Route exact path="/movies/demoprofile" component={Demo} />
+          <Route exact path="/movies/demorecommend" component={DemoRecommend} />
         </Layout>
         <Redirect from="*" to="/" />
       </Switch>

@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { breakpoint } from "../../components/token";
+import { breakpoint, fontSize } from "../../components/token";
 
 //data
 import { lanList } from "../../data/language";
@@ -24,7 +24,7 @@ const Analyser = ({
   return (
     <Container>
       <Section>
-        <h5>
+        <p>
           Out of <Underline onClick={filterAllMovies}>{total}</Underline> movies
           watched, I liked{" "}
           <Underline onClick={filterLikedMovies}>{liked}</Underline> and
@@ -98,10 +98,10 @@ const Analyser = ({
               );
             }
           })}
-        </h5>
+        </p>
       </Section>
       <Section>
-        <h5>
+        <p>
           The directors I like are{" "}
           {crews.map((crew, idx, arr) => {
             if (arr.length === 1) {
@@ -134,11 +134,11 @@ const Analyser = ({
               );
             }
           })}
-        </h5>
+        </p>
       </Section>
       <Section>
         {keywords && keywords.length > 0 && (
-          <h6>
+          <p>
             Some of the topics I enjoy the most are{" "}
             {keywords.slice(0, 3).map((k, idx, arr) => {
               if (arr.length === 1) {
@@ -171,7 +171,7 @@ const Analyser = ({
                 );
               }
             })}
-          </h6>
+          </p>
         )}
       </Section>
     </Container>
@@ -186,23 +186,15 @@ const Container = styled.div`
 `;
 
 const Section = styled.section`
-  h5 {
-    line-height: 2.5rem;
+  p {
+    font-size: ${fontSize.lg1};
+    font-weight: 500;
+    line-height: 2rem;
     margin: 1.75em 0;
   }
 
-  h6 {
-    line-height: 1.875rem;
-  }
-
   @media ${breakpoint.m} {
-    h5 {
-      line-height: 2rem;
-    }
-
-    h6 {
-      line-height: 1.75rem;
-    }
+    padding: 0 1rem;
   }
 `;
 

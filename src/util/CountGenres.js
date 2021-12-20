@@ -10,7 +10,6 @@ export const countGenres = (liked) => {
   arr.forEach((x) => {
     counts[x] = (counts[x] || 0) + 1;
   });
-  console.log(counts);
 
   let count = {};
 

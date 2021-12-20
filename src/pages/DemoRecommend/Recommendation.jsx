@@ -9,7 +9,10 @@ import { breakpoint } from "../../components/token";
 const Recommendation = (props) => {
   return (
     <>
-      <Header title="Recommended for you" />
+      <Header
+        title="Demo Recommendations"
+        subtitle="Rate 10 movies to get personalized recommendations"
+      />
       <Main>
         <Section>
           <Recommend
@@ -17,15 +20,12 @@ const Recommendation = (props) => {
             title={`Because you liked ${props.recommend.likedMovie1}`}
           />
         </Section>
-        {props.keyword.first && (
-          <Section>
-            <Recommend
-              data={props.basedOnKeyword}
-              title={`Because you like keyword: ${props.keyword.first}`}
-            />
-          </Section>
-        )}
-
+        <Section>
+          <Recommend
+            data={props.basedOnKeyword && props.basedOnKeyword}
+            title={`Because you like keyword: ${props.keyword.first}`}
+          />
+        </Section>
         <Section>
           <Recommend
             data={props.basedOnGenre && props.basedOnGenre}
@@ -38,14 +38,12 @@ const Recommendation = (props) => {
             title={`Because you liked ${props.recommend.likedMovie2}`}
           />
         </Section>
-        {props.keyword.second && (
-          <Section>
-            <Recommend
-              data={props.basedOnKeyword2}
-              title={`Because you like keyword: ${props.keyword.second}`}
-            />
-          </Section>
-        )}
+        <Section>
+          <Recommend
+            data={props.basedOnKeyword2 && props.basedOnKeyword2}
+            title={`Because you like keyword: ${props.keyword.second}`}
+          />
+        </Section>
       </Main>
     </>
   );
