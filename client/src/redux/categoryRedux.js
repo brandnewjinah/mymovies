@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { movieApi } from "../api";
+import { publicRequest } from "../api/local";
 
 export const getPersonDetail = createAsyncThunk(
   "category/getPersonDetail",
@@ -53,8 +54,20 @@ export const discoverMoviesByGenre = createAsyncThunk(
   "category/discoverMoviesByGenre",
   async (id) => {
     try {
-      const response = await movieApi.discover(id, null);
+      const response = await movieApi.discoverByGenre(id);
       return response;
+    } catch (error) {
+      return error;
+    }
+  }
+);
+
+export const getACollection = createAsyncThunk(
+  "category/getACollection",
+  async (id) => {
+    try {
+      const { data } = await publicRequest.get(`/collections/${id}`);
+      return data;
     } catch (error) {
       return error;
     }
@@ -132,6 +145,18 @@ const categorySlice = createSlice({
       state.total_pages = action.payload.total_pages;
     },
     [discoverMoviesByGenre.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [getACollection.pending]: (state) => {
+      state.loading = true;
+    },
+    [getACollection.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.name = action.payload.name;
+      state.results = action.payload.movies;
+    },
+    [getACollection.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },

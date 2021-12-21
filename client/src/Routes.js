@@ -17,6 +17,7 @@ import Continue from "./pages/Continue";
 import Recommendation from "./pages/Recommendation";
 import Details from "./pages/Details/Details";
 import Category from "./pages/Category/Category";
+import CollectionList from "./pages/Collection/CollectionList";
 import Demo from "./pages/DemoProfile/Demo";
 import DemoRecommend from "./pages/DemoRecommend";
 
@@ -32,8 +33,10 @@ const Routes = () => {
           <Route exact path="/movies/director/:id" component={Category} />
           <Route exact path="/movies/keyword/:id" component={Category} />
           <Route exact path="/movies/genre/:id" component={Category} />
+          <Route exact path="/movies/collection/:id" component={Category} />
           <Route exact path="/movies/recommend" component={Recommendation} />
           <Route exact path="/movies/continue" component={Continue} />
+          <Route exact path="/movies/collections" component={CollectionList} />
           <Route exact path="/movies/search" component={Search} />
           <Route exact path="/movies/demoprofile" component={Demo} />
           <Route exact path="/movies/demorecommend" component={DemoRecommend} />

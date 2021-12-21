@@ -5,9 +5,8 @@ import styled from "styled-components";
 //components
 import Placeholder from "../../components/placeholder/List";
 import { Header } from "../../components/Header";
-import { Grid } from "../../components/Grid";
+import { Grid2 } from "../../components/Grid";
 import Poster from "../../components/Poster";
-import { breakpoint } from "../../components/token";
 
 //util
 import { getGenre } from "../../util/getGenres";
@@ -18,11 +17,13 @@ import {
   discoverMoviesByCrew,
   discoverMoviesByGenre,
   discoverMoviesByKeyword,
+  getACollection,
   getKeyword,
   getPersonDetail,
 } from "../../redux/categoryRedux";
 import { getGenres } from "../../redux/genreRedux";
 import Pagination from "../../components/Pagination";
+import { breakpoint } from "../../components/token";
 
 const Category = () => {
   const [page, setPage] = useState(1);
@@ -47,7 +48,13 @@ const Category = () => {
     if (path === "genre") {
       dispatch(discoverMoviesByGenre(id));
     }
-  }, [dispatch, id, page]);
+
+    if (path === "collection") {
+      dispatch(getACollection(id));
+    }
+
+    window.scrollTo(0, 0);
+  }, [dispatch, id, page, path]);
 
   const { genres } = useSelector((state) => state.genres);
   const { loading, name, results, total_pages } = useSelector(
@@ -66,7 +73,7 @@ const Category = () => {
   };
 
   return (
-    <Container>
+    <>
       {loading ? (
         <Placeholder />
       ) : (
@@ -81,14 +88,14 @@ const Category = () => {
                     ? "Movies with keyword "
                     : null}
                 </span>
-                <span className="underline">
+                <mark className="highlight">
                   {path === "genre" ? handleGenre() : name}
-                </span>
+                </mark>
               </>
             }
           />
           {results && results.length > 0 && (
-            <Grid>
+            <Grid2>
               {results.map((movie) => (
                 <Poster
                   key={movie.id}
@@ -101,35 +108,34 @@ const Category = () => {
                   genre={getGenre(genres, movie.genre_ids)}
                 />
               ))}
-            </Grid>
+            </Grid2>
           )}
-          <Pagination
-            page={page}
-            total_pages={total_pages}
-            handleNextPage={() => handlePage("next")}
-            handlePrevPage={() => handlePage("prev")}
-          />
+          <Bottom>
+            <Pagination
+              page={page}
+              total_pages={total_pages}
+              handleNextPage={() => handlePage("next")}
+              handlePrevPage={() => handlePage("prev")}
+            />
+          </Bottom>
         </>
       )}
-    </Container>
+    </>
   );
 };
 
-const Container = styled.div`
-  width: 100%;
-  max-width: 1140px;
-  margin: 7rem auto;
-
-  @media ${breakpoint.xlg} {
-    padding: 0 2rem;
-  }
-
-  @media ${breakpoint.lg} {
-    margin: 5rem auto;
-  }
+const Bottom = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 0 4rem;
 
   @media ${breakpoint.m} {
-    padding: 0 1rem;
+    flex-direction: column;
+
+    div {
+      padding: 1rem 0;
+    }
   }
 `;
 

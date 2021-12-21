@@ -18,6 +18,7 @@ import rateReducer from "./rateRedux";
 import categoryReducer from "./categoryRedux";
 import keywordReducer from "./keywordRedux";
 import recommendReducer from "./recommendRedux";
+import collectionReducer from "./collectionRedux";
 
 const persistConfig = {
   key: "root",
@@ -33,6 +34,7 @@ const rootReducer = combineReducers({
   category: categoryReducer,
   keyword: keywordReducer,
   recommend: recommendReducer,
+  collection: collectionReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
