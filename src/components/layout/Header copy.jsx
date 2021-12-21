@@ -26,6 +26,8 @@ const Header = () => {
     handleRated();
   }, [liked, disliked]);
 
+  console.log(total);
+
   return (
     <Wrapper>
       <Nav>
@@ -34,76 +36,57 @@ const Header = () => {
             <Film width="24" height="24" color="#000" stroke="2" />
           </Link>
         </Left>
-        {location.pathname.includes("/rate") ? (
-          <Links>
-            <List></List>
-            <Right>
-              <Link to="/movies/demoprofile" onClick={() => setOpen(false)}>
-                Skip
-              </Link>
-            </Right>
-          </Links>
-        ) : (
-          <>
-            <Center open={open}>
-              <List>
-                <Item current={pathname === "/movies/recommend"}>
-                  {total > 9 ? (
-                    <SLink
-                      to="/movies/recommend"
-                      onClick={() => setOpen(false)}
-                    >
-                      Recommendation
-                    </SLink>
-                  ) : (
-                    <SLink
-                      to="/movies/recommend"
-                      onClick={() => setOpen(false)}
-                    >
-                      Recommendation
-                    </SLink>
-                  )}
-                </Item>
-                <Item current={pathname === "/movies/continue"}>
-                  <SLink to="/movies/continue" onClick={() => setOpen(false)}>
-                    Rate
-                  </SLink>
-                </Item>
-                <Item current={pathname === "/movies/search"}>
-                  <SLink to="/movies/search" onClick={() => setOpen(false)}>
-                    Search
-                  </SLink>
-                </Item>
-                <Item current={pathname === "/movies/collections"}>
-                  <SLink
-                    to="/movies/collections"
-                    onClick={() => setOpen(false)}
-                  >
-                    Collections
-                  </SLink>
-                </Item>
-              </List>
-              <MobileLink>
-                <Item end="true">
-                  <Link to="/movies/profile" onClick={() => setOpen(false)}>
-                    Profile
-                  </Link>
-                </Item>
-              </MobileLink>
-            </Center>
-            <Right open={open}>
+        <Center open={open}>
+          <List>
+            <Item current={pathname === "/movies/recommend"}>
               {total > 9 ? (
-                <Link to="/movies/profile" onClick={() => setOpen(false)}>
-                  Profile
-                </Link>
+                <SLink to="/movies/recommend" onClick={() => setOpen(false)}>
+                  Recommendation
+                </SLink>
               ) : (
-                <Link to="/movies/demoprofile" onClick={() => setOpen(false)}>
-                  Profile
-                </Link>
+                <SLink
+                  to="/movies/demorecommend"
+                  onClick={() => setOpen(false)}
+                >
+                  Recommendation
+                </SLink>
               )}
-            </Right>
-          </>
-        )}
+            </Item>
+            <Item current={pathname === "/movies/continue"}>
+              <SLink to="/movies/continue" onClick={() => setOpen(false)}>
+                Rate
+              </SLink>
+            </Item>
+            <Item current={pathname === "/movies/search"}>
+              <SLink to="/movies/search" onClick={() => setOpen(false)}>
+                Search
+              </SLink>
+            </Item>
+            <Item current={pathname === "/movies/collections"}>
+              <SLink to="/movies/collections" onClick={() => setOpen(false)}>
+                Collections
+              </SLink>
+            </Item>
+          </List>
+          <MobileLink>
+            <Item end="true">
+              <Link to="/movies/profile" onClick={() => setOpen(false)}>
+                Profile
+              </Link>
+            </Item>
+          </MobileLink>
+        </Center>
+        <Right open={open}>
+          {total > 9 ? (
+            <Link to="/movies/profile" onClick={() => setOpen(false)}>
+              Profile
+            </Link>
+          ) : (
+            <Link to="/movies/demoprofile" onClick={() => setOpen(false)}>
+              Profile
+            </Link>
+          )}
+        </Right>
         {location.pathname.includes("/rate") ? (
           <Mobile>
             {total > 9 ? (
@@ -183,7 +166,7 @@ const Center = styled.nav`
 
   @media ${breakpoint.lg} {
     position: absolute;
-    top: 5rem;
+    top: 4rem;
     left: 0;
     right: 0;
     background-color: #fff;

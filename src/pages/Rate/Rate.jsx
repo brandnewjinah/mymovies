@@ -59,6 +59,7 @@ const Rate = (props) => {
               )}
             </p>
           </Header>
+
           {props.results && props.results.length > 0 && (
             <Grid>
               {props.results.map((movie) => (
@@ -136,12 +137,13 @@ const Bottom = styled.div`
   justify-content: space-between;
   padding: 1rem 0 4rem;
 
+  @media ${breakpoint.xlg} {
+    padding: 1rem;
+  }
+
   @media ${breakpoint.m} {
     flex-direction: column;
-
-    div {
-      padding: 1rem 0;
-    }
+    padding: 1rem;
   }
 `;
 

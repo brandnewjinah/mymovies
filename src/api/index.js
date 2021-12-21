@@ -33,6 +33,7 @@ export const movieApi = {
   credits: (id) => getData(`/movie/${id}/credits`),
   movieDetails: (id) =>
     getData(`/movie/${id}`, { append_to_response: "videos" }),
+  watchProviders: (id) => getData(`/movie/${id}/watch/providers`),
   recommended: (id) =>
     getData(`/movie/${id}/recommendations`, { movie_id: id }),
   person: (id) => getData(`/person/${id}`),
@@ -65,4 +66,15 @@ export const movieApi = {
     }),
 
   search: (query, page) => getData("/search/movie", { query, page }),
+};
+
+export const kdramaApi = {
+  kdramas: (language, selection, keyword) =>
+    getData(`/discover/tv`, {
+      with_original_language: language,
+      sort_by: selection,
+      with_keywords: keyword,
+      page: 1,
+      // "vote_average.gte": 8.5,
+    }),
 };

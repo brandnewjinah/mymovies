@@ -38,12 +38,6 @@ const Recommendation = (props) => {
             title={`Because you liked ${props.recommend.likedMovie2}`}
           />
         </Section>
-        <Section>
-          <Recommend
-            data={props.basedOnKeyword2 && props.basedOnKeyword2}
-            title={`Because you like keyword: ${props.keyword.second}`}
-          />
-        </Section>
       </Main>
     </>
   );

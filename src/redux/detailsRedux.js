@@ -1,12 +1,38 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { movieApi } from "../api";
+import { publicRequest } from "../api/local";
 
 export const getMovieDetails = createAsyncThunk(
   "details/getMovieDetails",
   async (id) => {
     try {
       const response = await movieApi.movieDetails(id);
+      console.log(response);
       return response;
+    } catch (error) {
+      return error;
+    }
+  }
+);
+
+export const getWatchProviders = createAsyncThunk(
+  "details/getWatchProviders",
+  async (id) => {
+    try {
+      const { results } = await movieApi.watchProviders(id);
+      return results;
+    } catch (error) {
+      return error;
+    }
+  }
+);
+
+export const getCollections = createAsyncThunk(
+  "details/getCollections",
+  async (id) => {
+    try {
+      const { data } = await publicRequest.get(`/collections/search/${id}`);
+      return data;
     } catch (error) {
       return error;
     }
@@ -31,6 +57,8 @@ const detailsSlice = createSlice({
     vote_average: 0,
     vote_count: 0,
     videos: {},
+    collections: [],
+    watchProviders: {},
   },
   extraReducers: {
     [getMovieDetails.pending]: (state) => {
@@ -54,6 +82,39 @@ const detailsSlice = createSlice({
       state.videos = action.payload.videos;
     },
     [getMovieDetails.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [getCollections.pending]: (state) => {
+      state.loading = true;
+    },
+    [getCollections.fulfilled]: (state, action) => {
+      const collections = action.payload;
+      // if collections is empty (length is 0), return null
+      if (collections && collections.length > 0) {
+        const newCollections = collections.map(({ _id, name }) => ({
+          _id,
+          name,
+        }));
+        return { ...state, collections: newCollections, loading: false };
+      } else {
+        return { ...state, collections: null };
+      }
+    },
+    [getCollections.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [getWatchProviders.pending]: (state) => {
+      state.loading = true;
+    },
+    [getWatchProviders.fulfilled]: (state, action) => {
+      const US = action.payload.US ? action.payload.US : null;
+      const provider =
+        US && US.flatrate ? US.flatrate : US && US.rent ? US.rent : null;
+      state.watchProviders = provider;
+    },
+    [getWatchProviders.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },

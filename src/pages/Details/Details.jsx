@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import styled from "styled-components";
 
 //components
@@ -12,14 +13,19 @@ import Recommend from "../../components/Recommend";
 //token
 import {
   breakpoint,
+  fontSize,
+  lineHeight,
   neutral,
   primaryColors,
-  size,
 } from "../../components/token";
 
 //redux
 import { useDispatch, useSelector } from "react-redux";
-import { getMovieDetails } from "../../redux/detailsRedux";
+import {
+  getCollections,
+  getMovieDetails,
+  getWatchProviders,
+} from "../../redux/detailsRedux";
 import { dislikeMovie, likeMovie } from "../../redux/rateRedux";
 import { getKeywords, saveKeyword } from "../../redux/keywordRedux";
 import { getRecommened } from "../../redux/movieRedux";
@@ -32,8 +38,14 @@ const Details = () => {
 
   useEffect(() => {
     dispatch(getMovieDetails(id));
+    dispatch(getWatchProviders(id));
     dispatch(getKeywords(id));
     dispatch(getRecommened(id));
+    window.scrollTo(0, 0);
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    dispatch(getCollections(id));
   }, [dispatch, id]);
 
   const { loading, ...details } = useSelector((state) => state.details);
@@ -58,29 +70,32 @@ const Details = () => {
   };
 
   return (
-    <Container>
+    <>
+      <Helmet>
+        <title>{details.title}</title>
+      </Helmet>
       {loading ? (
         <Placeholder />
       ) : (
-        <>
+        <Container>
           <Main>
             <Info>
               <Header>
-                <h4>{details.title ? details.title : details.original_name}</h4>
+                <h1>{details.title ? details.title : details.original_name}</h1>
                 <div className="info">
-                  <div>
+                  <p>
                     {details.release_date
                       ? details.release_date.substring(0, 4)
                       : details.first_air_date.substring(0, 4)}
-                  </div>
-                  <div>
+                  </p>
+                  <p>
                     {details.genres &&
                       details.genres.map((genre, index) => (
                         <Link to={`/movies/genre/${genre.id}`} key={index}>
                           <span>{genre.name}</span>
                         </Link>
                       ))}
-                  </div>
+                  </p>
                 </div>
               </Header>
               <Plot>{details.overview}</Plot>
@@ -92,7 +107,7 @@ const Details = () => {
               />
 
               <Section>
-                <header>Keywords</header>
+                <h3>Keywords</h3>
                 {liked && (
                   <p className="caption">
                     Please tell us why you liked this movie by highlighting the
@@ -118,6 +133,44 @@ const Details = () => {
                   ))}
                 </div>
               </Section>
+              {details.collections && details.collections.length > 0 && (
+                <Section>
+                  <h3>Collections</h3>
+                  {details.collections.map((collection) => (
+                    <CollectionLink
+                      to={`/movies/collection/${collection._id}`}
+                      key={collection._id}
+                    >
+                      {collection.name}
+                    </CollectionLink>
+                  ))}
+                </Section>
+              )}
+              {details.watchProviders && details.watchProviders.length > 0 && (
+                <Section>
+                  <h3>Watch on</h3>
+                  <p className="caption">
+                    Watch information provided by{" "}
+                    <a
+                      href="https://www.justwatch.com/"
+                      className="provider"
+                      target="_blank"
+                    >
+                      JustWatch
+                    </a>
+                    .
+                  </p>
+                  <ProviderLogos>
+                    {details.watchProviders.map((provider) => (
+                      <img
+                        src={`https://www.themoviedb.org/t/p/original${provider.logo_path}`}
+                        alt="logo"
+                        key={provider.logo_path}
+                      />
+                    ))}
+                  </ProviderLogos>
+                </Section>
+              )}
             </Info>
             <ImageContainer>
               <ImageComponent
@@ -137,21 +190,14 @@ const Details = () => {
               />
             </RecommendContainer>
           )}
-        </>
+        </Container>
       )}
-    </Container>
+    </>
   );
 };
 
 const Container = styled.div`
-  width: 100%;
-  max-width: ${size.xlg};
-  margin: 7em auto;
-  padding-bottom: 3em;
-
-  @media ${breakpoint.lg} {
-    padding: 0 2rem 3rem;
-  }
+  /* padding: 2rem 0 4rem; */
 `;
 
 const Main = styled.section`
@@ -173,18 +219,34 @@ const Info = styled.div`
     width: 100%;
     order: 2;
     margin: 0;
-    padding: 1em 0;
+    padding: 1rem;
+  }
+`;
+
+const ProviderLogos = styled.div`
+  display: flex;
+  gap: 0.5rem;
+
+  img {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
   }
 `;
 
 const Header = styled.header`
+  h1 {
+    font-size: ${fontSize.lg2};
+    font-weight: 500;
+  }
+
   .info {
     display: flex;
     font-weight: 500;
     color: ${primaryColors.cornflower};
     margin: 1rem 0;
 
-    div {
+    p {
       &:not(:last-child):after {
         content: " • ";
         color: ${neutral[200]};
@@ -203,7 +265,8 @@ const Header = styled.header`
 
 const Plot = styled.div`
   color: ${neutral[500]};
-  line-height: 1.5rem;
+  font-size: ${fontSize.sm2};
+  line-height: ${lineHeight.sm2};
 `;
 
 const ImageContainer = styled.div`
@@ -221,7 +284,8 @@ const Section = styled.section`
   padding: 1rem 0;
   margin-top: 2rem;
 
-  header {
+  h3 {
+    font-size: ${fontSize.sm2};
     font-weight: 600;
     text-transform: uppercase;
   }
@@ -231,11 +295,29 @@ const Section = styled.section`
     color: ${neutral[400]};
     padding: 0 0 0.5rem;
   }
+
+  .provider {
+    text-decoration: underline;
+  }
+`;
+
+const CollectionLink = styled(Link)`
+  display: block;
+  line-height: 1.5rem;
+  color: ${primaryColors.cornflower};
+
+  :hover {
+    text-decoration: underline;
+  }
 `;
 
 const RecommendContainer = styled.section`
   width: 100%;
-  padding-top: 2em;
+  padding-top: 2rem;
+
+  @media ${breakpoint.lg} {
+    padding: 1rem;
+  }
 `;
 
 export default Details;

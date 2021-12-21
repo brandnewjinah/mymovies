@@ -36,77 +36,86 @@ const Header = () => {
             <Film width="24" height="24" color="#000" stroke="2" />
           </Link>
         </Left>
-        <Center open={open}>
-          <List>
-            <Item current={pathname === "/movies/recommend"}>
-              {total > 9 ? (
-                <SLink to="/movies/recommend" onClick={() => setOpen(false)}>
-                  Recommendation
-                </SLink>
-              ) : (
-                <SLink
-                  to="/movies/demorecommend"
+        {!location.pathname.includes("/rate") && (
+          <Center open={open}>
+            <List>
+              <Item>
+                {total > 9 ? (
+                  <NavLink
+                    to="/movies/recommend"
+                    onClick={() => setOpen(false)}
+                  >
+                    Recommendations
+                  </NavLink>
+                ) : (
+                  <NavLink
+                    to="/movies/demorecommend"
+                    onClick={() => setOpen(false)}
+                  >
+                    Recommendations
+                  </NavLink>
+                )}
+              </Item>
+              <Item>
+                <NavLink to="/movies/continue" onClick={() => setOpen(false)}>
+                  Rate
+                </NavLink>
+              </Item>
+              <Item>
+                <NavLink
+                  to="/movies/collections"
                   onClick={() => setOpen(false)}
                 >
-                  Recommendation
-                </SLink>
-              )}
-            </Item>
-            <Item current={pathname === "/movies/continue"}>
-              <SLink to="/movies/continue" onClick={() => setOpen(false)}>
-                Rate
-              </SLink>
-            </Item>
-            <Item current={pathname === "/movies/search"}>
-              <SLink to="/movies/search" onClick={() => setOpen(false)}>
-                Search
-              </SLink>
-            </Item>
-            <Item current={pathname === "/movies/collections"}>
-              <SLink to="/movies/collections" onClick={() => setOpen(false)}>
-                Collections
-              </SLink>
-            </Item>
-          </List>
-          <MobileLink>
-            <Item end="true">
-              <Link to="/movies/profile" onClick={() => setOpen(false)}>
-                Profile
-              </Link>
-            </Item>
-          </MobileLink>
-        </Center>
+                  Collections
+                </NavLink>
+              </Item>
+              <Item>
+                <NavLink to="/movies/search" onClick={() => setOpen(false)}>
+                  Search
+                </NavLink>
+              </Item>
+            </List>
+            <MobileLink>
+              <Item end="true">
+                {total > 9 ? (
+                  <NavLink to="/movies/profile" onClick={() => setOpen(false)}>
+                    Profile
+                  </NavLink>
+                ) : (
+                  <NavLink
+                    to="/movies/demoprofile"
+                    onClick={() => setOpen(false)}
+                  >
+                    Profile
+                  </NavLink>
+                )}
+              </Item>
+            </MobileLink>
+          </Center>
+        )}
         <Right open={open}>
           {total > 9 ? (
-            <Link to="/movies/profile" onClick={() => setOpen(false)}>
-              Profile
-            </Link>
+            <NavLink to="/movies/profile">Profile</NavLink>
           ) : (
-            <Link to="/movies/demoprofile" onClick={() => setOpen(false)}>
-              Profile
-            </Link>
+            <NavLink to="/movies/demoprofile">Profile</NavLink>
           )}
         </Right>
         {location.pathname.includes("/rate") ? (
-          <Mobile>
+          <MobileMenu>
             {total > 9 ? (
-              <Link to="/movies/profile" onClick={() => setOpen(false)}>
-                Profile
-              </Link>
+              <NavLink to="/movies/profile">Profile</NavLink>
             ) : (
-              <Link to="/movies/demoprofile" onClick={() => setOpen(false)}>
-                Skip
-              </Link>
+              <NavLink to="/movies/demoprofile">Demo</NavLink>
             )}
-          </Mobile>
+          </MobileMenu>
         ) : (
-          <Mobile>
+          <MobileMenu>
             {open ? (
               <div onClick={() => setOpen(!open)}>Close</div>
             ) : (
               <div onClick={() => setOpen(!open)}>Menu</div>
             )}
-          </Mobile>
+          </MobileMenu>
         )}
       </Nav>
     </Wrapper>
@@ -136,7 +145,6 @@ const Nav = styled.nav`
   justify-content: space-between;
   font-size: 0.925rem;
   color: ${primaryColors.blue};
-  /* padding: 0.75rem 0; */
   margin: 0 auto;
 
   div {
@@ -166,7 +174,7 @@ const Center = styled.nav`
 
   @media ${breakpoint.lg} {
     position: absolute;
-    top: 5rem;
+    top: 4rem;
     left: 0;
     right: 0;
     background-color: #fff;
@@ -174,43 +182,6 @@ const Center = styled.nav`
     flex-direction: column;
     justify-content: flex-start;
     transform: ${({ open }) => (open ? "scale(1)" : "scale(0)")};
-  }
-`;
-
-const MobileLink = styled.ul`
-  display: none;
-  list-style-type: none;
-
-  @media ${breakpoint.lg} {
-    display: block;
-    ${Flex}
-    flex-direction: column;
-    flex: 0 1 auto;
-    justify-content: flex-start;
-  }
-`;
-
-const Links = styled.div`
-  ${Flex}
-  flex: 0 1 66.6666%;
-
-  @media ${breakpoint.lg} {
-    background-color: #fff;
-    height: 100vh;
-    flex-direction: column;
-    position: absolute;
-    top: 3rem;
-    left: 0;
-    right: 0;
-    text-align: center;
-    overflow: hidden;
-    padding: 1rem;
-    z-index: 1;
-    transform: ${({ open }) => (open ? "scale(1)" : "scale(0)")};
-
-    a {
-      margin: 0.5rem;
-    }
   }
 `;
 
@@ -227,17 +198,6 @@ const List = styled.ul`
   }
 `;
 
-const Right = styled.nav`
-  ${Flex}
-  width: 100%;
-  flex: 0 1 auto;
-  justify-content: flex-end;
-
-  @media ${breakpoint.lg} {
-    display: none;
-  }
-`;
-
 const Item = styled.li`
   margin: 0 0.75rem;
   margin-right: ${(props) => props.end && 0};
@@ -251,13 +211,37 @@ const Item = styled.li`
   }
 `;
 
-const SLink = styled(Link)`
+const MobileLink = styled.ul`
+  display: none;
+  list-style-type: none;
+
+  @media ${breakpoint.lg} {
+    display: block;
+    ${Flex}
+    flex-direction: column;
+    flex: 0 1 auto;
+    justify-content: flex-start;
+  }
+`;
+
+const NavLink = styled(Link)`
   display: flex;
   align-items: center;
   justify-content: center;
 `;
 
-const Mobile = styled.div`
+const Right = styled.nav`
+  ${Flex}
+  width: 100%;
+  flex: 0 1 auto;
+  justify-content: flex-end;
+
+  @media ${breakpoint.lg} {
+    display: none;
+  }
+`;
+
+const MobileMenu = styled.div`
   display: none;
   cursor: pointer;
 

@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Header from "./Header";
 import Footer from "./Footer";
-import { size } from "../token";
+import { breakpoint, size } from "../token";
 
 const Layout = ({ children }) => {
   return (
@@ -25,6 +25,10 @@ const Main = styled.main`
   padding-top: calc(4rem + 2rem);
   padding-bottom: 62px;
   margin: 0 auto;
+
+  @media ${breakpoint.lg} {
+    padding-top: 4rem;
+  }
 `;
 
 export default Layout;
