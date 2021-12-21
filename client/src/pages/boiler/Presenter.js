@@ -89,8 +89,4 @@ const Material = styled.div`
   }
 `;
 
-const mapStateToProps = (state) => {
-  return {};
-};
-
-export default connect(null, null)(Presenter);
+export default Presenter;

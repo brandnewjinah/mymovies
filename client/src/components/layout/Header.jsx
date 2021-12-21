@@ -26,8 +26,6 @@ const Header = () => {
     handleRated();
   }, [liked, disliked]);
 
-  console.log(total);
-
   return (
     <Wrapper>
       <Nav>

@@ -4,6 +4,7 @@ export const getGenre = (genres, genre_ids) => {
     const currGenres = genre_ids.map((g) => {
       return g.name;
     });
+    console.log(currGenres.slice(0, 2));
     return currGenres.slice(0, 2);
   } else {
     const currGenres = genre_ids.map((genreId) => {
