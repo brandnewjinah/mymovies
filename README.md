@@ -2,7 +2,15 @@
 
 **Movies** is a fully responsive app that lets you rate movies you've watched. All you have to do is to rate at least 10 movies, and it will give you a personalized movie profile and recommendations based on your ratings.
 
-### <h2 align="center"> [Live Demo](https://movies.jinahlee.com)</h2>
+### <h3 align="center">[👉 Live Demo](https://movies.jinahlee.com)</h3>
+
+<div align="center">
+    <img src="https://res.cloudinary.com/fw7128/image/upload/v1640213544/movies_profile_kpv8d8.jpg">
+</div>
+
+<div align="center">
+    <img src="https://res.cloudinary.com/fw7128/image/upload/v1640213537/movies_recommend_vtprtc.jpg">
+</div>
 
 ## ⌨️ &nbsp; Technologies
 
